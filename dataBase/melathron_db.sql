@@ -57,6 +57,7 @@ CREATE TABLE works_on (
     FOREIGN KEY(salesmanID) REFERENCES salesman(salesmanID) );
 
 CREATE TABLE sale (
+	salesID INT AUTO_INCREMENT,
 	spcode INT,
     order_date DATETIME,
     voucher VARCHAR(20),
@@ -70,7 +71,7 @@ CREATE TABLE sale (
     balance_date DATETIME,
     salesmanID INT,
     subscriptionID INT,
-    PRIMARY KEY(spcode, order_date),
+    PRIMARY KEY(salesID),
     FOREIGN KEY(spcode) REFERENCES customer(spcode),
     FOREIGN KEY(salesmanID) REFERENCES salesman(salesmanID),
     FOREIGN KEY(subscriptionID) REFERENCES subscription(subscriptionID) );
