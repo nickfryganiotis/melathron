@@ -106,6 +106,7 @@ CREATE TABLE sale (
     shipping_method VARCHAR(100),
     voucher VARCHAR(20),
     number_of_doses SMALLINT,
+    paid BOOLEAN DEFAULT 0,
     spcode INT,
     subscription_id INT,
     salesman_id INT,
@@ -119,13 +120,49 @@ CREATE TABLE payment_info (
 	dose_number SMALLINT,
     sale_id INT,
     dose_amount FLOAT,
+    payment_amount FLOAT DEFAULT 0,
     dose_deadline DATETIME,
     payment_date DATETIME,
     payment_method VARCHAR(15),
     PRIMARY KEY(dose_number,sale_id),
     FOREIGN KEY(sale_id) REFERENCES sale(sale_id)
     );
-    
-    
-    
-    
+
+
+
+DELIMITER //
+CREATE FUNCTION check_paid(s_id INT)
+RETURNS BOOLEAN
+DETERMINISTIC
+BEGIN
+	IF (SELECT SUM(IFNULL(dose_amount,0))
+    FROM payment_info
+    WHERE sale_id = s_id) = (SELECT total_amount FROM sale WHERE sale_id = s_id) THEN
+    RETURN 1;
+    ELSE
+    RETURN 0;
+    END IF;
+END//
+DELIMITER ;
+
+
+DELIMITER //
+CREATE TRIGGER ins_paid AFTER INSERT ON payment_info
+FOR EACH ROW
+BEGIN
+	UPDATE sale
+	SET paid = check_paid(NEW.sale_id)
+    WHERE sale_id = NEW.sale_id;
+END//
+
+DELIMITER //
+CREATE TRIGGER upd_paid AFTER UPDATE ON payment_info
+FOR EACH ROW
+BEGIN
+	UPDATE sale
+	SET paid = check_paid(NEW.sale_id)
+    WHERE sale_id = NEW.sale_id;
+END//
+
+
+
