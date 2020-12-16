@@ -164,5 +164,6 @@ BEGIN
     WHERE sale_id = NEW.sale_id;
 END//
 
-
-
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+flush privileges;subscription
+INSERT INTO TABLE subscription (subscription_name) VALUES ('2008 ΜΕΛΟΣ');
