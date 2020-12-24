@@ -7,21 +7,29 @@ CREATE TABLE job (
     profession VARCHAR(50),
     PRIMARY KEY(job_id)
     );
-
+    
 CREATE TABLE continent (
+	continent_id INT AUTO_INCREMENT,
 	continent_name VARCHAR(20),
-    PRIMARY KEY(continent_name)
-    );
+    PRIMARY KEY(continent_id)
+);
+
+CREATE TABLE country (
+	country_id INT AUTO_INCREMENT,
+    country_name VARCHAR(50),
+    continent_id INT,
+    PRIMARY KEY(country_id),
+    FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
+);
 
 CREATE TABLE location (
 	location_id INT AUTO_INCREMENT,
-    country VARCHAR(20),
+    country_id INT,
     state VARCHAR(20),
     city VARCHAR(20),
     area VARCHAR(20),
-    continent_name VARCHAR(20),
     PRIMARY KEY(location_id),
-    FOREIGN KEY(continent_name) REFERENCES continent(continent_name)
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
     );
 
 CREATE TABLE customer (
@@ -30,6 +38,7 @@ CREATE TABLE customer (
     last_name VARCHAR(20) NOT NULL,
     fathers_name VARCHAR(20),
     company_name VARCHAR(100),
+    personnel INT,
     website VARCHAR(30),
     email VARCHAR(30),
     address_street VARCHAR(20),
@@ -37,7 +46,6 @@ CREATE TABLE customer (
     address_postal_code VARCHAR(20),
     fax VARCHAR(20),
     comments VARCHAR(200),
-    personnel INT,
     job_id INT,
     location_id INT,
     PRIMARY KEY(spcode),
@@ -61,11 +69,11 @@ CREATE TABLE mobile (
 
 CREATE TABLE apotelesma (
 	apotelesma_id INT AUTO_INCREMENT,
-    apotelesma_name VARCHAR(50),
-    subapotelesma_name VARCHAR(50),
-    continent_name VARCHAR(20),
+    apotelesma_name VARCHAR(100),
+    subapotelesma_name VARCHAR(100),
+    continent_id INT,
     PRIMARY KEY(apotelesma_id),
-    FOREIGN KEY(continent_name) REFERENCES continent(continent_name) 
+    FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
     );
 
   
@@ -80,8 +88,11 @@ CREATE TABLE history_instance (
 
 CREATE TABLE subscription (
 	subscription_id INT AUTO_INCREMENT,
-    subscription_name VARCHAR(50),
-    PRIMARY KEY (subscription_id)
+    subscription_category VARCHAR(50),
+    subscription_name VARCHAR(100),
+    country_id INT,
+    PRIMARY KEY (subscription_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
     );
 
 CREATE TABLE salesman (
@@ -99,11 +110,17 @@ CREATE TABLE works_on (
     FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id)
     );
 
+CREATE TABLE shipping_method (
+	shipping_method_id INT AUTO_INCREMENT,
+    shipping_method_name VARCHAR(50),
+    PRIMARY KEY(shipping_method_id)
+    );
+
 CREATE TABLE sale (
 	sale_id INT AUTO_INCREMENT,
 	order_date DATETIME,
     total_amount FLOAT,
-    shipping_method VARCHAR(100),
+    shipping_method_id INT,
     voucher VARCHAR(20),
     number_of_doses SMALLINT,
     paid BOOLEAN DEFAULT 0,
@@ -113,7 +130,8 @@ CREATE TABLE sale (
     PRIMARY KEY(sale_id),
     FOREIGN KEY(spcode) REFERENCES customer(spcode),
     FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id),
-    FOREIGN KEY(subscription_id) REFERENCES subscription(subscription_id)
+    FOREIGN KEY(subscription_id) REFERENCES subscription(subscription_id),
+    FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id)
     );
     
 CREATE TABLE payment_info (
@@ -127,8 +145,7 @@ CREATE TABLE payment_info (
     PRIMARY KEY(dose_number,sale_id),
     FOREIGN KEY(sale_id) REFERENCES sale(sale_id)
     );
-
-
+    
 
 DELIMITER //
 CREATE FUNCTION check_paid(s_id INT)
@@ -163,7 +180,12 @@ BEGIN
 	SET paid = check_paid(NEW.sale_id)
     WHERE sale_id = NEW.sale_id;
 END//
+DELIMITER ;
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
-flush privileges;subscription
-INSERT INTO TABLE subscription (subscription_name) VALUES ('2008 ΜΕΛΟΣ');
+
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt' INTO TABLE apotelesma FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subapotelesma_name, apotelesma_name, continent_id);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Shipping_methods.txt' INTO TABLE shipping_method FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (shipping_method_id, shipping_method_name);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Subscriptions.txt' INTO TABLE subscription FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subscription_name, subscription_category, country_id);
