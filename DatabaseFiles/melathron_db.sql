@@ -146,6 +146,13 @@ CREATE TABLE payment_info (
     FOREIGN KEY(sale_id) REFERENCES sale(sale_id)
     );
     
+CREATE TABLE account (
+	username VARCHAR(20),
+    passcode VARCHAR(20),
+    admin_priv BOOL default 0,
+    PRIMARY KEY(username)
+);
+    
 
 DELIMITER //
 CREATE FUNCTION check_paid(s_id INT)
