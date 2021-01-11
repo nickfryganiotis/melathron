@@ -6,6 +6,7 @@ CREATE TABLE job (
     category VARCHAR(50),
     profession VARCHAR(50),
     PRIMARY KEY(job_id)
+    
     );
     
 CREATE TABLE continent (
@@ -20,6 +21,7 @@ CREATE TABLE country (
     continent_id INT,
     PRIMARY KEY(country_id),
     FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE location (
@@ -30,6 +32,7 @@ CREATE TABLE location (
     area VARCHAR(20),
     PRIMARY KEY(location_id),
     FOREIGN KEY(country_id) REFERENCES country(country_id)
+    ON DELETE CASCADE
     );
 
 CREATE TABLE customer (
@@ -49,8 +52,10 @@ CREATE TABLE customer (
     job_id INT,
     location_id INT,
     PRIMARY KEY(spcode),
-    FOREIGN KEY(job_id) REFERENCES job(job_id),
+    FOREIGN KEY(job_id) REFERENCES job(job_id)
+    ON DELETE CASCADE,
     FOREIGN KEY(location_id) REFERENCES location(location_id)
+    ON DELETE CASCADE
     );
     
 CREATE TABLE phone (
@@ -58,6 +63,7 @@ CREATE TABLE phone (
     phone_number VARCHAR(15),
     PRIMARY KEY(spcode, phone_number),
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
+    ON DELETE CASCADE
     );
     
 CREATE TABLE mobile (
@@ -65,6 +71,7 @@ CREATE TABLE mobile (
     mobile_number VARCHAR(15),
     PRIMARY KEY(spcode, mobile_number),
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
+    ON DELETE CASCADE
     );
 
 CREATE TABLE apotelesma (
@@ -74,6 +81,7 @@ CREATE TABLE apotelesma (
     continent_id INT,
     PRIMARY KEY(apotelesma_id),
     FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
+    ON DELETE CASCADE
     );
 
   
@@ -82,8 +90,10 @@ CREATE TABLE history_instance (
     spcode INT,
     apotelesma_id INT,
     PRIMARY KEY(instance_date, spcode, apotelesma_id),
-    FOREIGN KEY(spcode) REFERENCES customer(spcode),
+    FOREIGN KEY(spcode) REFERENCES customer(spcode)
+    ON DELETE CASCADE,
     FOREIGN KEY(apotelesma_id) REFERENCES apotelesma(apotelesma_id)
+    ON DELETE CASCADE
     );
 
 CREATE TABLE subscription (
@@ -93,6 +103,7 @@ CREATE TABLE subscription (
     country_id INT,
     PRIMARY KEY (subscription_id),
     FOREIGN KEY(country_id) REFERENCES country(country_id)
+    ON DELETE CASCADE
     );
 
 CREATE TABLE salesman (
@@ -106,8 +117,10 @@ CREATE TABLE works_on (
 	spcode INT,
     salesman_id INT,
     PRIMARY KEY(spcode, salesman_id),
-    FOREIGN KEY(spcode) REFERENCES customer(spcode),
+    FOREIGN KEY(spcode) REFERENCES customer(spcode)
+    ON DELETE CASCADE,
     FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id)
+    ON DELETE CASCADE
     );
 
 CREATE TABLE shipping_method (
@@ -128,10 +141,10 @@ CREATE TABLE sale (
     subscription_id INT,
     salesman_id INT,
     PRIMARY KEY(sale_id),
-    FOREIGN KEY(spcode) REFERENCES customer(spcode),
-    FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id),
-    FOREIGN KEY(subscription_id) REFERENCES subscription(subscription_id),
-    FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id)
+    FOREIGN KEY(spcode) REFERENCES customer(spcode) ON DELETE CASCADE,
+    FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id) ON DELETE CASCADE,
+    FOREIGN KEY(subscription_id) REFERENCES subscription(subscription_id) ON DELETE CASCADE,
+    FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id) ON DELETE CASCADE
     );
     
 CREATE TABLE payment_info (
@@ -143,10 +156,10 @@ CREATE TABLE payment_info (
     payment_date DATETIME,
     payment_method VARCHAR(15),
     PRIMARY KEY(dose_number,sale_id),
-    FOREIGN KEY(sale_id) REFERENCES sale(sale_id)
+    FOREIGN KEY(sale_id) REFERENCES sale(sale_id) ON DELETE CASCADE
     );
     
-CREATE TABLE account (
+CREATE TABLE acc (
 	username VARCHAR(20),
     passcode VARCHAR(20),
     admin_priv BOOL default 0,
@@ -190,6 +203,12 @@ END//
 DELIMITER ;
 
 
+SELECT * FROM CUSTOMER;
+SELECT * FROM phone;
+SELECT * FROM mobile;
+INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
+INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Εύοσμος');
+INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);

@@ -1,0 +1,144 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./MyUserForm.css";
+import { makeToUnique, arrayToOption } from "./helperFunctions";
+
+export default function MySaleForm() {
+  const [sale, setSale] = useState({});
+  const [salesman, setSalesman] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
+
+  useEffect(() => {
+    var url1 = "http://localhost:5000/shipping_methods";
+    var url2 = "http://localhost:5000/subscriptions";
+    var url3 = "http://localhost:5000/salesman";
+    axios.all([axios.get(url1), axios.get(url2), axios.get(url3)]).then(
+      axios.spread((obj1, obj2, obj3) => {
+        setShippingMethods(obj1.data);
+        setSubscriptions(obj2.data);
+        setSalesman(obj3.data);
+      })
+    );
+  }, []);
+
+  const handleSaleChange = (e) => {
+    const { value, name } = e.target;
+    setSale({ ...sale, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    var sale_options = {
+      method: "post",
+      url: "http://localhost:5000/send_sale",
+      data: sale,
+    };
+    axios(sale_options)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    e.target.reset();
+    setSale({});
+  };
+
+  return (
+    <div className="user-form">
+      <h1>Εισαγωγή Νέας Πώλησης</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="spcode">Κωδικός Πελάτη</label>
+          <input
+            type="number"
+            name="spcode"
+            id="spcode"
+            onChange={handleSaleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="salesman">Πωλητής</label>
+          <select name="salesman" id="salesman" onChange={handleSaleChange}>
+            <option></option>
+            {makeToUnique(salesman, "salesman", sale).map(arrayToOption)}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="order_date">Ημερομηνία Παραγγελίας</label>
+          <input
+            type="date"
+            name="order_date"
+            id="order_date"
+            onChange={handleSaleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
+          <select
+            name="subscription_category"
+            id="subscription_category"
+            onChange={handleSaleChange}
+          >
+            <option></option>
+            {makeToUnique(subscriptions, "subscription_category", sale).map(arrayToOption)}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="subscription_name">Συνδρομή</label>
+          <select
+            name="subscription_name"
+            id="subscription_name"
+            onChange={handleSaleChange}
+          >
+            <option></option>
+            {makeToUnique(subscriptions,"subscription_name",sale,"subscription_category").map(arrayToOption)}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="total_amount">Συνολικό Ποσό Πληρωμής</label>
+          <input
+            type="number"
+            name="total_amount"
+            id="total_amount"
+            step="0.01"
+            onChange={handleSaleChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="shipping_method_name">Τρόπος Παράδοσης</label>
+          <select
+            name="shipping_method_name"
+            id="shipping_method_name"
+            onChange={handleSaleChange}
+          >
+            <option></option>
+            {makeToUnique(shippingMethods, "shipping_method_name", sale).map(arrayToOption)}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="voucher">Voucher</label>
+          <input
+            type="text"
+            name="voucher"
+            id="voucher"
+            onChange={handleSaleChange}
+          />
+        </div>
+
+        <br></br>
+        <button type="submit" className="btn btn-danger">
+          Εισαγωγή
+        </button>
+      </form>
+    </div>
+  );
+}
