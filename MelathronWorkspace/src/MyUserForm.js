@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./MyUserForm.css";
 import axios from "axios";
-import { makeToUnique, arrayToOption } from "./helperFunctions";
+import { makeToUnique, arrayToOption, loadAreaChoice } from "./helperFunctions";
 
 export default function MyUserForm() {
   const [phoneList, setPhoneList] = useState([{ phone_number: "" }]);
@@ -12,8 +12,15 @@ export default function MyUserForm() {
   const [apotelesmata, setApotelesmata] = useState([]);
   const [salesman, setSalesman] = useState([]);
   const [phones, setPhones] = useState({});
+  const [areaChoice, setAreaChoice] = useState({});
 
   useEffect(() => {
+    loadAreaChoice(setAreaChoice);
+  }, []);
+
+  useEffect(() => {
+    //console.log(JSON.parse(localStorage.getItem('area_choice')))
+
     var url1 = "http://localhost:5000/apotelesmata";
     var url2 = "http://localhost:5000/locations";
     var url3 = "http://localhost:5000/professions";
@@ -28,15 +35,15 @@ export default function MyUserForm() {
           setSalesman(obj4.data);
         })
       );
-  }, []);
+  }, [areaChoice]);
 
   const handlePhoneChange = (e, index) => {
     const { name, value } = e.target;
     const list = [...phoneList];
     list[index][name] = value;
     setPhoneList(list);
-    //setCustomer({ ...customer, phone: phoneList });
-    setPhones({ ...phones, phone: phoneList });
+    setCustomer({ ...customer, phone: phoneList });
+    //setPhones({ ...phones, phone: phoneList });
   };
 
   const handleMobileChange = (e, index) => {
@@ -44,7 +51,8 @@ export default function MyUserForm() {
     const list = [...mobileList];
     list[index][name] = value;
     setMobileList(list);
-    setPhones({ ...phones, mobile: mobileList });
+    setCustomer({ ...customer, mobile: mobileList });
+    //setPhones({ ...phones, mobile: mobileList });
   };
 
   const handleRemovePhone = (index) => {
@@ -82,7 +90,7 @@ export default function MyUserForm() {
     var last_spcode;
     axios(customer_options)
       .then((response) => {
-        last_spcode = response.data["spcode"];
+        /*last_spcode = response.data["spcode"];
         var phone_data = { ...phones, spcode: last_spcode };
         var phone_options = {
           method: "post",
@@ -92,7 +100,8 @@ export default function MyUserForm() {
 
         return axios(phone_options)
           .then((response) => {})
-          .catch((error) => console.error("timeout exceeded"));
+          .catch((error) => console.error("timeout exceeded"));*/
+          console.log(response)
       })
       .catch((error) => console.error("timeout exceeded"));
 
@@ -139,43 +148,49 @@ export default function MyUserForm() {
 
         <div>
           <label htmlFor="company_name">Επωνυμία Εταιρίας και Δυναμικό</label>
-          <input
-            type="text"
-            name="company_name"
-            id="company_name"
-            onChange={handleCustomerChange}
-          />
-          <input
-            type="number"
-            name="personnel"
-            id="personnel"
-            style={{ marginLeft: "10px", width: 50 }}
-            onChange={handleCustomerChange}
-          />
+          <div className="maria">
+            <input
+              type="text"
+              name="company_name"
+              id="company_name"
+              onChange={handleCustomerChange}
+              style={{ width: "75%" }}
+            />
+            <input
+              type="number"
+              name="personnel"
+              id="personnel"
+              style={{ marginLeft: "10px", width: "25%" }}
+              onChange={handleCustomerChange}
+            />
+          </div>
         </div>
 
         <div>
           <label htmlFor="address_street">Διέυθυνση</label>
-          <input
-            type="text"
-            name="address_street"
-            id="address_street"
-            onChange={handleCustomerChange}
-          />
-          <input
-            type="text"
-            name="address_number"
-            id="address_number"
-            style={{ marginLeft: "10px", width: 25 }}
-            onChange={handleCustomerChange}
-          />
-          <input
-            type="text"
-            name="address_postal_code"
-            id="address_postal_code"
-            style={{ marginLeft: "10px", width: 25 }}
-            onChange={handleCustomerChange}
-          />
+          <div className="maria">
+            <input
+              type="text"
+              name="address_street"
+              id="address_street"
+              style={{ width: "70%" }}
+              onChange={handleCustomerChange}
+            />
+            <input
+              type="text"
+              name="address_number"
+              id="address_number"
+              style={{ marginLeft: "10px", width: "14%" }}
+              onChange={handleCustomerChange}
+            />
+            <input
+              type="text"
+              name="address_postal_code"
+              id="address_postal_code"
+              style={{ marginLeft: "10px", width: "16%" }}
+              onChange={handleCustomerChange}
+            />
+          </div>
         </div>
 
         <div>
@@ -213,18 +228,21 @@ export default function MyUserForm() {
             return (
               <div>
                 <label htmlFor="phone_number"> {i === 0 && "Τηλέφωνο"}</label>
+                <div className="maria">
                 <input
+                  type="text"
                   name="phone_number"
                   value={x.phone_number}
                   onChange={(e) => handlePhoneChange(e, i)}
                 />
 
                 {phoneList.length !== 1 && (
-                  <button onClick={() => handleRemovePhone(i)}>-</button>
+                  <button style={{'margin-left' : '5px'}} onClick={() => handleRemovePhone(i)}>-</button>
                 )}
                 {phoneList.length - 1 === i && (
-                  <button onClick={handleAddPhone}>+</button>
+                  <button style={{'margin-left' : '5px'}} onClick={handleAddPhone}>+</button>
                 )}
+                </div>
               </div>
             );
           })}
@@ -235,18 +253,21 @@ export default function MyUserForm() {
             return (
               <div>
                 <label htmlFor="mobile_number"> {i === 0 && "Κινητό"}</label>
+                <div className="maria">
                 <input
+                  type="text"
                   name="mobile_number"
                   value={x.mobile_number}
                   onChange={(e) => handleMobileChange(e, i)}
                 />
 
                 {mobileList.length !== 1 && (
-                  <button onClick={() => handleRemoveMobile(i)}>-</button>
+                  <button style={{'margin-left' : '5px'}} onClick={() => handleRemoveMobile(i)}>-</button>
                 )}
                 {mobileList.length - 1 === i && (
-                  <button onClick={handleAddMobile}>+</button>
+                  <button style={{'margin-left' : '5px'}} onClick={handleAddMobile}>+</button>
                 )}
+                </div>
               </div>
             );
           })}

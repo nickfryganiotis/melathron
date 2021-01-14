@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./MyUserForm.css";
-import { makeToUnique, arrayToOption } from "./helperFunctions";
+import { makeToUnique, arrayToOption, loadAreaChoice } from "./helperFunctions";
+import UpfrontPaymentForm from "./UpfrontPaymentForm";
+import DosesPaymentForm from "./DosesPaymentForm";
 
 export default function MySaleForm() {
   const [sale, setSale] = useState({});
   const [salesman, setSalesman] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [shippingMethods, setShippingMethods] = useState([]);
+  const [status, setStatus] = useState(0);
+  const [areaChoice, setAreaChoice] = useState({});
+
+  useEffect(() => {
+    loadAreaChoice(setAreaChoice);
+  }, []);
 
   useEffect(() => {
     var url1 = "http://localhost:5000/shipping_methods";
@@ -20,7 +28,7 @@ export default function MySaleForm() {
         setSalesman(obj3.data);
       })
     );
-  }, []);
+  }, [areaChoice]);
 
   const handleSaleChange = (e) => {
     const { value, name } = e.target;
@@ -29,7 +37,7 @@ export default function MySaleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    var sale_options = {
+    /*var sale_options = {
       method: "post",
       url: "http://localhost:5000/send_sale",
       data: sale,
@@ -42,7 +50,12 @@ export default function MySaleForm() {
         console.log(error);
       });
     e.target.reset();
-    setSale({});
+    setSale({});*/
+    console.log(sale);
+  };
+
+  const radioHandler = (status) => {
+    setStatus(status);
   };
 
   return (
@@ -85,7 +98,9 @@ export default function MySaleForm() {
             onChange={handleSaleChange}
           >
             <option></option>
-            {makeToUnique(subscriptions, "subscription_category", sale).map(arrayToOption)}
+            {makeToUnique(subscriptions, "subscription_category", sale).map(
+              arrayToOption
+            )}
           </select>
         </div>
 
@@ -97,7 +112,12 @@ export default function MySaleForm() {
             onChange={handleSaleChange}
           >
             <option></option>
-            {makeToUnique(subscriptions,"subscription_name",sale,"subscription_category").map(arrayToOption)}
+            {makeToUnique(
+              subscriptions,
+              "subscription_name",
+              sale,
+              "subscription_category"
+            ).map(arrayToOption)}
           </select>
         </div>
 
@@ -120,7 +140,9 @@ export default function MySaleForm() {
             onChange={handleSaleChange}
           >
             <option></option>
-            {makeToUnique(shippingMethods, "shipping_method_name", sale).map(arrayToOption)}
+            {makeToUnique(shippingMethods, "shipping_method_name", sale).map(
+              arrayToOption
+            )}
           </select>
         </div>
 
@@ -132,6 +154,36 @@ export default function MySaleForm() {
             id="voucher"
             onChange={handleSaleChange}
           />
+        </div>
+
+        <div>
+          <label htmlFor="howToPay" >Τρόπος Εξόφλησης</label>
+          <div className="maria">
+            <input
+              type="radio"
+              name="howToPay"
+              id="upfront"
+              checked={status === 1}
+              onClick={(e) => radioHandler(1)}
+            />
+            <label htmlFor="upfront" style={{'margin-top': 0, 'font-size': '16px'}}>Απευθείας Πληρωμή</label>
+            </div>
+            <div className="maria">
+            <input
+              type="radio"
+              name="howToPay"
+              id="doses"
+              checked={status === 2}
+              onClick={(e) => radioHandler(2)}
+            />
+            <label htmlFor="doses" style={{'margin-top': 0, 'font-size': '16px'}}>Πληρωμή με Δόσεις</label>
+          </div>
+        </div>
+        <br></br>
+
+        <div>
+          {status === 1 && <UpfrontPaymentForm onChange={handleSaleChange} />}
+          {status === 2 && <DosesPaymentForm onChange={handleSaleChange} />}
         </div>
 
         <br></br>

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./MyForm.css";
 import { makeToUnique, arrayToOption } from "./helperFunctions";
-const ipcRenderer = window.require('electron').ipcRenderer;
-
-
+import { useHistory } from "react-router-dom";
 
 export default function AreaChoice() {
   const [continents, setContinents] = useState([]);
   const [countries, setCountries] = useState([]);
   const [choice, setChoice] = useState({});
+
+  const history = useHistory();
 
   useEffect(() => {
     var url1 = "http://localhost:5000/continents";
@@ -24,28 +24,27 @@ export default function AreaChoice() {
 
   const handleContinentChange = (e) => {
     const { value, name } = e.target;
-    var selected_item = continents.find(function(item){
-        return item["continent_name"] === value; 
-      }); 
-    setChoice({ ...choice, continent_id : selected_item["continent_id"] });
+    var selected_item = continents.find(function (item) {
+      return item["continent_name"] === value;
+    });
+    setChoice({ ...choice, continent_id: selected_item["continent_id"] });
   };
 
   const handleCountryChange = (e) => {
-      const {value, name} = e.target;
-      var selected_item = countries.find(function(item){
-        return item["country_name"] === value; 
-      });
-      setChoice({...choice, country_id : selected_item["country_id"]})
-  }
+    const { value, name } = e.target;
+    var selected_item = countries.find(function (item) {
+      return item["country_name"] === value;
+    });
+    setChoice({ ...choice, country_id: selected_item["country_id"] });
+  };
 
   const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log(choice);
-      ipcRenderer.send('CountNotifElectron', choice);
-      //setLoc(choice)
-  }
-
-
+    e.preventDefault();
+    localStorage.setItem('area_choice', JSON.stringify(choice) )
+    //console.log(JSON.parse(localStorage.getItem('area_choice')))
+    history.push("/insert_customer");
+  };
+ 
   return (
     <div className="user-form">
       <h1>Επιλέξτε Περιοχή Εργασίας</h1>
@@ -72,13 +71,20 @@ export default function AreaChoice() {
             required
           >
             <option></option>
-            {makeToUnique(countries, "country_name", choice, "continent_id").map(arrayToOption)}
+            {makeToUnique(
+              countries,
+              "country_name",
+              choice,
+              "continent_id"
+            ).map(arrayToOption)}
           </select>
         </div>
         <br></br>
         <br></br>
         <br></br>
-        <button type='submit' className='btn btn-danger'>Επιλογή</button>
+        <button type="submit" className="btn btn-danger">
+          Επιλογή
+        </button>
       </form>
     </div>
   );

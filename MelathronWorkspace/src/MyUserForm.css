@@ -2,6 +2,10 @@
     width: 500px;
     margin: 0 auto;
     font-family: Tahoma, Geneva, sans-serif;
+    background-color: #f2f2f2;
+    box-sizing: 50;
+    border-radius: 5px;
+    padding: 20px;
 }
 .user-form h1 {
     text-align: center;
@@ -9,23 +13,23 @@
     font-size: 34px;
     padding: 20px 0 20px 0;
 }
-.user-form input,
+.user-form input[type="text"],
+.user-form input[type="number"],
+.user-form input[type="date"],
+.user-form input[type="email"],
 .user-form select,
 .user-form textarea {
     width: 100%;
-    padding: 15px;
+    padding: 12px; 
     border: 1px solid #dddddd;
     margin-bottom: 15px;
     box-sizing:border-box;
     margin: 0 auto;
-    font-size: 15px;
+    font-size: 16px; 
+    border-radius: 4px;
 }
 .user-form input[type=radio]{
-    margin-bottom: 0px;
-    padding: 0px;
-    border: 0px;
-    margin: 0;
-    box-sizing: initial;
+    margin-top: 20px;
 }
 .user-form label{
     width: 100%;
@@ -33,15 +37,33 @@
     font-size: 20px;
     margin-top: 15px;
     box-sizing:border-box;
+    display: block;
 
 }
 .user-form button[type="submit"] {
-    width: 100%;
-    padding: 15px;
-    background-color: #535b63;
-    border: 0;
+    width: 50%;
+
+    background-color: #535b60;
+
     box-sizing: border-box;
-    cursor: pointer;
     font-weight: bold;
     color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin:auto;
+        
+}
+.user-form button[type="submit"]:hover {
+    background-color: #45a049;
+    
+  }
+
+.maria {
+    display:flex
+}
+
+input {
+    display: block;
 }

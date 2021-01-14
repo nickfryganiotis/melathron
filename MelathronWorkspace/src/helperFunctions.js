@@ -45,3 +45,12 @@ export function getJSONValues(table){
     });
   };
 
+//Συνάρτηση που φορτώνει από το local storage την επιλογή του χρήστη για ήπειρο και περιοχή και θέτει μια μεταβλητή ίση με αυτή την επιλογή με την setAreaChoice
+export function loadAreaChoice(setAreaChoice){
+  var x = localStorage.getItem('area_choice')
+  var y = JSON.parse(x)
+  if (typeof(y)!== 'undefined'){
+    setAreaChoice(y)
+  }
+}
+

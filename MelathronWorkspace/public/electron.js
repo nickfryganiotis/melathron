@@ -1,38 +1,29 @@
 const { app, BrowserWindow, Menu } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
-const { ipcMain } = require("electron");
 
 function loadIfNotLoaded(currentWindow, page) {
   if (currentWindow.webContents.getURL() !== page) {
     currentWindow.loadURL(page);
   }
 }
-
+let win;
 function createWindow() {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
     },
   });
-  //win.loadURL("http://localhost:3000/");
-  win.webContents.openDevTools()
+  win.webContents.openDevTools();
   win.loadURL(
     isDev
       ? "http://localhost:3000"
       : 'file://${path.join(__dirname, "../build/index.html")}'
   );
-  win.removeMenu()
-  console.log(win.webContents)
-
-  ipcMain.on('CountNotifElectron', function(event, arg) 
-{
-  win.loadURL("http://localhost:3000/insert_customer")
-  
-})
-
+  //win.removeMenu()
+  //console.log(win.webContents)
   const template = [
     {
       label: "Αρχική Σελίδα",
@@ -80,6 +71,3 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-
-

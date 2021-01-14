@@ -1,48 +1,41 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from "react";
+//import "./App.css";
 import MyUserForm from "./MyUserForm";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Error from "./Error";
 import AboutUs from "./AboutUs";
 import MyCustomerSearch from "./MyCustomerSearch";
-import MyForm from "./MyForm";
 import MySaleForm from "./MySaleForm";
-import Login from "./Login";
 import AreaChoice from "./AreaChoice";
 
-//const ChoiceContext = React.createContext();
 
 function App() {
-  const [loc, setLoc] = useState({})
+
   return (
+    <>
     <Router>
       <Switch>
           <Route exact path="/">
             <AreaChoice />
           </Route>
-        <Route exact path="/auth">
-          <Login />
-        </Route>
-        <Route exact path="/miform">
-          <MyForm />
-        </Route>
-        <Route exact path="/about">
-          <AboutUs />
-        </Route>
-        <Route exact path="/insert_customer">
-          <MyUserForm />
-        </Route>
-        <Route exact path="/insert_sale">
-          <MySaleForm />
-        </Route>
-        <Route exact path="/search_customer">
-          <MyCustomerSearch />
-        </Route>
+          <Route exact path="/about">
+            <AboutUs />
+          </Route>
+          <Route exact path="/insert_customer">
+            <MyUserForm />
+          </Route>
+          <Route exact path="/insert_sale">
+            <MySaleForm />
+          </Route>
+          <Route exact path="/search_customer">
+            <MyCustomerSearch />
+          </Route>
         <Route path="*">
-          <Error/>
+          <Error />
         </Route>
       </Switch>
     </Router>
+    </>
   );
 }
 

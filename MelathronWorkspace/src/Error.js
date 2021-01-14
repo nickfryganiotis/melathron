@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default function Error({loc}){
-    return <h1>{loc}</h1>
+export default function Error(){
+    return <h1>Η σελίδα δεν βρέθηκε</h1>
 }
