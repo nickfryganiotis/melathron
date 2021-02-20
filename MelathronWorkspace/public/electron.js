@@ -14,6 +14,7 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true
     },
   });
   win.webContents.openDevTools();
@@ -55,10 +56,35 @@ function createWindow() {
         loadIfNotLoaded(win, "http://localhost:3000/search_customer");
       },
     },
+    {
+      label: "Εισαγωγή από Αρχείο",
+      submenu: [{
+        label: "Εισαγωγή Πελατών",
+        click: function () {
+          loadIfNotLoaded(win, "http://localhost:3000/load_from_file_customers");
+        }
+      },
+      {
+        label: "Εισαγωγή Πωλήσεων",
+        click: function (){
+          loadIfNotLoaded(win, "http://localhost:3000/load_from_file_sales")
+        }
+      }
+      ]
+      
+    },
+    {
+      label: "Development",
+      click: function () {win.webContents.openDevTools()}
+    }
   ];
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-}
+
+
+};
+
+
 
 app.whenReady().then(createWindow);
 
@@ -71,3 +97,5 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+
