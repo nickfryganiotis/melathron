@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./MyCustomSearch.css";
 import axios from "axios";
-import {
-  getJSONValues,
-  mapToRow,
-  loadAreaChoice,
-  makeToUnique,
-  arrayToOption,
-} from "./helperFunctions";
+import { arrayToOption, loadAreaChoice, makeToUnique } from "./helperFunctions";
 
 export default function MyCustomerSearch() {
   const [people, setPeople] = useState([]);
@@ -24,11 +18,14 @@ export default function MyCustomerSearch() {
       .get("http://localhost:5000/customers")
       .then((response) => {
         setPeople(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
     console.log(customerOptions);
+    localStorage.setItem("customer_search_results", JSON.stringify(people));
+    createBrowserWindow();
   };
 
   useEffect(() => {
@@ -36,16 +33,21 @@ export default function MyCustomerSearch() {
   }, []);
 
   useEffect(() => {
-    //console.log(JSON.parse(localStorage.getItem('area_choice')))
-
-    var url1 = "http://localhost:5000/apotelesmata";
+    let area = JSON.parse(localStorage.getItem("area_choice"));
+    //setCustomerOptions({...customerOptions, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
+    let url1 = "http://localhost:5000/apotelesmata";
+    let apotelesmata_options = {
+      method: "post",
+      url: url1,
+      data: { continent_id: area["continent_id"] },
+    };
     var url2 = "http://localhost:5000/locations";
     var url3 = "http://localhost:5000/professions";
     var url4 = "http://localhost:5000/salesman";
     var url5 = "http://localhost:5000/subscriptions";
     axios
       .all([
-        axios.get(url1),
+        axios(apotelesmata_options),
         axios.get(url2),
         axios.get(url3),
         axios.get(url4),
@@ -85,10 +87,21 @@ export default function MyCustomerSearch() {
     setCustomerOptions({ ...customerOptions, [name]: value });
   };
 
+  function createBrowserWindow() {
+    const BrowserWindow = window.require("electron").remote.BrowserWindow;
+    const win2 = new BrowserWindow({
+      height: 600,
+      width: 800,
+    });
+    win2.setMenu(null);
+    //win2.webContents.openDevTools();
+    win2.loadURL("http://localhost:3000/customer_search_window");
+  }
+
   return (
     <>
-          <div className="user-form">
-      <h1>Αναζήτηση Πελάτη</h1>
+      <div className="user-form">
+        <h1>Αναζήτηση Πελάτη</h1>
 
         <form>
           <div>
@@ -321,16 +334,20 @@ export default function MyCustomerSearch() {
             </select>
           </div>
         </form>
-        <button onClick={getSearchResults}>Αναζήτηση</button>
+        <br></br>
+        <br></br>
+        <button type="submit" onClick={getSearchResults}>
+          Αναζήτηση
+        </button>
       </div>
 
-      <div>
+      {/*<div>
         <table>
           <tr>{mapToRow(attributes)}</tr>
           {getJSONValues(people)}
         </table>
         <br></br>
-      </div>
+      </div>*/}
     </>
   );
 }

@@ -17,6 +17,7 @@
 .user-form input[type="number"],
 .user-form input[type="date"],
 .user-form input[type="email"],
+.user-form input[type="file"],
 .user-form select,
 .user-form textarea {
     width: 100%;

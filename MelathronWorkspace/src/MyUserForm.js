@@ -19,14 +19,19 @@ export default function MyUserForm() {
   }, []);
 
   useEffect(() => {
-    //console.log(JSON.parse(localStorage.getItem('area_choice')))
-
+    var area = JSON.parse(localStorage.getItem('area_choice'))
+    setCustomer({...customer, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
     var url1 = "http://localhost:5000/apotelesmata";
+    var apotelesmata_options = {
+      method: "post",
+      url: url1,
+      data: {'continent_id': area['continent_id']}
+    }
     var url2 = "http://localhost:5000/locations";
     var url3 = "http://localhost:5000/professions";
     var url4 = "http://localhost:5000/salesman";
     axios
-      .all([axios.get(url1), axios.get(url2), axios.get(url3), axios.get(url4)])
+      .all([axios(apotelesmata_options), axios.get(url2), axios.get(url3), axios.get(url4)])
       .then(
         axios.spread((obj1, obj2, obj3, obj4) => {
           setApotelesmata(obj1.data);
@@ -82,6 +87,7 @@ export default function MyUserForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(customer)
     var customer_options = {
       method: "post",
       url: "http://localhost:5000/send",

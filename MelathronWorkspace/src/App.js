@@ -7,6 +7,9 @@ import AboutUs from "./AboutUs";
 import MyCustomerSearch from "./MyCustomerSearch";
 import MySaleForm from "./MySaleForm";
 import AreaChoice from "./AreaChoice";
+import CustomerSearchWindow from "./CustomerSearchWindow";
+import CustomersFromFile from "./CustomersFromFile";
+import SalesFromFile from "./SalesFromFile"
 
 
 function App() {
@@ -29,6 +32,15 @@ function App() {
           </Route>
           <Route exact path="/search_customer">
             <MyCustomerSearch />
+          </Route>
+          <Route exact path="/customer_search_window">
+            <CustomerSearchWindow />
+          </Route>
+          <Route exact path="/load_from_file_customers">
+            <CustomersFromFile />
+          </Route>
+          <Route exact path="/load_from_file_sales">
+            <SalesFromFile />
           </Route>
         <Route path="*">
           <Error />
