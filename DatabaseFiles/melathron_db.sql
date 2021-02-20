@@ -34,6 +34,16 @@ CREATE TABLE location (
     FOREIGN KEY(country_id) REFERENCES country(country_id)
     ON DELETE CASCADE
     );
+    
+CREATE TABLE apotelesma (
+	apotelesma_id INT AUTO_INCREMENT,
+    apotelesma_name VARCHAR(100),
+    subapotelesma_name VARCHAR(100),
+    continent_id INT,
+    PRIMARY KEY(apotelesma_id),
+    FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
+    ON DELETE CASCADE
+);
 
 CREATE TABLE customer (
 	spcode INT AUTO_INCREMENT,
@@ -51,8 +61,11 @@ CREATE TABLE customer (
     comments VARCHAR(200),
     job_id INT,
     location_id INT,
+    apotelesma_id INT,
     PRIMARY KEY(spcode),
     FOREIGN KEY(job_id) REFERENCES job(job_id)
+    ON DELETE CASCADE,
+    FOREIGN KEY(apotelesma_id) REFERENCES apotelesma(apotelesma_id)
     ON DELETE CASCADE,
     FOREIGN KEY(location_id) REFERENCES location(location_id)
     ON DELETE CASCADE
@@ -73,20 +86,9 @@ CREATE TABLE mobile (
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
     ON DELETE CASCADE
     );
-
-CREATE TABLE apotelesma (
-	apotelesma_id INT AUTO_INCREMENT,
-    apotelesma_name VARCHAR(100),
-    subapotelesma_name VARCHAR(100),
-    continent_id INT,
-    PRIMARY KEY(apotelesma_id),
-    FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
-    ON DELETE CASCADE
-    );
-
   
 CREATE TABLE history_instance (
-	instance_date DATETIME,
+	instance_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     spcode INT,
     apotelesma_id INT,
     PRIMARY KEY(instance_date, spcode, apotelesma_id),
@@ -202,13 +204,31 @@ BEGIN
 END//
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER curr_apotelesma_in AFTER INSERT ON history_instance
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET apotelesma_id = NEW.apotelesma_id
+    WHERE spcode = NEW.spcode;
+END//
+DELIMITER ;
 
-SELECT * FROM CUSTOMER;
-SELECT * FROM phone;
-SELECT * FROM mobile;
+DELIMITER //
+CREATE TRIGGER curr_apotelesma_upd AFTER UPDATE ON history_instance
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET apotelesma_id = NEW.apotelesma_id
+    WHERE spcode = NEW.spcode;
+END//
+DELIMITER ;
+
+
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Εύοσμος');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
+
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
