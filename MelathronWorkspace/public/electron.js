@@ -14,7 +14,7 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule: true
+      enableRemoteModule: true,
     },
   });
   win.webContents.openDevTools();
@@ -33,58 +33,69 @@ function createWindow() {
       },
     },
     {
-      label: "Σχετικά με εμάς",
-      click: function () {
-        loadIfNotLoaded(win, "http://localhost:3000/about");
-      },
+      label: "Εισαγωγή",
+      submenu: [
+        {
+          label: "Εισαγωγή Πελάτη",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/insert_customer");
+          },
+        },
+        {
+          label: "Εισαγωγή Πώλησης",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/insert_sale");
+          },
+        },
+      ],
     },
     {
-      label: "Εισαγωγή Πελάτη",
-      click: function () {
-        loadIfNotLoaded(win, "http://localhost:3000/insert_customer");
-      },
-    },
-    {
-      label: "Εισαγωγή Πώλησης",
-      click: function () {
-        loadIfNotLoaded(win, "http://localhost:3000/insert_sale");
-      },
-    },
-    {
-      label: "Αναζήτηση Πελάτη",
-      click: function () {
-        loadIfNotLoaded(win, "http://localhost:3000/search_customer");
-      },
+      label: "Αναζήτηση",
+      submenu: [
+        {
+          label: "Αναζήτηση Πελατών",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/cs");
+          },
+        },
+        {
+          label: "Αναζήτηση Πωλήσεων",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/search_sale");
+          },
+        },
+      ],
     },
     {
       label: "Εισαγωγή από Αρχείο",
-      submenu: [{
-        label: "Εισαγωγή Πελατών",
-        click: function () {
-          loadIfNotLoaded(win, "http://localhost:3000/load_from_file_customers");
-        }
-      },
-      {
-        label: "Εισαγωγή Πωλήσεων",
-        click: function (){
-          loadIfNotLoaded(win, "http://localhost:3000/load_from_file_sales")
-        }
-      }
-      ]
-      
+      submenu: [
+        {
+          label: "Εισαγωγή Πελατών",
+          click: function () {
+            loadIfNotLoaded(
+              win,
+              "http://localhost:3000/load_from_file_customers"
+            );
+          },
+        },
+        {
+          label: "Εισαγωγή Πωλήσεων",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/load_from_file_sales");
+          },
+        },
+      ],
     },
     {
       label: "Development",
-      click: function () {win.webContents.openDevTools()}
-    }
+      click: function () {
+        win.webContents.openDevTools();
+      },
+    },
   ];
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-
-
-};
-
-
+}
 
 app.whenReady().then(createWindow);
 
@@ -97,5 +108,3 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
-

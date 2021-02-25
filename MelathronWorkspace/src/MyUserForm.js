@@ -40,6 +40,7 @@ export default function MyUserForm() {
           setSalesman(obj4.data);
         })
       );
+    console.log(areaChoice)
   }, [areaChoice]);
 
   const handlePhoneChange = (e, index) => {
@@ -113,6 +114,7 @@ export default function MyUserForm() {
 
     e.target.reset();
     setCustomer({});
+    setCustomer({...customer, 'continent_id': areaChoice['continent_id'], 'country_id': areaChoice['country_id'] })
     setPhones({});
     setPhoneList([{ phone_number: "" }]);
     setMobileList([{ mobile_number: "" }]);
@@ -363,10 +365,10 @@ export default function MyUserForm() {
         </div>
 
         <div>
-          <label htmlFor="salesman">Πωλητής</label>
-          <select name="salesman" id="salesman" onChange={handleCustomerChange}>
+          <label htmlFor="salesman_name">Πωλητής</label>
+          <select name="salesman_name" id="salesman_name" onChange={handleCustomerChange}>
             <option></option>
-            {makeToUnique(salesman, "salesman", customer).map(arrayToOption)}
+            {makeToUnique(salesman, "salesman_name", customer).map(arrayToOption)}
           </select>
         </div>
 

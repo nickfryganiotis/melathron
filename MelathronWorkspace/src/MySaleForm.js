@@ -18,9 +18,9 @@ export default function MySaleForm() {
   }, []);
 
   useEffect(() => {
-    var url1 = "http://localhost:5000/shipping_methods";
-    var url2 = "http://localhost:5000/subscriptions";
-    var url3 = "http://localhost:5000/salesman";
+    let url1 = "http://localhost:5000/shipping_methods";
+    let url2 = "http://localhost:5000/subscriptions";
+    let url3 = "http://localhost:5000/salesman";
     axios.all([axios.get(url1), axios.get(url2), axios.get(url3)]).then(
       axios.spread((obj1, obj2, obj3) => {
         setShippingMethods(obj1.data);
@@ -56,6 +56,7 @@ export default function MySaleForm() {
 
   const radioHandler = (status) => {
     setStatus(status);
+    setSale({ ...sale, status : status })
   };
 
   return (
@@ -75,7 +76,7 @@ export default function MySaleForm() {
         <div>
           <label htmlFor="salesman">Πωλητής</label>
           <select name="salesman" id="salesman" onChange={handleSaleChange}>
-            <option></option>
+            <option/>
             {makeToUnique(salesman, "salesman", sale).map(arrayToOption)}
           </select>
         </div>
@@ -97,7 +98,7 @@ export default function MySaleForm() {
             id="subscription_category"
             onChange={handleSaleChange}
           >
-            <option></option>
+            <option/>
             {makeToUnique(subscriptions, "subscription_category", sale).map(
               arrayToOption
             )}
@@ -111,7 +112,7 @@ export default function MySaleForm() {
             id="subscription_name"
             onChange={handleSaleChange}
           >
-            <option></option>
+            <option/>
             {makeToUnique(
               subscriptions,
               "subscription_name",
@@ -139,7 +140,7 @@ export default function MySaleForm() {
             id="shipping_method_name"
             onChange={handleSaleChange}
           >
-            <option></option>
+            <option/>
             {makeToUnique(shippingMethods, "shipping_method_name", sale).map(
               arrayToOption
             )}
@@ -179,14 +180,14 @@ export default function MySaleForm() {
             <label htmlFor="doses" style={{'margin-top': 0, 'font-size': '16px'}}>Πληρωμή με Δόσεις</label>
           </div>
         </div>
-        <br></br>
+        <br/>
 
         <div>
           {status === 1 && <UpfrontPaymentForm onChange={handleSaleChange} />}
           {status === 2 && <DosesPaymentForm onChange={handleSaleChange} />}
         </div>
 
-        <br></br>
+        <br/>
         <button type="submit" className="btn btn-danger">
           Εισαγωγή
         </button>

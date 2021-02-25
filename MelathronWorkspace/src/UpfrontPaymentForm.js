@@ -4,21 +4,31 @@ export default function UpfrontPaymentForm({onChange}) {
   return (
     <div >
         <div>
-          <label htmlFor="payment_amount">Πληρωθέν Ποσό</label>
+            <label htmlFor="dose_deadline1">Προσθεσμία Εξόφλησης </label>
+            <input
+                type="date"
+                name={"dose_deadline1"}
+                id={"dose_deadline1"}
+                onChange={onChange}
+            />
+        </div>
+
+        <div>
+          <label htmlFor="payment_amount1">Πληρωθέν Ποσό</label>
           <input
             type="number"
-            name="payment_amount"
-            id="payment_amount"
+            name="payment_amount1"
+            id="payment_amount1"
             onChange={onChange}
           /> 
         </div>
 
         <div>
-          <label htmlFor="payment_method">Μέθοδος Πληρωμής</label>
+          <label htmlFor="payment_method1">Μέθοδος Πληρωμής</label>
           <div className="maria">
           <input
             type="radio"
-            name="payment_method"
+            name="payment_method1"
             id = "card"
             value="Κάρτα"
             onClick={onChange}
@@ -28,7 +38,7 @@ export default function UpfrontPaymentForm({onChange}) {
           <div className="maria">
           <input
             type="radio"
-            name="payment_method"
+            name="payment_method1"
             id="cash"
             value="Μετρητά"
             onClick={onChange}

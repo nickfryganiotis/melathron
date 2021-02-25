@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./MyCustomSearch.css";
 import axios from "axios";
-import { arrayToOption, loadAreaChoice, makeToUnique } from "./helperFunctions";
+import {
+  arrayToOption,
+  loadAreaChoice,
+  makeToUnique,
+  removeDuplicates,
+} from "./helperFunctions";
+import ReactSelect from "react-select";
 
-export default function MyCustomerSearch() {
+export default function CustomerSearch() {
   const [people, setPeople] = useState([]);
   const [areaChoice, setAreaChoice] = useState({});
   const [customerOptions, setCustomerOptions] = useState({});
@@ -13,10 +19,9 @@ export default function MyCustomerSearch() {
   const [salesman, setSalesman] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
 
-
   const getSearchResults = () => {
     axios
-      .get("http://localhost:5000/search_customer")
+      .get("http://localhost:5000/customers")
       .then((response) => {
         setPeople(response.data);
         console.log(response.data);
@@ -35,17 +40,17 @@ export default function MyCustomerSearch() {
 
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
-    //setCustomerOptions({...customerOptions, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
+    setCustomerOptions({...customerOptions, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
     let url1 = "http://localhost:5000/apotelesmata";
     let apotelesmata_options = {
       method: "post",
       url: url1,
       data: { continent_id: area["continent_id"] },
     };
-    let url2 = "http://localhost:5000/locations";
-    let url3 = "http://localhost:5000/professions";
-    let url4 = "http://localhost:5000/salesman";
-    let url5 = "http://localhost:5000/subscriptions";
+    var url2 = "http://localhost:5000/locations";
+    var url3 = "http://localhost:5000/professions";
+    var url4 = "http://localhost:5000/salesman";
+    var url5 = "http://localhost:5000/subscriptions";
     axios
       .all([
         axios(apotelesmata_options),
@@ -88,6 +93,22 @@ export default function MyCustomerSearch() {
     setCustomerOptions({ ...customerOptions, [name]: value });
   };
 
+  const handleTheChange = (value, action) => {
+    setCustomerOptions({ ...customerOptions, [action.name]: value });
+  };
+
+  const myFunction = (ob, attr) => {
+    const arr = [];
+    ob.forEach((element) => {
+      if (element[attr])
+        arr.push({
+          value: element[attr],
+          label: element[attr],
+        });
+    });
+    return removeDuplicates(arr, "value");
+  }
+
   function createBrowserWindow() {
     const BrowserWindow = window.require("electron").remote.BrowserWindow;
     const win2 = new BrowserWindow({
@@ -95,7 +116,7 @@ export default function MyCustomerSearch() {
       width: 800,
     });
     win2.setMenu(null);
-    //win2.webContents.openDevTools();
+    win2.webContents.openDevTools();
     win2.loadURL("http://localhost:3000/customer_search_window");
   }
 
@@ -136,7 +157,7 @@ export default function MyCustomerSearch() {
           </div>
 
           <div>
-            <label htmlFor="phone_number">Σταθερό Τηλέφωνο</label>
+            <label hmtlFor="phone_number">Σταθερό Τηλέφωνο</label>
             <input
               type="text"
               name="phone_number"
@@ -146,7 +167,7 @@ export default function MyCustomerSearch() {
           </div>
 
           <div>
-            <label htmlFor="mobile_number">Κινητό Τηλέφωνο</label>
+            <label hmtlFor="mobile_number">Κινητό Τηλέφωνο</label>
             <input
               type="text"
               name="mobile_number"
@@ -187,158 +208,118 @@ export default function MyCustomerSearch() {
 
           <div>
             <label htmlFor="state">Νομός/ Πολιτεία</label>
-            <select
+            <ReactSelect
               name="state"
               id="state"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(locations, "state", customerOptions).map(
-                arrayToOption
-              )}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(locations, "state")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="city">Πόλη</label>
-            <select
+            <ReactSelect
               name="city"
               id="city"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(locations, "city", customerOptions).map(
-                arrayToOption
-              )}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(locations, "city")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="area">Περιοχή</label>
-            <select
+            <ReactSelect
               name="area"
               id="area"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(locations, "area", customerOptions).map(
-                arrayToOption
-              )}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(locations, "area")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="category">Γενική Κατηγορία Επαγγέλματος</label>
-            <select
+            <ReactSelect
               name="category"
               id="category"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(professions, "category", customerOptions).map(
-                arrayToOption
-              )}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(professions, "category")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="profession">Επάγγελμα</label>
-            <select
+            <ReactSelect
               name="profession"
               id="profession"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(professions, "profession", customerOptions).map(
-                arrayToOption
-              )}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(professions, "profession")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="apotelesma_name">
               Γενική Κατηγορία Αποτελέσματος
             </label>
-            <select
+            <ReactSelect
               name="apotelesma_name"
               id="apotelesma_name"
-              onChange={handleCustomerOptionsChange}
-              multiple={true}
-            >
-              <option/>
-              {makeToUnique(
-                apotelesmata,
-                "apotelesma_name",
-                customerOptions
-              ).map(arrayToOption)}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(apotelesmata, "apotelesma_name")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="subapotelesma_name">Αποτέλεσμα</label>
-            <select
+            <ReactSelect
               name="subapotelesma_name"
               id="subapotelesma_name"
-              onChange={handleCustomerOptionsChange}
-              multiple={true}
-            >
-              <option/>
-              {makeToUnique(
-                apotelesmata,
-                "subapotelesma_name",
-                customerOptions
-              ).map(arrayToOption)}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(apotelesmata, "subapotelesma_name")}
+              isMulti={true}
+            />
           </div>
 
           <div>
-            <label htmlFor="salesman">Πωλητής</label>
-            <select
-              name="salesman"
-              id="salesman"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(salesman, "salesman", setCustomerOptions).map(
-                arrayToOption
-              )}
-            </select>
+            <label htmlFor="salesman_name">Πωλητής</label>
+            <ReactSelect
+              name="salesman_name"
+              id="salesman_name"
+              onChange={handleTheChange}
+              options={myFunction(salesman, "salesman_name")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
-            <select
+            <ReactSelect
               name="subscription_category"
               id="subscription_category"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(
-                subscriptions,
-                "subscription_category",
-                customerOptions
-              ).map(arrayToOption)}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(subscriptions, "subscription_category")}
+              isMulti={true}
+            />
           </div>
 
           <div>
             <label htmlFor="subscription_name">Συνδρομή</label>
-            <select
+            <ReactSelect
               name="subscription_name"
               id="subscription_name"
-              onChange={handleCustomerOptionsChange}
-            >
-              <option/>
-              {makeToUnique(
-                subscriptions,
-                "subscription_name",
-                customerOptions
-              ).map(arrayToOption)}
-            </select>
+              onChange={handleTheChange}
+              options={myFunction(subscriptions, "subscription_name")}
+              isMulti={true}
+            />
           </div>
         </form>
-        <br/>
-        <br/>
+        <br></br>
+        <br></br>
         <button type="submit" onClick={getSearchResults}>
           Αναζήτηση
         </button>
