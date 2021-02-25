@@ -1,4 +1,4 @@
-create schema melathron;
+CREATE SCHEMA IF NOT EXISTS melathron;
 USE melathron;
 
 CREATE TABLE job (
@@ -6,8 +6,7 @@ CREATE TABLE job (
     category VARCHAR(50),
     profession VARCHAR(50),
     PRIMARY KEY(job_id)
-    
-    );
+);
     
 CREATE TABLE continent (
 	continent_id INT AUTO_INCREMENT,
@@ -174,7 +173,7 @@ CREATE FUNCTION check_paid(s_id INT)
 RETURNS BOOLEAN
 DETERMINISTIC
 BEGIN
-	IF (SELECT SUM(IFNULL(dose_amount,0))
+	IF (SELECT SUM(IFNULL(payment_amount,0))
     FROM payment_info
     WHERE sale_id = s_id) = (SELECT total_amount FROM sale WHERE sale_id = s_id) THEN
     RETURN 1;
@@ -186,6 +185,15 @@ DELIMITER ;
 
 
 DELIMITER //
+CREATE TRIGGER ins_paid_date BEFORE INSERT ON payment_info
+FOR EACH ROW
+BEGIN
+    IF NEW.payment_amount = NEW.dose_amount THEN
+    SET NEW.payment_date = CURRENT_TIMESTAMP;
+    END IF;
+END//
+
+DELIMITER //
 CREATE TRIGGER ins_paid AFTER INSERT ON payment_info
 FOR EACH ROW
 BEGIN
@@ -193,6 +201,18 @@ BEGIN
 	SET paid = check_paid(NEW.sale_id)
     WHERE sale_id = NEW.sale_id;
 END//
+
+DELIMITER //
+CREATE TRIGGER upd_paid_date BEFORE UPDATE ON payment_info
+FOR EACH ROW
+BEGIN
+    IF NEW.payment_amount = NEW.dose_amount THEN
+    SET NEW.payment_date = CURRENT_TIMESTAMP; 
+    ELSE
+    SET NEW.payment_date = NULL; 
+    END IF;
+END//
+DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER upd_paid AFTER UPDATE ON payment_info
@@ -227,7 +247,6 @@ DELIMITER ;
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Εύοσμος');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
-
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
