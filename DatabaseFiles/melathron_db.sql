@@ -109,8 +109,7 @@ CREATE TABLE subscription (
 
 CREATE TABLE salesman (
 	salesman_id INT AUTO_INCREMENT,
-    salesman_first_name VARCHAR(20),
-    salesman_last_name VARCHAR(20),
+    salesman_name VARCHAR(60),
     PRIMARY KEY(salesman_id)
     );
 
@@ -147,7 +146,7 @@ CREATE TABLE sale (
     FOREIGN KEY(subscription_id) REFERENCES subscription(subscription_id) ON DELETE CASCADE,
     FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id) ON DELETE CASCADE
     );
-    
+
 CREATE TABLE payment_info (
 	dose_number SMALLINT,
     sale_id INT,
@@ -159,7 +158,7 @@ CREATE TABLE payment_info (
     PRIMARY KEY(dose_number,sale_id),
     FOREIGN KEY(sale_id) REFERENCES sale(sale_id) ON DELETE CASCADE
     );
-    
+
 CREATE TABLE acc (
 	username VARCHAR(20),
     passcode VARCHAR(20),
@@ -247,6 +246,9 @@ DELIMITER ;
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Εύοσμος');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name='Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
+INSERT INTO salesman (salesman_name) VALUES ("Νικόλαος Φρυγανιώτης");
+INSERT INTO job (category, profession) VALUES ("Ιατρός", "Παθολόγος");
+INSERT INTO job (category, profession) VALUES ("Ιατρός", "Γυναικολόγος");
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
