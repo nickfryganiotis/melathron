@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./MyCustomSearch.css";
 import axios from "axios";
-import {
-  arrayToOption,
-  loadAreaChoice,
-  makeToUnique,
-  removeDuplicates,
-} from "./helperFunctions";
+import { loadAreaChoice, removeDuplicates } from "./helperFunctions";
 import ReactSelect from "react-select";
 
 export default function CustomerSearch() {
-  const [people, setPeople] = useState([]);
   const [areaChoice, setAreaChoice] = useState({});
   const [customerOptions, setCustomerOptions] = useState({});
   const [locations, setLocations] = useState([]);
@@ -18,29 +12,32 @@ export default function CustomerSearch() {
   const [apotelesmata, setApotelesmata] = useState([]);
   const [salesman, setSalesman] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
-
-  const getSearchResults = () => {
-    axios
-      .get("http://localhost:5000/customers")
-      .then((response) => {
-        setPeople(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    console.log(customerOptions);
-    localStorage.setItem("customer_search_results", JSON.stringify(people));
-    createBrowserWindow();
-  };
+  const [spcode, setSpcode] = useState({});
 
   useEffect(() => {
     loadAreaChoice(setAreaChoice);
   }, []);
 
+  const getSearchResults = () => {
+    localStorage.setItem(
+      "customer_search_options",
+      JSON.stringify(customerOptions)
+    );
+    createBrowserWindow("customer_search");
+  };
+
+  const getSpcodeResults = () => {
+    localStorage.setItem("spcode_search", JSON.stringify(spcode));
+    createBrowserWindow("spcode_search");
+  };
+
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
-    setCustomerOptions({...customerOptions, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
+    setCustomerOptions({
+      ...customerOptions,
+      continent_id: area["continent_id"],
+      country_id: area["country_id"],
+    });
     let url1 = "http://localhost:5000/apotelesmata";
     let apotelesmata_options = {
       method: "post",
@@ -70,24 +67,6 @@ export default function CustomerSearch() {
       );
   }, [areaChoice]);
 
-  const attributes = [
-    "Κωδικός",
-    "Όνομα",
-    "Επώνυμο",
-    "Πατρώνυμο",
-    "Επωνυμία Εταιρίας",
-    "Ιστοσελίδα",
-    "Email",
-    "Οδός",
-    "Αριθμός",
-    "Τ.Κ.",
-    "FAX",
-    "Σχόλια",
-    "Δυναμικό",
-    "...",
-    "...",
-  ];
-
   const handleCustomerOptionsChange = (e) => {
     const { value, name } = e.target;
     setCustomerOptions({ ...customerOptions, [name]: value });
@@ -95,6 +74,11 @@ export default function CustomerSearch() {
 
   const handleTheChange = (value, action) => {
     setCustomerOptions({ ...customerOptions, [action.name]: value });
+  };
+
+  const handleSpcodeChange = (e) => {
+    const { value, name } = e.target;
+    setSpcode({ ...spcode, [name]: value });
   };
 
   const myFunction = (ob, attr) => {
@@ -107,9 +91,9 @@ export default function CustomerSearch() {
         });
     });
     return removeDuplicates(arr, "value");
-  }
+  };
 
-  function createBrowserWindow() {
+  function createBrowserWindow(window_type) {
     const BrowserWindow = window.require("electron").remote.BrowserWindow;
     const win2 = new BrowserWindow({
       height: 600,
@@ -117,7 +101,13 @@ export default function CustomerSearch() {
     });
     win2.setMenu(null);
     win2.webContents.openDevTools();
-    win2.loadURL("http://localhost:3000/customer_search_window");
+    if (window_type == "customer_search") {
+      win2.loadURL("http://localhost:3000/customer_search_window");
+    } else if (window_type == "spcode_search") {
+      win2.loadURL("http://localhost:3000/code_search_window");
+    } else {
+      console.log("ERROR");
+    }
   }
 
   return (
@@ -132,8 +122,9 @@ export default function CustomerSearch() {
               type="number"
               name="spcode"
               id="spcode"
-              onChange={handleCustomerOptionsChange}
+              onChange={handleSpcodeChange}
             />
+            <button onClick={getSpcodeResults}>Αναζήτηση με Κωδικό</button>
           </div>
 
           <div>

@@ -12,6 +12,7 @@ import CustomersFromFile from "./CustomersFromFile";
 import SalesFromFile from "./SalesFromFile"
 import CustomerSearch from "./CustomerSearch";
 import MySaleSearch from "./MySaleSearch";
+import CodeSearchWindow from "./CodeSearchWindow";
 
 
 function App() {
@@ -34,6 +35,9 @@ function App() {
           </Route>
           <Route exact path="/customer_search_window">
             <CustomerSearchWindow />
+          </Route>
+          <Route exact path="/code_search_window">
+            <CodeSearchWindow />
           </Route>
           <Route exact path="/load_from_file_customers">
             <CustomersFromFile />

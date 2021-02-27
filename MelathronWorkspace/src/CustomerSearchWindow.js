@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import ReactTable from "react-table-6";
 import "react-table-6/react-table.css";
 import CustomerInfo from "./CustomerInfo";
+import axios from "axios";
 
 export default function CustomerSearchWindow() {
   const [results, setResults] = useState([]);
   const [exp, setExp] = useState({});
+  const [customerOptions, setCustomerOptions] = useState({});
 
   const attributes = [
     { Header: "Κωδικός", accessor: "spcode" },
@@ -21,32 +23,28 @@ export default function CustomerSearchWindow() {
     { Header: "Αποτέλεσμα", accessor: "subapotelesma_name" },
   ];
 
-  /*const attributes = [
-    "Κωδικός",
-    "Όνομα", 
-     "Επώνυμο", 
-    "Πατρώνυμο", 
-    "Επωνυμία Εταιρίας", 
-    "Ιστοσελίδα",
-    "Email", 
-    "Οδός", 
-    "Τ.Κ.",
-    "Κατηγορία Αποτελέσματος",
-    "Αποτέλεσμα",
-  ];*/
+  async function readCustomerOptions() {
+    let x = JSON.parse(localStorage.getItem("customer_search_options"));
+    return x
+  }
+
+  async function customerOptionsSet(){
+    let y = await readCustomerOptions()
+    setCustomerOptions(y)
+  }
 
   useEffect(() => {
-    setResults(JSON.parse(localStorage.getItem("customer_search_results")));
-    console.log(results);
+    customerOptionsSet()
+    axios
+      .get("http://localhost:5000/customers")
+      .then((response) => {
+        setResults(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
-  /* return(<div>
-        <table>
-          <tr>{mapToRow(attributes)}</tr>
-          {getJSONValues(results)}
-        </table>
-        <ReactTable />
-    </div>)*/
   return (
     <div>
       <ReactTable
@@ -69,7 +67,7 @@ export default function CustomerSearchWindow() {
         SubComponent={(row) => {
           return (
             <div>
-              <CustomerInfo sp = {row.original.spcode}/>
+              <CustomerInfo sp={row.original.spcode} />
             </div>
           );
         }}
@@ -77,4 +75,3 @@ export default function CustomerSearchWindow() {
     </div>
   );
 }
-

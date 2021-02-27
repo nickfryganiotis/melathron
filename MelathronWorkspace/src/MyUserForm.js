@@ -94,7 +94,6 @@ export default function MyUserForm() {
       url: "http://localhost:5000/send",
       data: customer,
     };
-    var last_spcode;
     axios(customer_options)
       .then((response) => {
         /*last_spcode = response.data["spcode"];
