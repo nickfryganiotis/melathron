@@ -29,14 +29,14 @@ export default function DosesPaymentForm({ onChange }) {
       </div>
 
       <div>
-        {numDoses === 2 && (
+        {numDoses == 2 && (
           <div style={{ padding: "10px" }}>
             {" "}
             <Doses i={1} onChange={onChange} /> <br/>
             <Doses i={2} onChange={onChange} />{" "}
           </div>
         )}
-        {numDoses === 3 && (
+        {numDoses == 3 && (
           <div style={{ padding: "10px" }}>
             {" "}
             <Doses i={1} onChange={onChange} /> <br/>
@@ -44,7 +44,7 @@ export default function DosesPaymentForm({ onChange }) {
             <Doses i={3} onChange={onChange} />{" "}
           </div>
         )}
-        {numDoses === 4 && (
+        {numDoses == 4 && (
           <div style={{ padding: "10px" }}>
             {" "}
             <Doses i={1} onChange={onChange} /> <br/>

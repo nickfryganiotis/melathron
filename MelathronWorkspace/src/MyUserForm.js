@@ -19,19 +19,22 @@ export default function MyUserForm() {
   }, []);
 
   useEffect(() => {
-    var area = JSON.parse(localStorage.getItem('area_choice'))
-    setCustomer({...customer, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
-    var url1 = "http://localhost:5000/apotelesmata";
+    //var area = JSON.parse(localStorage.getItem('area_choice'))
+    setCustomer({...customer, 'continent_id': areaChoice['continent_id'], 'country_id': areaChoice['country_id'] })
     var apotelesmata_options = {
       method: "post",
-      url: url1,
-      data: {'continent_id': area['continent_id']}
+      url: "http://localhost:5000/apotelesmata",
+      data: {'continent_id': areaChoice['continent_id']}
     }
-    var url2 = "http://localhost:5000/locations";
-    var url3 = "http://localhost:5000/professions";
-    var url4 = "http://localhost:5000/salesman";
+    var locations_options = {
+      method : "post",
+      url: "http://localhost:5000/locations",
+      data: {'country_id': areaChoice['country_id']}
+    }
+    var professions_options = "http://localhost:5000/professions";
+    var salesman_options = "http://localhost:5000/salesman";
     axios
-      .all([axios(apotelesmata_options), axios.get(url2), axios.get(url3), axios.get(url4)])
+      .all([axios(apotelesmata_options), axios(locations_options), axios.get(professions_options), axios.get(salesman_options)])
       .then(
         axios.spread((obj1, obj2, obj3, obj4) => {
           setApotelesmata(obj1.data);
@@ -96,20 +99,9 @@ export default function MyUserForm() {
     };
     axios(customer_options)
       .then((response) => {
-        /*last_spcode = response.data["spcode"];
-        var phone_data = { ...phones, spcode: last_spcode };
-        var phone_options = {
-          method: "post",
-          url: "http://localhost:5000/Graham",
-          data: phone_data,
-        };
-
-        return axios(phone_options)
-          .then((response) => {})
-          .catch((error) => console.error("timeout exceeded"));*/
           console.log(response)
       })
-      .catch((error) => console.error("timeout exceeded"));
+      .catch((error) => console.log(error));
 
     e.target.reset();
     setCustomer({});

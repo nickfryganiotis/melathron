@@ -206,3 +206,12 @@ app.get("/countries", (req, res) => {
     res.send(results);
   });
 });
+
+app.post("/customer_info", (req, res) => {
+  spcode = req.body.spcode
+  const query = "SELECT * FROM customer c LEFT JOIN history_instance h ON c.spcode = h.spcode LEFT JOIN phone p ON c.spcode = p.spcode LEFT JOIN mobile m ON c.spcode = m.spcode LEFT JOIN sale s ON c.spcode = s.spcode WHERE c.spcode = ?";
+  connection.query(query, [spcode] , function (error, results) {
+    if (error) throw error;
+    res.send(results);
+  });
+});

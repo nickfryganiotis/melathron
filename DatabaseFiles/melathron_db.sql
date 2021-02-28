@@ -148,7 +148,7 @@ CREATE TABLE sale (
     );
 
 CREATE TABLE payment_info (
-	dose_number SMALLINT,
+	dose_number INT,
     sale_id INT,
     dose_amount FLOAT,
     payment_amount FLOAT DEFAULT 0,
@@ -242,7 +242,6 @@ BEGIN
     WHERE spcode = NEW.spcode;
 END//
 DELIMITER ;
-
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);

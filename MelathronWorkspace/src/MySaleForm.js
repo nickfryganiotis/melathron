@@ -18,10 +18,16 @@ export default function MySaleForm() {
   }, []);
 
   useEffect(() => {
+    //var area = JSON.parse(localStorage.getItem('area_choice'))
+    setSale({...sale, 'continent_id': areaChoice['continent_id'], 'country_id': areaChoice['country_id'] })
     let url1 = "http://localhost:5000/shipping_methods";
-    let url2 = "http://localhost:5000/subscriptions";
+    let subscriptions_options = {
+      method: "post",
+      url: "http://localhost:5000/subscriptions",
+      data: {'country_id': areaChoice['country_id']}
+    }
     let url3 = "http://localhost:5000/salesman";
-    axios.all([axios.get(url1), axios.get(url2), axios.get(url3)]).then(
+    axios.all([axios.get(url1), axios(subscriptions_options), axios.get(url3)]).then(
       axios.spread((obj1, obj2, obj3) => {
         setShippingMethods(obj1.data);
         setSubscriptions(obj2.data);
@@ -37,7 +43,7 @@ export default function MySaleForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    /*var sale_options = {
+    let sale_options = {
       method: "post",
       url: "http://localhost:5000/send_sale",
       data: sale,
@@ -50,7 +56,7 @@ export default function MySaleForm() {
         console.log(error);
       });
     e.target.reset();
-    setSale({});*/
+    setSale({});
     console.log(sale);
   };
 
@@ -74,10 +80,10 @@ export default function MySaleForm() {
         </div>
 
         <div>
-          <label htmlFor="salesman">Πωλητής</label>
-          <select name="salesman" id="salesman" onChange={handleSaleChange}>
+          <label htmlFor="salesman_name">Πωλητής</label>
+          <select name="salesman_name" id="salesman_name" onChange={handleSaleChange}>
             <option/>
-            {makeToUnique(salesman, "salesman", sale).map(arrayToOption)}
+            {makeToUnique(salesman, "salesman_name", sale).map(arrayToOption)}
           </select>
         </div>
 

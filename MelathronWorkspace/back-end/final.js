@@ -89,9 +89,10 @@ app.get("/locations", (req, res) => {
     });
   });
   
-  app.get("/apotelesmata", (req, res) => {
-    const query = "SELECT * FROM apotelesma;";
-    connection.query(query, function (error, results) {
+  app.post("/apotelesmata", (req, res) => {
+    const area = req.body
+    const query = "SELECT * FROM apotelesma WHERE continent_id = ?"
+    connection.query(query, [area['continent_id']],function (error, results) {
       if (error) throw error;
       res.send(results);
     });
