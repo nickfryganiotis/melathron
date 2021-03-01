@@ -313,3 +313,29 @@ app.get("/status2",(req,res)=>{
     }
     res.sendStatus(200);
 });
+
+app.post("/customer_info",(req,res) =>{
+    const spcode = req.body['spcode'];
+    var output = [];
+    var query =  "SELECT * FROM customer c, location l, apotelesma a, job j WHERE c.spcode = ? AND l.location_id = c.location_id AND a.apotelesma_id = c.apotelesma_id AND j.job_id = c.job_id"
+    connection.query(query,spcode,function(error,results){
+        if (error) throw error;
+        output.push(results);
+    });
+    query =  "SELECT * FROM history_instance h, apotelesma a WHERE h.spcode = ? AND h.apotelesma_id = a.apotelesma_id";
+    connection.query(query,spcode,function(error,results){
+        if (error) throw error;
+        output.push(results);       
+    });
+    query = "SELECT * FROM works_on WHERE works_on.spcode = ?"
+    connection.query(query,spcode,function(error,results){
+        if (error) throw error;
+        output.push(results);        
+    });
+    query = "SELECT * FROM sale s, payment_info p, subscription sb, shipping_method sm WHERE s.spcode = ? AND p.sale_id = s.sale_id AND sb.subscription_id = s.subscription_id AND sm.shipping_method_id = s.shipping_method_id";
+    connection.query(query,spcode,function(error,results){
+        if (error) throw error;
+        output.push(results);
+        res.send(output);
+    });  
+});
