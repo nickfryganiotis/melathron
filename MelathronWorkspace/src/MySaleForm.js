@@ -66,10 +66,13 @@ export default function MySaleForm() {
   };
 
   return (
-    <div className="user-form">
+    <div className='total-main-page2'>
+    <div className="user-form2">
       <h1>Εισαγωγή Νέας Πώλησης</h1>
       <form onSubmit={handleSubmit}>
-        <div>
+        
+      <div className='user-form-line2'>
+      <div className='form-input2 left2'>
           <label htmlFor="spcode">Κωδικός Πελάτη</label>
           <input
             type="number"
@@ -79,7 +82,7 @@ export default function MySaleForm() {
           />
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="salesman_name">Πωλητής</label>
           <select name="salesman_name" id="salesman_name" onChange={handleSaleChange}>
             <option/>
@@ -87,7 +90,7 @@ export default function MySaleForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="order_date">Ημερομηνία Παραγγελίας</label>
           <input
             type="date"
@@ -96,8 +99,11 @@ export default function MySaleForm() {
             onChange={handleSaleChange}
           />
         </div>
+        </div>
 
-        <div>
+
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
           <select
             name="subscription_category"
@@ -111,7 +117,7 @@ export default function MySaleForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="subscription_name">Συνδρομή</label>
           <select
             name="subscription_name"
@@ -127,8 +133,10 @@ export default function MySaleForm() {
             ).map(arrayToOption)}
           </select>
         </div>
+        </div>
 
-        <div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="total_amount">Συνολικό Ποσό Πληρωμής</label>
           <input
             type="number"
@@ -139,7 +147,7 @@ export default function MySaleForm() {
           />
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="shipping_method_name">Τρόπος Παράδοσης</label>
           <select
             name="shipping_method_name"
@@ -153,7 +161,7 @@ export default function MySaleForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="voucher">Voucher</label>
           <input
             type="text"
@@ -162,8 +170,10 @@ export default function MySaleForm() {
             onChange={handleSaleChange}
           />
         </div>
+        </div>
 
-        <div>
+        <div className='user-form-line2'>
+        <div className='form-input2'>
           <label htmlFor="howToPay" >Τρόπος Εξόφλησης</label>
           <div className="maria">
             <input
@@ -185,6 +195,7 @@ export default function MySaleForm() {
             />
             <label htmlFor="doses" style={{'margin-top': 0, 'font-size': '16px'}}>Πληρωμή με Δόσεις</label>
           </div>
+          </div>
         </div>
         <br/>
 
@@ -194,10 +205,13 @@ export default function MySaleForm() {
         </div>
 
         <br/>
-        <button type="submit" className="btn btn-danger">
+        <div className='center2'>
+        <button type="submit" className="btn btn-danger choice-btn2">
           Εισαγωγή
         </button>
+        </div>
       </form>
+    </div>
     </div>
   );
 }

@@ -46,12 +46,15 @@ export default function AreaChoice() {
   };
  
   return (
+    <div className='total-main-page'>
+      <div className="user-form-div">
+        <div className="user-form-image"></div>
     <div className="user-form">
       <h1>Επιλέξτε Περιοχή Εργασίας</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="continent_name">Ήπειρος</label>
-          <select
+          <select className='user-form-select'
             name="continent_name"
             id="continent_name"
             onChange={handleContinentChange}
@@ -64,7 +67,8 @@ export default function AreaChoice() {
 
         <div>
           <label htmlFor="country">Χώρα</label>
-          <select
+          <select className='user-form-select'
+            type='text'
             name="country"
             id="country"
             onChange={handleCountryChange}
@@ -82,10 +86,14 @@ export default function AreaChoice() {
         <br></br>
         <br></br>
         <br></br>
-        <button type="submit" className="btn btn-danger">
-          Επιλογή
-        </button>
+        <dic className='center'>
+          <button type="submit" className="btn btn-danger choice-btn">
+            Επιλογή
+          </button>
+        </dic>
       </form>
+    </div>
+    </div>
     </div>
   );
 }

@@ -87,12 +87,13 @@ export default function MySaleSearch() {
   }
 
   return (
-    <>
-      <div className="user-form">
+    <div className='total-main-page2'>
+      <div className="user-form2">
         <h1>Αναζήτηση Πώλησης</h1>
 
         <form>
-          <div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
             <label htmlFor="sale_id">Κωδικός Πώλησης</label>
             <input
               type="number"
@@ -102,7 +103,7 @@ export default function MySaleSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2 left2'>
             <label htmlFor="salesman_name">Πωλητής</label>
             <ReactSelect
               name="salesman_name"
@@ -113,7 +114,7 @@ export default function MySaleSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="spcode">Κωδικός Πελάτη</label>
             <input
               type="number"
@@ -122,8 +123,10 @@ export default function MySaleSearch() {
               onChange={handleSaleOptionsChange}
             />
           </div>
+          </div>
 
-          <div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
             <ReactSelect
               name="subscription_category"
@@ -134,7 +137,7 @@ export default function MySaleSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2 left2'>
             <label htmlFor="subscription_name">Συνδρομή</label>
             <ReactSelect
               name="subscription_name"
@@ -145,7 +148,7 @@ export default function MySaleSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="shipping_method_name">Τρόπος Παράδοσης</label>
             <ReactSelect
               name="shipping_method_name"
@@ -155,18 +158,23 @@ export default function MySaleSearch() {
               isMulti={true}
             />
           </div>
+          </div>
 
-          <div>
+          <div className='user-form-line2'>
+          <div className='form-input2 '>
             <label htmlFor="date_range">Ημερομηνία Παραγγελίας</label>
-            <div className="maria">
-                <label htmlFor = "order_date1" style={{width: "auto", fontSize: "16px" }}>Από</label>
+            <div className='user-form-line2 line-left2 range2'>
+            <div className='form-input2 left2 '>
+                <label htmlFor = "order_date1">Από</label>
               <input
                 type="date"
                 name="order_date1"
                 id="order_date1"
                 onChange={handleSaleOptionsChange}
               />
-              <label htmlFor = "order_date2" style={{width: "auto", fontSize: "16px"}}>Έως</label>
+              </div>
+              <div className='form-input2 '>
+              <label htmlFor = "order_date2">Έως</label>
               <input
                 type="date"
                 name="order_date2"
@@ -175,34 +183,43 @@ export default function MySaleSearch() {
               />
             </div>
           </div>
+          </div>
+          </div>
 
-
-          <div>
+          <div className='user-form-line2'>
+          <div className='form-input2'>
             <label htmlFor="price_range">Ποσό Πληρωμής</label>
-            <div className="maria">
-                <label htmlFor = "amount1" style={{width: "auto", fontSize: "16px" }}>Από</label>
+            <div className='user-form-line2 line-left2 range2'>
+            <div className='form-input2 left2 number2'>
+                <label htmlFor = "amount1">Από</label>
               <input
                 type="number"
                 name="amount1"
                 id="amount1"
                 onChange={handleSaleOptionsChange}
               />
-              <label htmlFor = "amount2" style={{width: "auto", fontSize: "16px"}}>Έως</label>
+              </div>
+              <div className='form-input2 number2'>
+              <label htmlFor = "amount2">Έως</label>
               <input
                 type="number"
                 name="amount2"
                 id="amount2"
                 onChange={handleSaleOptionsChange}
               />
+              </div>
+              </div>
             </div>
           </div>
         </form>
         <br></br>
         <br></br>
-        <button type="submit" onClick={getSearchResults}>
+        <div className='center2'>
+        <button type="submit" className="btn btn-danger choice-btn2" onClick={getSearchResults}>
           Αναζήτηση
         </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

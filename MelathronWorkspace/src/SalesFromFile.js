@@ -47,10 +47,13 @@ export default function SalesFromFile() {
   };
 
   return (
-    <div className="user-form">
+    <div className='total-main-page2'>
+    <div className="user-form2">
       <h1>Εισαγωγή Πωλήσεων από Αρχείο</h1>
       <form onSubmit={tryit}>
-        <div>
+      <div className='center2'>
+      <div className='user-form-line2'>
+      <div className='form-input2'>
           <label>Επιλέξτε τον φάκελο που περιέχει τα δεδομένα</label>
           <input
             type="file"
@@ -63,11 +66,14 @@ export default function SalesFromFile() {
             }}
           ></input>
         </div>
+        </div>
+        </div>
         <br></br>
-        <div>
-          <button type="submit" className='btn btn-danger'>Εισαγωγή Στοιχείων</button>
+        <div className='center2'>
+          <button type="submit" className='btn btn-danger choice-btn2'>Εισαγωγή</button>
         </div>
       </form>
+    </div>
     </div>
   );
 }

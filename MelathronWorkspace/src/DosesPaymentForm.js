@@ -15,9 +15,10 @@ export default function DosesPaymentForm({ onChange }) {
   };
   return (
     <div>
-      {numDoses}
-      <div>
-        <label htmlFor="number_of_doses">Αριθμός Δόσεων</label>
+      <div className='user-form-line2 line-left2'>
+      
+      <div className='form-input2 number2'>
+        <label htmlFor="number_of_doses">Αριθμός Δόσεων: {numDoses}</label>
         <input
           type="number"
           name="number_of_doses"
@@ -26,6 +27,7 @@ export default function DosesPaymentForm({ onChange }) {
           max="4"
           onChange={myChange}
         />
+      </div>
       </div>
 
       <div>

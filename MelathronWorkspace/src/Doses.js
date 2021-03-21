@@ -3,9 +3,10 @@ import React from 'react'
 export default function Doses({i, onChange}){
 
     return (      
-    <div style={{'border' : '1px solid black'}} >
+    <div>
         <br/>
-        <div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="dose_amount">Ποσό Δόσης {i}</label>
           <input
             type="number"
@@ -13,9 +14,10 @@ export default function Doses({i, onChange}){
             id={"dose_amount" + i}
             onChange={onChange}
           />
-        </div>
+          </div>
+        
 
-        <div>
+          <div className='form-input2 left2'>
           <label htmlFor="dose_deadline">Προσθεσμία Εξόφλησης Δόσης {i}</label>
           <input
             type="date"
@@ -25,7 +27,7 @@ export default function Doses({i, onChange}){
           />
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="payment_amount">Πληρωθέν Ποσό Δόσης {i}</label>
           <input
             type="number"
@@ -35,7 +37,7 @@ export default function Doses({i, onChange}){
           />
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="payment_method">Μέθοδος Πληρωμής Δόσης {i}</label>
           <div className="maria">
             <input
@@ -47,7 +49,6 @@ export default function Doses({i, onChange}){
             />
             <label
               htmlFor="card"
-              style={{ "margin-top": 0, "font-size": "16px" }}
             >
               Τραπεζική Κατάθεση
             </label>
@@ -62,12 +63,12 @@ export default function Doses({i, onChange}){
             />
             <label
               htmlFor="cash"
-              style={{ "margin-top": 0, "font-size": "16px" }}
             >
               Μετρητά
             </label>
           </div>
         </div>
         <br/>
+      </div>
       </div>)
 }
