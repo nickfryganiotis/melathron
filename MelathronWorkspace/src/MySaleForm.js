@@ -13,18 +13,19 @@ export default function MySaleForm() {
   const [status, setStatus] = useState(0);
   const [areaChoice, setAreaChoice] = useState({});
 
-  useEffect(() => {
+  /*useEffect(() => {
     loadAreaChoice(setAreaChoice);
-  }, []);
+  }, []);*/
 
   useEffect(() => {
-    //var area = JSON.parse(localStorage.getItem('area_choice'))
-    setSale({...sale, 'continent_id': areaChoice['continent_id'], 'country_id': areaChoice['country_id'] })
+    let area = JSON.parse(localStorage.getItem('area_choice'))
+    loadAreaChoice(setAreaChoice)
+    setSale({...sale, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
     let url1 = "http://localhost:5000/shipping_methods";
     let subscriptions_options = {
       method: "post",
       url: "http://localhost:5000/subscriptions",
-      data: {'country_id': areaChoice['country_id']}
+      data: {'country_id': area['country_id']}
     }
     let url3 = "http://localhost:5000/salesman";
     axios.all([axios.get(url1), axios(subscriptions_options), axios.get(url3)]).then(
@@ -34,7 +35,7 @@ export default function MySaleForm() {
         setSalesman(obj3.data);
       })
     );
-  }, [areaChoice]);
+  }, []);
 
   const handleSaleChange = (e) => {
     const { value, name } = e.target;

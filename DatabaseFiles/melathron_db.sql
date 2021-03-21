@@ -7,7 +7,7 @@ CREATE TABLE job (
     profession VARCHAR(50),
     PRIMARY KEY(job_id)
 );
-    
+
 CREATE TABLE continent (
 	continent_id INT AUTO_INCREMENT,
 	continent_name VARCHAR(20),

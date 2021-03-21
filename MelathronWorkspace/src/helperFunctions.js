@@ -46,11 +46,12 @@ export function getJSONValues(table){
   };
 
 //Συνάρτηση που φορτώνει από το local storage την επιλογή του χρήστη για ήπειρο και περιοχή και θέτει μια μεταβλητή ίση με αυτή την επιλογή με την setAreaChoice
-export function loadAreaChoice(setAreaChoice){
+export async function loadAreaChoice(setAreaChoice){
   var x = localStorage.getItem('area_choice')
   var y = JSON.parse(x)
   if (typeof(y)!== 'undefined'){
     setAreaChoice(y)
+    //return y
   }
 }
 
@@ -63,7 +64,6 @@ export function removeDuplicates( arr, prop ) {
   for ( var key in obj ) newArr.push(obj[key]);
   return newArr;
 }
-
 
 
 /*const attributes = [

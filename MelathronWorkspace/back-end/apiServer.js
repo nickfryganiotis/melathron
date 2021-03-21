@@ -115,8 +115,9 @@ app.post("/send",(req,res) => {
             arg;
         }
     });
-    console.log(customer);
+    //console.log(customer);
     var input = [customer];
+    //console.log(input)
     var query = "INSERT into customer SET ?"; 
     if(auxs['category'] && auxs['profession']){
         query += ", `job_id` = (SELECT job_id FROM job WHERE category = ? and profession = ?)"

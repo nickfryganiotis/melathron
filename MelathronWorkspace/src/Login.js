@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import "./Login.css";
 //const ipcRenderer = require("electron").ipcRenderer;
+import axios from "axios";
+import {useHistory} from "react-router-dom"
 
 export default function Login() {
   const [account, setAccount] = useState({
     username: "",
     passcode: "",
   });
-
+  const hist = useHistory();
   function tryLogin(acc) {
-    fetch("http://localhost:5000/auth", {
-      method: "POST",
-      body: JSON.stringify(acc),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }).then((resp) => {
-      console.log(resp.status);
+    login_options = {
+      method: "post",
+      url: "http://localhost:5000/login",
+      data: account,
+    };
+    axios(login_options).then((response) => {
+      console.log(response)
+      hist.push("http://localhost:5000/")
     });
   }
 
@@ -42,20 +43,18 @@ export default function Login() {
           <input
             type="text"
             name="username"
-            id ="username"
+            id="username"
             onChange={handleAccountChange}
             required
           />
           <input
             type="password"
             name="passcode"
-            id = "passcode"
+            id="passcode"
             onChange={handleAccountChange}
             required
           />
-          <button type="submit">
-            Είσοδος
-          </button>
+          <button type="submit">Είσοδος</button>
         </form>
       </div>
     </>

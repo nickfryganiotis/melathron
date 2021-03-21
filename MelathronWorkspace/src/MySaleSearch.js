@@ -35,24 +35,29 @@ export default function MySaleSearch() {
     createBrowserWindow();
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     loadAreaChoice(setAreaChoice);
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
+    loadAreaChoice(setAreaChoice);
     //setCustomerOptions({...customerOptions, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
-    var url1 = "http://localhost:5000/salesman";
-    var url2 = "http://localhost:5000/subscriptions";
-    var url3 = "http://localhost:5000/shipping_methods";
-    axios.all([axios.get(url1), axios.get(url2), axios.get(url3)]).then(
-      axios.spread((obj1, obj2, obj3, obj4) => {
+    let url1 = "http://localhost:5000/salesman";
+    let subscriptions_options = {
+      method: "post",
+      url: "http://localhost:5000/subscriptions",
+      data: {'country_id': area['country_id']}
+    }
+    let url3 = "http://localhost:5000/shipping_methods";
+    axios.all([axios.get(url1), axios(subscriptions_options), axios.get(url3)]).then(
+      axios.spread((obj1, obj2, obj3) => {
         setSalesman(obj1.data);
         setSubscriptions(obj2.data);
         setShippingMethods(obj3.data);
       })
     );
-  }, [areaChoice]);
+  }, []);
 
   const handleSaleOptionsChange = (e) => {
     const { value, name } = e.target;

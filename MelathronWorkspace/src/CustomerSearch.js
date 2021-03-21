@@ -14,9 +14,9 @@ export default function CustomerSearch() {
   const [subscriptions, setSubscriptions] = useState([]);
   const [spcode, setSpcode] = useState({});
 
-  useEffect(() => {
+  /*useEffect(() => {
     loadAreaChoice(setAreaChoice);
-  }, []);
+  }, []);*/
 
   const getSearchResults = () => {
     localStorage.setItem(
@@ -33,28 +33,36 @@ export default function CustomerSearch() {
 
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
+    loadAreaChoice(setAreaChoice);
     setCustomerOptions({
       ...customerOptions,
       continent_id: area["continent_id"],
       country_id: area["country_id"],
     });
-    let url1 = "http://localhost:5000/apotelesmata";
     let apotelesmata_options = {
       method: "post",
-      url: url1,
+      url: "http://localhost:5000/apotelesmata",
       data: { continent_id: area["continent_id"] },
     };
-    var url2 = "http://localhost:5000/locations";
-    var url3 = "http://localhost:5000/professions";
-    var url4 = "http://localhost:5000/salesman";
-    var url5 = "http://localhost:5000/subscriptions";
+    let locations_options = {
+      method : "post",
+      url: "http://localhost:5000/locations",
+      data: {'country_id': area['country_id']}
+    }
+    let url3 = "http://localhost:5000/professions";
+    let url4 = "http://localhost:5000/salesman";
+    let subscriptions_options = {
+      method: "post",
+      url: "http://localhost:5000/subscriptions",
+      data: {'country_id': area['country_id']}
+    }
     axios
       .all([
         axios(apotelesmata_options),
-        axios.get(url2),
+        axios(locations_options),
         axios.get(url3),
         axios.get(url4),
-        axios.get(url5),
+        axios(subscriptions_options),
       ])
       .then(
         axios.spread((obj1, obj2, obj3, obj4, obj5) => {
@@ -65,7 +73,7 @@ export default function CustomerSearch() {
           setSubscriptions(obj5.data);
         })
       );
-  }, [areaChoice]);
+  }, []);
 
   const handleCustomerOptionsChange = (e) => {
     const { value, name } = e.target;

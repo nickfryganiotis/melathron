@@ -14,22 +14,23 @@ export default function MyUserForm() {
   const [phones, setPhones] = useState({});
   const [areaChoice, setAreaChoice] = useState({});
 
-  useEffect(() => {
+  /*useEffect(() => {
     loadAreaChoice(setAreaChoice);
-  }, []);
+  }, []);*/
 
   useEffect(() => {
-    //var area = JSON.parse(localStorage.getItem('area_choice'))
-    setCustomer({...customer, 'continent_id': areaChoice['continent_id'], 'country_id': areaChoice['country_id'] })
+    let area = JSON.parse(localStorage.getItem('area_choice'))
+    loadAreaChoice(setAreaChoice)
+    setCustomer({...customer, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
     var apotelesmata_options = {
       method: "post",
       url: "http://localhost:5000/apotelesmata",
-      data: {'continent_id': areaChoice['continent_id']}
+      data: {'continent_id': area['continent_id']}
     }
     var locations_options = {
       method : "post",
       url: "http://localhost:5000/locations",
-      data: {'country_id': areaChoice['country_id']}
+      data: {'country_id': area['country_id']}
     }
     var professions_options = "http://localhost:5000/professions";
     var salesman_options = "http://localhost:5000/salesman";
@@ -44,7 +45,7 @@ export default function MyUserForm() {
         })
       );
     console.log(areaChoice)
-  }, [areaChoice]);
+  }, []);
 
   const handlePhoneChange = (e, index) => {
     const { name, value } = e.target;
@@ -110,7 +111,7 @@ export default function MyUserForm() {
     setPhoneList([{ phone_number: "" }]);
     setMobileList([{ mobile_number: "" }]);
   };
-
+  
   return (
     <div className="user-form">
       <h1>Εισαγωγή Νέου Πελάτη</h1>
@@ -122,6 +123,7 @@ export default function MyUserForm() {
             name="last_name"
             id="last_name"
             onChange={handleCustomerChange}
+            required
           />
         </div>
 
@@ -132,6 +134,7 @@ export default function MyUserForm() {
             name="first_name"
             id="first_name"
             onChange={handleCustomerChange}
+            required
           />
         </div>
 

@@ -23,6 +23,7 @@ function createWindow() {
       ? "http://localhost:3000"
       : 'file://${path.join(__dirname, "../build/index.html")}'
   );
+  //win.setMenu(null)
   //win.removeMenu()
   //console.log(win.webContents)
   const template = [
