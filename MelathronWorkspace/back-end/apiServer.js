@@ -2,7 +2,7 @@ const express = require("express");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const session = require('express-session')
-const { response } = require("express");
+const { response, query } = require("express");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
@@ -319,7 +319,7 @@ app.post("/search_customer",(req,res) => {
 
     const customer = req.body
     var input = [];
-    query = "SELECT SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name, ap.apotelesma_name, ap.subapotelesma_name, j.category, wor.salesman_name\nFROM("
+    var query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name, ap.apotelesma_name, ap.subapotelesma_name, j.category, wor.salesman_name\nFROM("
     query += " SELECT *\n FROM customer\n"
     var parameters = false;
     if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ?%\n"; parameters = true; input.push( customer[ 'last_name' ] ); }
@@ -354,15 +354,16 @@ app.post("/search_customer",(req,res) => {
                                 const subapotelesma_names = customer['subapotelesma_name'];
                                 for ( i=0; i< subapotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subapotelesma_name = ?"; input.push(subapotelesma_names[i]['value']);  }
                                 query += ")\n" }
-    query += ") AS ap ON cust.apotelesma_id = ap.apotelesma_id\n INNER JOIN (\n SELECT *\n FROM works_on, salesman\n"
+    query += ") AS ap ON cust.apotelesma_id = ap.apotelesma_id\n INNER JOIN (\n SELECT salesman.salesman_name as salesman_name, works_on.spcode as spcode\n FROM works_on, salesman\n"
 
     parameters = false;
-    query += "WHERE works_on.salesman_name = salesman.salesman_name\n";
+    //query += "WHERE works_on.salesman_name = salesman.salesman_name\n";
+    query += "WHERE works_on.salesman_id = salesman.salesman_id\n";
     if ( customer['salesman_name'] ) { query += "AND("
                                        const salesman_names = customer['salesman_name'];                                    
-                                       for ( i=0; i< salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "works_on.salesman_name = ?"; input.push(salesman_names[i]['value']);  }
+                                       for ( i=0; i< salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman.salesman_name = ?"; input.push(salesman_names[i]['value']);  }
                                        query += ")\n"; }
-    query += ") AS wor ON cust.spcode = wor.spcode\n INNER JOIN (\n SELECT *\n FROM sale, subscription s\n";
+    query += ") AS wor ON cust.spcode = wor.spcode\n INNER JOIN (\n SELECT sale.spcode as spcode\n FROM sale, subscription s\n";
 
     parameters = false;
     query += "WHERE sale.subscription_id = s.subscription_id";
