@@ -319,78 +319,105 @@ app.post("/search_customer",(req,res) => {
 
     const customer = req.body
     var input = [];
-    var query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name, ap.apotelesma_name, ap.subapotelesma_name, j.category, wor.salesman_name\nFROM("
-    query += " SELECT *\n FROM customer\n"
+    var prefix_query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name" // , ,\nFROM("
+    
+    var query = " SELECT *\n FROM customer\n"
     var parameters = false;
     if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ?%\n"; parameters = true; input.push( customer[ 'last_name' ] ); }
     if( customer[ 'first_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "first_name LIKE ?%\n"; parameters = true; input.push( customer[ 'first_name' ] ); }
     if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ?%\n"; parameters = true; input.push( customer[ 'email' ] ); }
     if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ?%\n"; parameters = true; input.push( customer[ 'website' ] ); }
     if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ?%\n"; parameters = true; input.push( customer[ 'company_name' ] ); }
-    query += ") AS cust\n INNER JOIN (\n SELECT *\n FROM location\n"
+    query += ") AS cust\n " 
     
     parameters = false;
-    if( customer[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?\n"; parameters = true; input.push( customer['country_id'] ); }
-    if( customer[ 'state' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
-                                const states = customer['state'];
-                                for ( i=0; i< states.length; i++ ) { query += i > 0 ? " OR " : ""; query += "state = ?"; input.push(states[i]['value']);  }
-                                query += ")\n" }
-    if( customer[ 'city' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
-                                const cities = customer['city'];
-                                for ( i=0; i< cities.length; i++ ) { query += i > 0 ? " OR " : ""; query += "city = ?"; input.push(cities[i]['value']);  }
-                                query += ")\n" }
-    if( customer[ 'area' ] ) { query += !parameters ? " WHERE " : " AND "; query += "( "
-                                const areas = customer['area'];
-                                for ( i=0; i< areas.length; i++ ) { query += i > 0 ? " OR " : ""; query += "area = ?"; input.push(areas[i]['value']);  }
-                                query += ")\n" }
-    query += ") AS loc ON cust.location_id = loc.location_id\n INNER JOIN (\n SELECT *\n FROM apotelesma\n"
+    if( customer[ 'country_id' ] || customer[ 'state' ] || customer [ 'city' ] || customer[ 'area' ] ) {
+        query += "INNER JOIN (\n SELECT *\n FROM location\n"
+        if( customer[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?\n"; parameters = true; input.push( customer['country_id'] ); }
+        if( customer[ 'state' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
+                                    const states = customer['state'];
+                                    for ( i=0; i< states.length; i++ ) { query += i > 0 ? " OR " : ""; query += "state = ?"; input.push(states[i]['value']);  }
+                                    query += ")\n" }
+        if( customer[ 'city' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
+                                    const cities = customer['city'];
+                                    for ( i=0; i< cities.length; i++ ) { query += i > 0 ? " OR " : ""; query += "city = ?"; input.push(cities[i]['value']);  }
+                                    query += ")\n" }
+        if( customer[ 'area' ] ) { query += !parameters ? " WHERE " : " AND "; query += "( "
+                                    const areas = customer['area'];
+                                    for ( i=0; i< areas.length; i++ ) { query += i > 0 ? " OR " : ""; query += "area = ?"; input.push(areas[i]['value']);  }
+                                    query += ")\n" }
+        query += ") AS loc ON cust.location_id = loc.location_id\n"
+    }
 
     parameters = false;
-    if( customer[ 'apotelesma_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
-                                const apotelesma_names = customer['apotelesma_name'];
-                                for ( i=0; i< apotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "apotelesma_name = ?"; input.push(apotelesma_names[i]['value']);  }
-                                query += ")\n" }
-    if( customer[ 'subapotelesma_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
-                                const subapotelesma_names = customer['subapotelesma_name'];
-                                for ( i=0; i< subapotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subapotelesma_name = ?"; input.push(subapotelesma_names[i]['value']);  }
-                                query += ")\n" }
-    query += ") AS ap ON cust.apotelesma_id = ap.apotelesma_id\n INNER JOIN (\n SELECT salesman.salesman_name as salesman_name, works_on.spcode as spcode\n FROM works_on, salesman\n"
-
+    if ( customer[ 'category' ] || customer[ 'profession' ] ) {
+        query += "INNER JOIN\n (SELECT *\n FROM job\n"
+        if( customer[ 'category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true; 
+                                       const categories = customer[ 'category' ];
+                                       for ( i=0; i< categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "category = ?"; input.push(categories[i]['value']);  }
+                                       query += ")\n"; }  
+        if( customer[ 'category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true; 
+                                       const categories = customer[ 'category' ];
+                                       for ( i=0; i< categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "category = ?"; input.push(categories[i]['value']);  }
+                                       query += ")\n"; }
+        query += ") AS j ON j.job_id = cust.job_id\n";
+        prefix_query += ", j.category";  
+    }
+    
+    parameters = false;
+    if ( customer[ 'apotelesma_name' ] || customer[ 'subapotelesma_name' ] ) {
+        query += "INNER JOIN (\n SELECT *\n FROM apotelesma\n"
+        if( customer[ 'apotelesma_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
+                                              const apotelesma_names = customer['apotelesma_name'];
+                                              for ( i=0; i< apotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "apotelesma_name = ?"; input.push(apotelesma_names[i]['value']);  }
+                                              query += ")\n"; 
+                                              prefix_query +=  ", ap.apotelesma_name" }
+        if( customer[ 'subapotelesma_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
+                                                 const subapotelesma_names = customer['subapotelesma_name'];
+                                                 for ( i=0; i< subapotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subapotelesma_name = ?"; input.push(subapotelesma_names[i]['value']);  }
+                                                 query += ")\n"; 
+                                                 prefix_query += ", ap.subapotelesma_name"  }
+        query += ") AS ap ON cust.apotelesma_id = ap.apotelesma_id\n"
+    }
     parameters = false;
     //query += "WHERE works_on.salesman_name = salesman.salesman_name\n";
-    query += "WHERE works_on.salesman_id = salesman.salesman_id\n";
-    if ( customer['salesman_name'] ) { query += "AND("
-                                       const salesman_names = customer['salesman_name'];                                    
+    if ( customer['salesman_name'] ) { query += "INNER JOIN (\n SELECT salesman.salesman_name as salesman_name, works_on.spcode as spcode\n FROM works_on, salesman\n WHERE works_on.salesman_id = salesman.salesman_id\n";
+                                       query += "AND("
+                                       const salesman_names = customer[ 'salesman_name' ];                                    
                                        for ( i=0; i< salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman.salesman_name = ?"; input.push(salesman_names[i]['value']);  }
-                                       query += ")\n"; }
-    query += ") AS wor ON cust.spcode = wor.spcode\n INNER JOIN (\n SELECT sale.spcode as spcode\n FROM sale, subscription s\n";
+                                       query += ")\n) AS wor ON cust.spcode = wor.spcode\n";
+                                       prefix_query +=  ", wor.salesman_name" 
+    }
+                                
+    parameters = false;
+    if( customer[ 'subscription_category' ] || customer[ 'subscription_name' ]){
+        query += "INNER JOIN (\n SELECT sale.spcode as spcode\n FROM sale, subscription s\n WHERE sale.subscription_id = s.subscription_id"; 
+        if ( customer['subscription_category'] ) { query += "AND("
+                                                   const subscription_categories = customer['subscription_category'];                                    
+                                                   for ( i=0; i< subscription_categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "s.subscription_category = ?"; input.push(subscription_categories[i]['value']);  }
+                                                   query += ")\n"; }
+        if ( customer['subscription_name'] ) { query += "AND("
+                                               const subscription_names = customer['subscription_name'];                                    
+                                               for ( i=0; i< subscription_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "s.subscription_name = ?"; input.push(subscription_names[i]['value']);  }
+                                               query += ")\n"; }
+        query += ") AS sal ON cust.spcode = sal.spcode\n"
+    }
 
     parameters = false;
-    query += "WHERE sale.subscription_id = s.subscription_id";
-    if ( customer['subscription_category'] ) { query += "AND("
-                                       const subscription_categories = customer['subscription_category'];                                    
-                                       for ( i=0; i< subscription_categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "s.subscription_category = ?"; input.push(subscription_categories[i]['value']);  }
-                                       query += ")\n"; }
-    if ( customer['subscription_name'] ) { query += "AND("
-                                       const subscription_names = customer['subscription_name'];                                    
-                                       for ( i=0; i< subscription_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "s.subscription_name = ?"; input.push(subscription_names[i]['value']);  }
-                                       query += ")\n"; }
-    query += ") AS sal ON cust.spcode = sal.spcode\n INNER JOIN (\n SELECT *\n FROM phone\n"
-
-    parameters = false;
-    if ( customer[ 'phone_number ']) { query += " WHERE phone_number LIKE ?%\n"; input.push( customer['phone_number'] ); }
-    query += ") AS pho ON cust.spcode = pho.spcode\n INNER JOIN (\n SELECT *\n FROM mobile\n"
+    if ( customer[ 'phone_number ']) { query += "INNER JOIN (\n SELECT *\n FROM phone\n WHERE phone_number LIKE ?%\n"; 
+                                       input.push( customer['phone_number'] ); 
+                                       quey += ") AS pho ON cust.spcode = pho.spcode\n" }
     
-    if ( customer[ 'mobile_number ']) { query += " WHERE mobile_number LIKE ?%\n"; input.push( customer['mobile_number'] ); }
-    query += ") AS mob ON cust.spcode = mob.spcode"
-
-    connection.query( query, input, function ( error, results ) {
+    if ( customer[ 'mobile_number ']) { query += "INNER JOIN (\n SELECT *\n FROM mobile\n WHERE mobile_number LIKE ?%\n"; 
+                                        input.push( customer['mobile_number'] ); 
+                                        query += ") AS mob ON cust.spcode = mob.spcode" }
+    
+    const fquery = prefix_query +"\nFROM ( \n" + query;
+    connection.query( fquery, input, function ( error, results ) {
         if (error) throw error;
         res.send(results);   
     })
-
-
-                
+                    
 });
 
 app.post("/customer_info",(req,res) =>{
