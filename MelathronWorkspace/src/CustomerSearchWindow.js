@@ -35,10 +35,17 @@ export default function CustomerSearchWindow() {
 
   useEffect(() => {
     customerOptionsSet()
-    axios
-      .get("http://localhost:5000/customers")
+    console.log(customerOptions)
+    let x = JSON.parse(localStorage.getItem("customer_search_options"))
+    let opts = {
+      method: "post",
+      url: "http://localhost:5000/search_customer",
+      data: x,
+    };
+    axios(opts)
       .then((response) => {
         setResults(response.data);
+        console.log(response)
       })
       .catch((error) => {
         console.log(error);

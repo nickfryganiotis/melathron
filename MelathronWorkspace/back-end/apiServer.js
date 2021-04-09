@@ -323,11 +323,11 @@ app.post("/search_customer",(req,res) => {
     
     var query = " SELECT *\n FROM customer\n"
     var parameters = false;
-    if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ?%\n"; parameters = true; input.push( customer[ 'last_name' ] ); }
-    if( customer[ 'first_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "first_name LIKE ?%\n"; parameters = true; input.push( customer[ 'first_name' ] ); }
-    if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ?%\n"; parameters = true; input.push( customer[ 'email' ] ); }
-    if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ?%\n"; parameters = true; input.push( customer[ 'website' ] ); }
-    if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ?%\n"; parameters = true; input.push( customer[ 'company_name' ] ); }
+    if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ?\n"; parameters = true; input.push( customer[ 'last_name' ] + '%' ); }
+    if( customer[ 'first_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "first_name LIKE ?\n"; parameters = true; input.push( customer[ 'first_name' ] + '%'); }
+    if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ?\n"; parameters = true; input.push( customer[ 'email' ] + '%'); }
+    if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ?\n"; parameters = true; input.push( customer[ 'website' ] + '%'); }
+    if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ?\n"; parameters = true; input.push( customer[ 'company_name' ] + '%' ); }
     query += ") AS cust\n " 
     
     parameters = false;
@@ -404,12 +404,12 @@ app.post("/search_customer",(req,res) => {
     }
 
     parameters = false;
-    if ( customer[ 'phone_number ']) { query += "INNER JOIN (\n SELECT *\n FROM phone\n WHERE phone_number LIKE ?%\n"; 
-                                       input.push( customer['phone_number'] ); 
+    if ( customer[ 'phone_number ']) { query += "INNER JOIN (\n SELECT *\n FROM phone\n WHERE phone_number LIKE ?\n"; 
+                                       input.push( customer['phone_number'] + '%' ); 
                                        quey += ") AS pho ON cust.spcode = pho.spcode\n" }
     
-    if ( customer[ 'mobile_number ']) { query += "INNER JOIN (\n SELECT *\n FROM mobile\n WHERE mobile_number LIKE ?%\n"; 
-                                        input.push( customer['mobile_number'] ); 
+    if ( customer[ 'mobile_number ']) { query += "INNER JOIN (\n SELECT *\n FROM mobile\n WHERE mobile_number LIKE ?\n"; 
+                                        input.push( customer['mobile_number'] + '%'); 
                                         query += ") AS mob ON cust.spcode = mob.spcode" }
     
     const fquery = prefix_query +"\nFROM ( \n" + query;
@@ -423,7 +423,7 @@ app.post("/search_customer",(req,res) => {
 app.post("/customer_info",(req,res) =>{
     const spcode = req.body['spcode'];
     var output = [];
-    var query =  "SELECT * FROM customer c, location l, apotelesma a, job j WHERE c.spcode = ? AND l.location_id = c.location_id AND a.apotelesma_id = c.apotelesma_id AND j.job_id = c.job_id"
+    var query =  "SELECT * FROM customer c LEFT OUTER JOIN location l ON l.location_id = c.location_id LEFT OUTER JOIN apotelesma a ON a.apotelesma_id = c.apotelesma_id LEFT OUTER JOIN job j ON j.job_id = c.job_id WHERE c.spcode = ?"
     connection.query(query,spcode,function(error,results){
         if (error) throw error;
         output.push(results);
@@ -439,6 +439,7 @@ app.post("/customer_info",(req,res) =>{
         output.push(results);        
     });
     query = "SELECT * FROM sale s, payment_info p, subscription sb, shipping_method sm WHERE s.spcode = ? AND p.sale_id = s.sale_id AND sb.subscription_id = s.subscription_id AND sm.shipping_method_id = s.shipping_method_id";
+    query = "SELECT * FROM sale s LEFT OUTER JOIN payment_info p ON p.sale_id = s.sale_id LEFT OUTER JOIN subscription sb ON sb.subscription_id = s.subscription_id LEFT OUTER JOIN shipping_method sm ON sm.shipping_method_id = s.shipping_method_id WHERE s.spcode = ?";
     connection.query(query,spcode,function(error,results){
         if (error) throw error;
         output.push(results);
