@@ -322,11 +322,11 @@ app.post("/search_customer",(req,res) => {
     query = "SELECT SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name, ap.apotelesma_name, ap.subapotelesma_name, j.category, wor.salesman_name\nFROM("
     query += " SELECT *\n FROM customer\n"
     var parameters = false;
-    if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ? + '%'\n"; parameters = true; input.push( customer[ 'last_name' ] ); }
-    if( customer[ 'first_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "first_name LIKE ? + '%'\n"; parameters = true; input.push( customer[ 'first_name' ] ); }
-    if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ? + '%'\n"; parameters = true; input.push( customer[ 'email' ] ); }
-    if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ? + '%'\n"; parameters = true; input.push( customer[ 'website' ] ); }
-    if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ? + '%'\n"; parameters = true; input.push( customer[ 'company_name' ] ); }
+    if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ?%\n"; parameters = true; input.push( customer[ 'last_name' ] ); }
+    if( customer[ 'first_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "first_name LIKE ?%\n"; parameters = true; input.push( customer[ 'first_name' ] ); }
+    if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ?%\n"; parameters = true; input.push( customer[ 'email' ] ); }
+    if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ?%\n"; parameters = true; input.push( customer[ 'website' ] ); }
+    if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ?%\n"; parameters = true; input.push( customer[ 'company_name' ] ); }
     query += ") AS cust\n INNER JOIN (\n SELECT *\n FROM location\n"
     
     parameters = false;
@@ -377,10 +377,10 @@ app.post("/search_customer",(req,res) => {
     query += ") AS sal ON cust.spcode = sal.spcode\n INNER JOIN (\n SELECT *\n FROM phone\n"
 
     parameters = false;
-    if ( customer[ 'phone_number ']) { query += " WHERE phone_number LIKE ? + '%'\n"; input.push( customer['phone_number'] ); }
+    if ( customer[ 'phone_number ']) { query += " WHERE phone_number LIKE ?%\n"; input.push( customer['phone_number'] ); }
     query += ") AS pho ON cust.spcode = pho.spcode\n INNER JOIN (\n SELECT *\n FROM mobile\n"
     
-    if ( customer[ 'mobile_number ']) { query += " WHERE mobile_number LIKE ? + '%'\n"; input.push( customer['mobile_number'] ); }
+    if ( customer[ 'mobile_number ']) { query += " WHERE mobile_number LIKE ?%\n"; input.push( customer['mobile_number'] ); }
     query += ") AS mob ON cust.spcode = mob.spcode"
 
     connection.query( query, input, function ( error, results ) {
@@ -417,4 +417,3 @@ app.post("/customer_info",(req,res) =>{
         res.send(output);
     });  
 });
-
