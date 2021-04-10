@@ -48,16 +48,18 @@ export default function MySaleSearch() {
     let subscriptions_options = {
       method: "post",
       url: "http://localhost:5000/subscriptions",
-      data: {'country_id': area['country_id']}
-    }
+      data: { country_id: area["country_id"] },
+    };
     let url3 = "http://localhost:5000/shipping_methods";
-    axios.all([axios.get(url1), axios(subscriptions_options), axios.get(url3)]).then(
-      axios.spread((obj1, obj2, obj3) => {
-        setSalesman(obj1.data);
-        setSubscriptions(obj2.data);
-        setShippingMethods(obj3.data);
-      })
-    );
+    axios
+      .all([axios.get(url1), axios(subscriptions_options), axios.get(url3)])
+      .then(
+        axios.spread((obj1, obj2, obj3) => {
+          setSalesman(obj1.data);
+          setSubscriptions(obj2.data);
+          setShippingMethods(obj3.data);
+        })
+      );
   }, []);
 
   const handleSaleOptionsChange = (e) => {
@@ -94,139 +96,194 @@ export default function MySaleSearch() {
 
   const radioHandler = (status) => {
     setStatus(status);
-    setSaleOptions({ ...saleOptions, "paid" : status })
+    setSaleOptions({ ...saleOptions, paid: status });
   };
 
   return (
-    <>
-      <div className="user-form">
+    <div className="total-main-page2">
+      <div className="user-form2">
         <h1>Αναζήτηση Πώλησης</h1>
 
         <form>
-          <div>
-            <label htmlFor="sale_id">Κωδικός Πώλησης</label>
-            <input
-              type="number"
-              name="sale_id"
-              id="sale_id"
-              onChange={handleSaleOptionsChange}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="salesman_name">Πωλητής</label>
-            <ReactSelect
-              name="salesman_name"
-              id="salesman_name"
-              onChange={handleTheChange}
-              options={myFunction(salesman, "salesman_name")}
-              isMulti={true}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="spcode">Κωδικός Πελάτη</label>
-            <input
-              type="number"
-              name="spcode"
-              id="spcode"
-              onChange={handleSaleOptionsChange}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
-            <ReactSelect
-              name="subscription_category"
-              id="subscription_category"
-              onChange={handleTheChange}
-              options={myFunction(subscriptions, "subscription_category")}
-              isMulti={true}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="subscription_name">Συνδρομή</label>
-            <ReactSelect
-              name="subscription_name"
-              id="subscription_name"
-              onChange={handleTheChange}
-              options={myFunction(subscriptions, "subscription_name")}
-              isMulti={true}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="shipping_method_name">Τρόπος Παράδοσης</label>
-            <ReactSelect
-              name="shipping_method_name"
-              id="shipping_method_name"
-              onChange={handleTheChange}
-              options={myFunction(shippingMethods, "shipping_method_name")}
-              isMulti={true}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="date_range">Ημερομηνία Παραγγελίας</label>
-            <div className="maria">
-                <label htmlFor = "order_date1" style={{width: "auto", fontSize: "16px" }}>Από</label>
-              <input
-                type="date"
-                name="order_date1"
-                id="order_date1"
-                onChange={handleSaleOptionsChange}
-              />
-              <label htmlFor = "order_date2" style={{width: "auto", fontSize: "16px"}}>Έως</label>
-              <input
-                type="date"
-                name="order_date2"
-                id="order_date2"
-                onChange={handleSaleOptionsChange}
-              />
-            </div>
-          </div>
-
-
-          <div>
-            <label htmlFor="price_range">Ποσό Πληρωμής</label>
-            <div className="maria">
-                <label htmlFor = "amount1" style={{width: "auto", fontSize: "16px" }}>Από</label>
+          <div className="user-form-line2">
+            <div className="form-input2 left2">
+              <label htmlFor="sale_id">Κωδικός Πώλησης</label>
               <input
                 type="number"
-                name="amount1"
-                id="amount1"
+                name="sale_id"
+                id="sale_id"
                 onChange={handleSaleOptionsChange}
               />
-              <label htmlFor = "amount2" style={{width: "auto", fontSize: "16px"}}>Έως</label>
+            </div>
+
+            <div className="form-input2 left2">
+              <label htmlFor="salesman_name">Πωλητής</label>
+              <ReactSelect
+                name="salesman_name"
+                id="salesman_name"
+                onChange={handleTheChange}
+                options={myFunction(salesman, "salesman_name")}
+                isMulti={true}
+              />
+            </div>
+
+            <div className="form-input2">
+              <label htmlFor="spcode">Κωδικός Πελάτη</label>
               <input
                 type="number"
-                name="amount2"
-                id="amount2"
+                name="spcode"
+                id="spcode"
                 onChange={handleSaleOptionsChange}
               />
+            </div>
+          </div>
+          <div className="user-form-line2">
+            <div className="form-input2 left2">
+              <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
+              <ReactSelect
+                name="subscription_category"
+                id="subscription_category"
+                onChange={handleTheChange}
+                options={myFunction(subscriptions, "subscription_category")}
+                isMulti={true}
+              />
+            </div>
+
+            <div className="form-input2 left2">
+              <label htmlFor="subscription_name">Συνδρομή</label>
+              <ReactSelect
+                name="subscription_name"
+                id="subscription_name"
+                onChange={handleTheChange}
+                options={myFunction(subscriptions, "subscription_name")}
+                isMulti={true}
+              />
+            </div>
+
+            <div className="form-input2">
+              <label htmlFor="shipping_method_name">Τρόπος Παράδοσης</label>
+              <ReactSelect
+                name="shipping_method_name"
+                id="shipping_method_name"
+                onChange={handleTheChange}
+                options={myFunction(shippingMethods, "shipping_method_name")}
+                isMulti={true}
+              />
+            </div>
+          </div>
+          <div className="user-form-line2">
+            <div className="form-input2 ">
+              <label htmlFor="date_range">Ημερομηνία Παραγγελίας</label>
+              <div className="user-form-line2 line-left2 range2">
+                <div className="form-input2 left2 ">
+                  <label htmlFor="order_date1">Από</label>
+                  <input
+                    type="date"
+                    name="order_date1"
+                    id="order_date1"
+                    onChange={handleSaleOptionsChange}
+                  />
+                </div>
+                <div className="form-input2 ">
+                  <label htmlFor="order_date2">Έως</label>
+                  <input
+                    type="date"
+                    name="order_date2"
+                    id="order_date2"
+                    onChange={handleSaleOptionsChange}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className = 'maria'>
-            <label htmlFor="paid" style={{'margin-top': 0, 'font-size': '16px'}}>Εξοφλημένες</label>
-            <input type="radio" name="paid" id="paid" checked={status==1} onClick={(e) => radioHandler(1)} />
-          </div>
-          <div className = 'maria'>
-            <label htmlFor="notpaid" style={{'margin-top': 0, 'font-size': '16px'}}>Ανεξόφλητες</label>
-            <input type="radio" name="notpaid" id="notpaid" checked={status==0} onClick={(e) => radioHandler(0)} />
+          <div className="user-form-line2">
+            <div className="form-input2">
+              <label htmlFor="price_range">Ποσό Πληρωμής</label>
+              <div className="user-form-line2 line-left2 range2">
+                <div className="form-input2 left2 number2">
+                  <label htmlFor="amount1">Από</label>
+                  <input
+                    type="number"
+                    name="amount1"
+                    id="amount1"
+                    onChange={handleSaleOptionsChange}
+                  />
+                </div>
+                <div className="form-input2 number2">
+                  <label htmlFor="amount2">Έως</label>
+                  <input
+                    type="number"
+                    name="amount2"
+                    id="amount2"
+                    onChange={handleSaleOptionsChange}
+                  />
+                </div>
+              </div>
             </div>
-            <div className = 'maria'>
-            <label htmlFor="bothpaid" style={{'margin-top': 0, 'font-size': '16px'}}>Όλες οι πωλήσεις</label>
-            <input type="radio" name="bothpaid" id="bothpaid" checked={status==2} onClick={(e) => radioHandler(2)} />
+          </div>
+          <div className="user-form-line2">
+            <div className="form-input2">
+              <div className="maria">
+                <input
+                  type="radio"
+                  name="paid"
+                  id="paid"
+                  checked={status == 1}
+                  onClick={(e) => radioHandler(1)}
+                />
+                <label
+                  htmlFor="paid"
+                  style={{ "margin-top": 0, "font-size": "16px" }}
+                >
+                  Εξοφλημένες
+                </label>
+              </div>
+              <div className="maria">
+                <input
+                  type="radio"
+                  name="notpaid"
+                  id="notpaid"
+                  checked={status == 0}
+                  onClick={(e) => radioHandler(0)}
+                />
+                <label
+                  htmlFor="notpaid"
+                  style={{ "margin-top": 0, "font-size": "16px" }}
+                >
+                  Ανεξόφλητες
+                </label>
+              </div>
+              <div className="maria">
+                <input
+                  type="radio"
+                  name="bothpaid"
+                  id="bothpaid"
+                  checked={status == 2}
+                  onClick={(e) => radioHandler(2)}
+                />
+                <label
+                  htmlFor="bothpaid"
+                  style={{ "margin-top": 0, "font-size": "16px" }}
+                >
+                  Όλες οι πωλήσεις
+                </label>
+              </div>
+            </div>
           </div>
         </form>
         <br></br>
         <br></br>
-        <button type="submit" onClick={getSearchResults}>
-          Αναζήτηση
-        </button>
+        <div className="center2">
+          <button
+            type="submit"
+            className="btn btn-danger choice-btn2"
+            onClick={getSearchResults}
+          >
+            Αναζήτηση
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

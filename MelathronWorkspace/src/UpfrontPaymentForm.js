@@ -1,9 +1,10 @@
 import React from "react";
+import "./MyUserForm.css";
 
 export default function UpfrontPaymentForm({onChange}) {
   return (
-    <div >
-        <div>
+    <div className='user-form-line2'>
+        <div className='form-input2 left2'>
             <label htmlFor="dose_deadline1">Προσθεσμία Εξόφλησης </label>
             <input
                 type="date"
@@ -13,7 +14,7 @@ export default function UpfrontPaymentForm({onChange}) {
             />
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="payment_amount1">Πληρωθέν Ποσό</label>
           <input
             type="number"
@@ -23,7 +24,7 @@ export default function UpfrontPaymentForm({onChange}) {
           /> 
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="payment_method1">Μέθοδος Πληρωμής</label>
           <div className="maria">
           <input
@@ -33,7 +34,7 @@ export default function UpfrontPaymentForm({onChange}) {
             value="Κάρτα"
             onClick={onChange}
           />
-          <label htmlFor="card" style={{'margin-top': 0, 'font-size': '16px'}}>Τραπεζική Κατάθεση</label>
+          <label htmlFor="card">Τραπεζική Κατάθεση</label>
           </div>
           <div className="maria">
           <input
@@ -43,7 +44,7 @@ export default function UpfrontPaymentForm({onChange}) {
             value="Μετρητά"
             onClick={onChange}
           />
-          <label htmlFor="cash" style={{'margin-top': 0, 'font-size': '16px'}}>Μετρητά</label>
+          <label htmlFor="cash">Μετρητά</label>
         </div>
         </div>
 

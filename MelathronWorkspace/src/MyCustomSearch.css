@@ -1,4 +1,4 @@
-table {
+/*table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
@@ -16,13 +16,13 @@ table {
   a {
     color: black;
   }
-  
+  */
   /* mouse over link /
   a:hover {
     color: green;
   }
   
-  / selected link */
+  / selected link *//*
   a:active {
     color: blue;
-  }
+  }*/

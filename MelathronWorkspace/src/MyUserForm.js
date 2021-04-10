@@ -113,10 +113,12 @@ export default function MyUserForm() {
   };
   
   return (
-    <div className="user-form">
+    <div className='total-main-page2'>
+    <div className="user-form2">
       <h1>Εισαγωγή Νέου Πελάτη</h1>
       <form onSubmit={handleSubmit}>
-        <div>
+      <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="last_name">Επώνυμο</label>
           <input
             type="text"
@@ -127,7 +129,7 @@ export default function MyUserForm() {
           />
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="first_name">Όνομα</label>
           <input
             type="text"
@@ -138,7 +140,7 @@ export default function MyUserForm() {
           />
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="fathers_name">Πατρώνυμο</label>
           <input
             type="text"
@@ -147,55 +149,60 @@ export default function MyUserForm() {
             onChange={handleCustomerChange}
           />
         </div>
-
-        <div>
-          <label htmlFor="company_name">Επωνυμία Εταιρίας και Δυναμικό</label>
-          <div className="maria">
+        </div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
+          <label htmlFor="company_name">Επωνυμία Εταιρίας</label>
             <input
               type="text"
               name="company_name"
               id="company_name"
               onChange={handleCustomerChange}
-              style={{ width: "75%" }}
             />
+            </div>
+            <div className='form-input2 number2'>
+            <label htmlFor="personnel">Δυναμικό</label>
             <input
               type="number"
               name="personnel"
               id="personnel"
-              style={{ marginLeft: "10px", width: "25%" }}
               onChange={handleCustomerChange}
             />
           </div>
         </div>
 
-        <div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="address_street">Διέυθυνση</label>
-          <div className="maria">
             <input
               type="text"
               name="address_street"
               id="address_street"
-              style={{ width: "70%" }}
               onChange={handleCustomerChange}
             />
+            </div>
+        <div className='form-input2 left2 number2'>
+          <label htmlFor="address_number">Αριθμός</label>
             <input
               type="text"
               name="address_number"
               id="address_number"
-              style={{ marginLeft: "10px", width: "14%" }}
               onChange={handleCustomerChange}
             />
+            </div>
+            <div className='form-input2 number2'>
+          <label htmlFor="address_postal_code">Τ.Κ.</label>
             <input
               type="text"
               name="address_postal_code"
               id="address_postal_code"
-              style={{ marginLeft: "10px", width: "16%" }}
               onChange={handleCustomerChange}
             />
           </div>
         </div>
 
-        <div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="fax">FAX</label>
           <input
             type="text"
@@ -205,7 +212,7 @@ export default function MyUserForm() {
           />
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -215,7 +222,7 @@ export default function MyUserForm() {
           />
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="website">Ιστοσελίδα</label>
           <input
             type="text"
@@ -224,8 +231,9 @@ export default function MyUserForm() {
             onChange={handleCustomerChange}
           />
         </div>
-
-        <div>
+        </div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           {phoneList.map((x, i) => {
             return (
               <div>
@@ -239,10 +247,10 @@ export default function MyUserForm() {
                 />
 
                 {phoneList.length !== 1 && (
-                  <button style={{'margin-left' : '5px'}} onClick={() => handleRemovePhone(i)}>-</button>
+                  <button className='btn-plus' onClick={() => handleRemovePhone(i)}>-</button>
                 )}
                 {phoneList.length - 1 === i && (
-                  <button style={{'margin-left' : '5px'}} onClick={handleAddPhone}>+</button>
+                  <button className='btn-plus' onClick={handleAddPhone}>+</button>
                 )}
                 </div>
               </div>
@@ -250,7 +258,7 @@ export default function MyUserForm() {
           })}
         </div>
 
-        <div>
+        <div className='form-input2'>
           {mobileList.map((x, i) => {
             return (
               <div>
@@ -264,18 +272,20 @@ export default function MyUserForm() {
                 />
 
                 {mobileList.length !== 1 && (
-                  <button style={{'margin-left' : '5px'}} onClick={() => handleRemoveMobile(i)}>-</button>
+                  <button className='btn-plus' onClick={() => handleRemoveMobile(i)}>-</button>
                 )}
                 {mobileList.length - 1 === i && (
-                  <button style={{'margin-left' : '5px'}} onClick={handleAddMobile}>+</button>
+                  <button className='btn-plus' onClick={handleAddMobile}>+</button>
                 )}
                 </div>
               </div>
             );
           })}
+          </div>
         </div>
 
-        <div>
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="state">Νομός/ Πολιτεία</label>
           <select name="state" id="state" onChange={handleCustomerChange}>
             <option></option>
@@ -283,7 +293,7 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2 left2'>
           <label htmlFor="city">Πόλη</label>
           <select name="city" id="city" onChange={handleCustomerChange}>
             <option></option>
@@ -293,7 +303,7 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="area">Περιοχή</label>
           <select name="area" id="area" onChange={handleCustomerChange}>
             <option></option>
@@ -303,7 +313,10 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        </div>
+
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="category">Γενική Κατηγορία Επαγγέλματος</label>
           <select name="category" id="category" onChange={handleCustomerChange}>
             <option></option>
@@ -311,7 +324,7 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="profession">Επάγγελμα</label>
           <select
             name="profession"
@@ -325,7 +338,10 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        </div>
+
+        <div className='user-form-line2'>
+        <div className='form-input2 left2'>
           <label htmlFor="apotelesma_name">
             Γενική Κατηγορία Αποτελέσματος
           </label>
@@ -341,7 +357,7 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        <div className='form-input2'>
           <label htmlFor="subapotelesma_name">Αποτέλεσμα</label>
           <select
             name="subapotelesma_name"
@@ -358,7 +374,10 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        </div>
+
+        <div className='user-form-line2'>
+        <div className='form-input2'>
           <label htmlFor="salesman_name">Πωλητής</label>
           <select name="salesman_name" id="salesman_name" onChange={handleCustomerChange}>
             <option></option>
@@ -366,7 +385,10 @@ export default function MyUserForm() {
           </select>
         </div>
 
-        <div>
+        </div>
+
+        <div className='user-form-line2'>
+        <div className='form-input2'>
           <label htmlFor="comments">Σχόλια</label>
           <textarea
             name="comments"
@@ -374,12 +396,15 @@ export default function MyUserForm() {
             onChange={handleCustomerChange}
           ></textarea>
         </div>
-
+        </div>
         <br></br>
-        <button type="submit" className="btn btn-danger">
+        <div className='center2'>
+        <button type="submit" className="btn btn-danger choice-btn2">
           Εισαγωγή
         </button>
+        </div>
       </form>
+    </div>
     </div>
   );
 }

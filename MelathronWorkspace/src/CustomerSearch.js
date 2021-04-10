@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./MyCustomSearch.css";
+import "./MyUserForm.css";
 import axios from "axios";
 import { loadAreaChoice, removeDuplicates } from "./helperFunctions";
 import ReactSelect from "react-select";
@@ -119,12 +119,13 @@ export default function CustomerSearch() {
   }
 
   return (
-    <>
-      <div className="user-form">
+    <div className='total-main-page2'>
+      <div className="user-form2">
         <h1>Αναζήτηση Πελάτη</h1>
 
         <form>
-          <div>
+        <div className='user-form-line2 line-left2'>
+      <div className='form-input2 left2 number2'>
             <label htmlFor="spcode">Κωδικός Πελάτη</label>
             <input
               type="number"
@@ -132,10 +133,12 @@ export default function CustomerSearch() {
               id="spcode"
               onChange={handleSpcodeChange}
             />
-            <button onClick={getSpcodeResults}>Αναζήτηση με Κωδικό</button>
+            </div>
+            <button className='btn btn-danger choice-btn2 btn-code2' onClick={getSpcodeResults}>Αναζήτηση με Κωδικό</button>
           </div>
 
-          <div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="last_name">Επώνυμο</label>
             <input
               type="text"
@@ -145,7 +148,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="first_name">Όνομα</label>
             <input
               type="text"
@@ -154,8 +157,9 @@ export default function CustomerSearch() {
               onChange={handleCustomerOptionsChange}
             />
           </div>
-
-          <div>
+          </div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label hmtlFor="phone_number">Σταθερό Τηλέφωνο</label>
             <input
               type="text"
@@ -165,7 +169,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2 left2'>
             <label hmtlFor="mobile_number">Κινητό Τηλέφωνο</label>
             <input
               type="text"
@@ -175,7 +179,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="email">Email</label>
             <input
               type="text"
@@ -184,8 +188,9 @@ export default function CustomerSearch() {
               onChange={handleCustomerOptionsChange}
             />
           </div>
-
-          <div>
+          </div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="website">Ιστοσελίδα</label>
             <input
               type="text"
@@ -195,7 +200,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="company_name">Επωνυμία Εταιρίας</label>
             <input
               type="text"
@@ -204,8 +209,9 @@ export default function CustomerSearch() {
               onChange={handleCustomerOptionsChange}
             />
           </div>
-
-          <div>
+          </div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="state">Νομός/ Πολιτεία</label>
             <ReactSelect
               name="state"
@@ -216,7 +222,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2 left2'>
             <label htmlFor="city">Πόλη</label>
             <ReactSelect
               name="city"
@@ -227,7 +233,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="area">Περιοχή</label>
             <ReactSelect
               name="area"
@@ -237,8 +243,9 @@ export default function CustomerSearch() {
               isMulti={true}
             />
           </div>
-
-          <div>
+          </div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="category">Γενική Κατηγορία Επαγγέλματος</label>
             <ReactSelect
               name="category"
@@ -249,7 +256,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="profession">Επάγγελμα</label>
             <ReactSelect
               name="profession"
@@ -259,8 +266,9 @@ export default function CustomerSearch() {
               isMulti={true}
             />
           </div>
-
-          <div>
+          </div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="apotelesma_name">
               Γενική Κατηγορία Αποτελέσματος
             </label>
@@ -273,7 +281,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="subapotelesma_name">Αποτέλεσμα</label>
             <ReactSelect
               name="subapotelesma_name"
@@ -283,8 +291,9 @@ export default function CustomerSearch() {
               isMulti={true}
             />
           </div>
-
-          <div>
+          </div>
+          <div className='user-form-line2'>
+          <div className='form-input2 left2'>
             <label htmlFor="salesman_name">Πωλητής</label>
             <ReactSelect
               name="salesman_name"
@@ -295,7 +304,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2 left2'>
             <label htmlFor="subscription_category">Κατηγορία Συνδρομής</label>
             <ReactSelect
               name="subscription_category"
@@ -306,7 +315,7 @@ export default function CustomerSearch() {
             />
           </div>
 
-          <div>
+          <div className='form-input2'>
             <label htmlFor="subscription_name">Συνδρομή</label>
             <ReactSelect
               name="subscription_name"
@@ -316,12 +325,15 @@ export default function CustomerSearch() {
               isMulti={true}
             />
           </div>
+          </div>
         </form>
         <br></br>
         <br></br>
-        <button type="submit" onClick={getSearchResults}>
-          Αναζήτηση
+        <div className='center2'>
+        <button type="submit" className="btn btn-danger choice-btn2" onClick={getSearchResults}>
+        Αναζήτηση
         </button>
+        </div>
       </div>
 
       {/*<div>
@@ -331,6 +343,6 @@ export default function CustomerSearch() {
         </table>
         <br></br>
       </div>*/}
-    </>
+    </div>
   );
 }
