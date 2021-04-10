@@ -1,9 +1,12 @@
+import axios from "axios";
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import "./MyUserForm.css";
+import { greekToEnglish } from "./helperFunctions.js";
 
 export default function CustomersFromFile() {
   const [customers, setCustomers] = useState([]);
+  const [res, setRes] = useState([]);
 
   const readExcel = (file) => {
     const promise = new Promise((resolve, reject) => {
@@ -26,7 +29,7 @@ export default function CustomersFromFile() {
 
       fileReader.onerror = (error) => {
         //reject(error);
-        console.log(file)
+        console.log(file);
       };
     });
 
@@ -35,15 +38,48 @@ export default function CustomersFromFile() {
     });
     promise.catch((error) => {
       //console.log(error);
-      console.log(file)
+      console.log(file);
     });
   };
 
   const tryit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     console.log(customers);
     e.target.reset();
     setCustomers([]);
+
+    let telephones = customers.map((customer) => ({
+      phones: customer["ΤΗΛΕΦΩΝΑ"],
+      mobiles: customer["ΚΙΝΗΤΑ"],
+    }));
+    let checkTele = {
+      method: "post",
+      url: "http://localhost:5000/check_phones",
+      data: telephones,
+    };
+    axios(checkTele)
+      .then((res) => alert(res))
+      .catch((error) => {
+       console.log(error);
+      });
+
+    let options = customers.map((customer) => ({
+      method: "post",
+      url: "http://localhost:5000/customer_file",
+      data: greekToEnglish(customer),
+    }));
+    console.log(options);
+    axios
+      .all(options.map((opt) => axios(opt)))
+      .then(
+        axios.spread((...responses) => {
+          setRes(responses);
+          console.log(responses);
+        })
+      )
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -56,16 +92,17 @@ export default function CustomersFromFile() {
             type="file"
             onChange={(e) => {
               const f = e.target.files[0];
-              if (f){
+              if (f) {
                 readExcel(f);
               }
-              
             }}
           ></input>
         </div>
         <br></br>
         <div>
-          <button type="submit" className='btn btn-danger'>Εισαγωγή Στοιχείων</button>
+          <button type="submit" className="btn btn-danger">
+            Εισαγωγή Στοιχείων
+          </button>
         </div>
       </form>
     </div>

@@ -447,17 +447,6 @@ app.post("/customer_info",(req,res) =>{
     });  
 });
 
-app.get("/testing" , (req,res) => {
-    var records = [
-        ['Yashwant', 'Chavan', 'gIANNI'],
-        ['Diwakar', 'Patil', null],
-        ['Anoop', 'More', null]
-];
-
-var sql = "INSERT INTO customer (first_name, last_name, fathers_name) VALUES ?";
-
-var query = connection.query(sql, [records], function(err, result) {
-console.log(result);
-});
-res.sendStatus(404);
+app.post("/customer_file" , (req,res) => {
+    res.sendStatus(200);
 })

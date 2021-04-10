@@ -79,3 +79,37 @@ export function removeDuplicates( arr, prop ) {
     "Κατηγορία Αποτελέσματος",
     "Αποτέλεσμα",
   ];*/
+
+export function greekToEnglish(obj) {
+  const dict = {
+    "ΟΝΟΜΑ" : "first_name",
+    "ΕΠΩΝΥΜΟ" : "last_name",
+    "ΠΑΤΡΩΝΥΜΟ" : "fathers_name",
+    "ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ" : "company_name",
+    "ΔΥΝΑΜΙΚΟ" : "personnel",
+    "FAX" : "fax",
+    "EMAIL" : "email",
+    "ΙΣΤΟΣΕΛΙΔΑ" : "website",
+    "ΟΔΟΣ" : "address_street",
+    "ΑΡΙΘΜΟΣ" : "address_number",
+    "ΤΚ" : "address_postal_code",
+    "Τ.Κ." : "address_postal_code",
+    "ΣΧΟΛΙΑ" : "comments",
+    "ΣΤΑΘΕΡΑ" : "phone",
+    "KINHTA" : "mobile",
+    "ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ" : "state",
+    "ΝΟΜΟΣ" : "state",
+    "ΠΟΛΙΤΕΙΑ" : "state",
+    "ΠΟΛΗ" : "city",
+    "ΠΕΡΙΟΧΗ" : "area",
+    "ΚΩΔΙΚΟΣ ΑΠΟΤΕΛΕΣΜΑΤΟΣ" : "apotelesma_id",
+    "ΚΩΔΙΚΟΣ ΕΠΑΓΓΕΛΜΑΤΟΣ" : "job_id",
+    "ΚΩΔΙΚΟΣ ΤΟΠΟΘΕΣΙΑΣ" : "location_id",
+  }
+
+  let x = {}
+  Object.keys(obj).forEach(function(key) {
+    x[dict[key]] = obj[key];
+  })
+  return x
+}
