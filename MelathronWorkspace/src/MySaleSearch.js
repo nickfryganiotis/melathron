@@ -19,6 +19,7 @@ export default function MySaleSearch() {
   const [shippingMethods, setShippingMethods] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [ran, setRan] = useState([50]);
+  const [status, setStatus] = useState(2);
 
   const getSearchResults = () => {
     axios
@@ -90,6 +91,11 @@ export default function MySaleSearch() {
     win3.webContents.openDevTools();
     win3.loadURL("http://localhost:3000/sale_search_window");
   }
+
+  const radioHandler = (status) => {
+    setStatus(status);
+    setSaleOptions({ ...saleOptions, "paid" : status })
+  };
 
   return (
     <>
@@ -200,6 +206,19 @@ export default function MySaleSearch() {
                 onChange={handleSaleOptionsChange}
               />
             </div>
+          </div>
+
+          <div className = 'maria'>
+            <label htmlFor="paid" style={{'margin-top': 0, 'font-size': '16px'}}>Εξοφλημένες</label>
+            <input type="radio" name="paid" id="paid" checked={status==1} onClick={(e) => radioHandler(1)} />
+          </div>
+          <div className = 'maria'>
+            <label htmlFor="notpaid" style={{'margin-top': 0, 'font-size': '16px'}}>Ανεξόφλητες</label>
+            <input type="radio" name="notpaid" id="notpaid" checked={status==0} onClick={(e) => radioHandler(0)} />
+            </div>
+            <div className = 'maria'>
+            <label htmlFor="bothpaid" style={{'margin-top': 0, 'font-size': '16px'}}>Όλες οι πωλήσεις</label>
+            <input type="radio" name="bothpaid" id="bothpaid" checked={status==2} onClick={(e) => radioHandler(2)} />
           </div>
         </form>
         <br></br>
