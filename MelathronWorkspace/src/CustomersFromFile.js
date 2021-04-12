@@ -47,20 +47,36 @@ export default function CustomersFromFile() {
     console.log(customers);
     e.target.reset();
     setCustomers([]);
-    let telephones = customers.map((customer) => ({
-      phones: customer["ΤΗΛΕΦΩΝΑ"],
+    let phons = customers.map((customer) => ({
+      phones: customer["ΣΤΑΘΕΡΑ"],
+    }));
+    let mobls = customers.map((customer) => ({
       mobiles: customer["ΚΙΝΗΤΑ"],
     }));
+    console.log(mobls);
+    console.log(phons);
+    console.log(customers);
     let checkTele = {
       method: "post",
       url: "http://localhost:5000/check_phones",
-      data: telephones,
+      data: phons
     };
     axios(checkTele)
-      .then((res) => alert(res))
+      .then((res) => console.log(res.data))
       .catch((error) => {
        console.log(error);
       });
+
+    let checkMobl = {
+        method: "post",
+        url: "http://localhost:5000/check_mobiles",
+        data: mobls
+      };
+      axios(checkMobl)
+        .then((res) => console.log(res.data))
+        .catch((error) => {
+         console.log(error);
+        });
 
     let options = customers.map((customer) => ({
       method: "post",
@@ -80,6 +96,7 @@ export default function CustomersFromFile() {
         console.log(error);
       });
   };
+
 
   return (
     <div className='total-main-page2'>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import ApHistory from "./customerInfoComponents/ApHistory";
 import "./info.css";
 export default function CustomerInfo({ sp }) {
   const [customer, setCustomer] = useState([]);
@@ -36,9 +37,8 @@ export default function CustomerInfo({ sp }) {
               return (
                 <tr>
                   <th>{key}</th>
-                  <th>{element[key]}</th>
                   <th>
-                    <input type="text" />
+                    <input type="text" placeholder={element[key]} />
                   </th>
                 </tr>
               );
@@ -47,7 +47,7 @@ export default function CustomerInfo({ sp }) {
         );
       })}
 
-      {hist.length !== 0 && <table className="elli">
+      {/*hist.length !== 0 && <table className="elli">
         <tr>
         {Object.keys(hist[0]).map((key, index) => {
                 return <th>{key}</th>;
@@ -62,7 +62,8 @@ export default function CustomerInfo({ sp }) {
             </tr>
           );
         })}
-      </table>}
+      </table>*/}
+      { hist.length !== 0 && <ApHistory apHistory={hist} />}
 
       {salesmen.length !== 0 && <table className="elli">
         <tr>

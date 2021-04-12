@@ -447,32 +447,127 @@ app.post("/customer_info",(req,res) =>{
     });  
 });
 
-app.post("/customer_file" , (req,res) => {
-    res.sendStatus(200);
-});
 
-app.post( "/check_phones" , (res , req) => {
+app.post( "/check_phones" , (req , res) => {
     
     const phones = req.body;
-    phone = new Set(); mobile = new Set();
+    console.log(req.body);
+    var phone = new Set();
     for ( i = 0; i < phones.length; i++ ) {
-        const phone_customer = phones[ i ][ 'phones' ].split(",").map( el => el.trim() ); const mobile_customer = phones[ i ][ 'mobiles' ].split(",").map( el => el.trim() );
-        for ( j = 0; j < phone_customer; j++ ) phone.add( phone_customer[ j ] );
-        for ( j = 0; j < mobile_customer; j++ ) mobile.add( mobile_customer [ j ] );
+        const phone_customer = phones[ i ][ 'phones' ].split(",").map( el => el.trim() );
+        for ( j = 0; j < phone_customer.length; j++ ) phone.add( phone_customer[ j ] );
     }
-    
+
     var query = "SELECT * FROM phone";
     connection.query( query, function ( error, results ) {
         if (error) throw error;
-        for (i = 0; i < results.length; i++ ) { if ( phone.has( results[i][ 'phone_number' ] ) )  res.send( { 'spcode': results[ i ][ 'spcode' ]} ); }
+        var found = false;
+        for (i = 0; i < results.length; i++ ) { if ( phone.has( results[i][ 'phone_number' ] ) ) {found = true ;res.send( [{ 'spcode': results[ i ][ 'spcode' ]}] );}
+        if (i==results.length-1 && !found) res.sendStatus(200) }
+        //res.sendStatus(200);
     })
     
-    query = "SELECT * FROM mobile";
+});
+
+app.post( "/check_mobiles" , (req , res) => {
+    
+    const phones = req.body;
+    console.log(req.body);
+    var mobile = new Set();
+
+    for ( i = 0; i < phones.length; i++ ) {
+        const mobile_customer = phones[ i ][ 'mobiles' ].split(",").map( el => el.trim() );
+        for ( j = 0; j < mobile_customer.length; j++ ) mobile.add( mobile_customer [ j ] );
+    }
+
+    var query = "SELECT * FROM mobile";
     connection.query( query, function ( error, results ) {
         if (error) throw error;
-        for (i = 0; i < results.length; i++ ) { if ( mobile.has( results[i][ 'phone_number' ] ) )  res.send( { 'spcode': results[ i ][ 'spcode' ]} ); }
+        var found = false;
+        for (i = 0; i < results.length; i++ ) { if ( mobile.has( results[i][ 'mobile_number' ] ) )  {found = true; res.send( [{ 'spcode': results[ i ][ 'spcode' ]}] );}
+        if (i==results.length-1 && !found) res.sendStatus(200) }
+
+        //res.sendStatus(200);
     })
 
-    res.sendStatus(200);
+
     
+});
+
+function stringifyPhones(phones, phoneMethod){
+    var phone = new Set();
+    for ( i = 0; i < phones.length; i++ ) {
+        const phone_customer = phones[ i ][ phoneMethod ].split(",").map( el => el.trim() );
+        for ( j = 0; j < phone_customer.length; j++ ) phone.add( phone_customer [ j ] );
+    }
+    return phone
+}
+
+app.post("/customer_file",(req,res) => {
+    var customer = req.body
+    const args = ['phone','mobile','continent_id','apotelesma_id','salesman_id'];
+    args.map(arg => {
+        if(customer[arg]){
+            auxs[arg] = customer[arg];
+            delete customer[arg];
+            arg;
+        }
+    });
+    //console.log(customer);
+    var input = [customer];
+    //console.log(input)
+    var query = "INSERT into customer SET ?"; 
+    connection.query(query, input,function (error, results) {
+      if (error) throw error;
+      auxs['spcode'] = results.insertId;
+      res.redirect('/aux_customer_file');
+    });
+});
+
+app.get('/aux_customer_file',(req,res) => {
+    const spcode = auxs['spcode'];
+    const phones =  auxs['phones'];
+    if(phones){
+        phones.map(phone => {
+                const query = "INSERT INTO phone VALUES ("+spcode+","+phone['phone_number']+");";
+                //console.log(query);
+                //console.log(phone);
+                connection.query(query, function (error) {
+                    if (error) throw error;
+                });
+                phone;
+            });
+    }
+
+    const mobiles = auxs['mobile'];
+
+    if(mobiles){
+        mobiles.map(mobile => {
+                const query = "INSERT INTO mobile VALUES ("+spcode+","+mobile['mobile_number']+");";
+                //console.log(query);
+                //console.log(phone);
+                connection.query(query, function (error) {
+                    if (error) throw error;
+                });
+                
+                mobile;
+            });       
+    }
+
+    const salesman_id = auxs['salesman_id'];
+    if(salesman_id){
+        const query = "INSERT INTO works_on VALUES (?,?)"
+        connection.query(query,[spcode,salesman_id],function(error){
+            if (error) throw error;
+        });
+    }
+    const apotelesma_id = auxs['apotelesma_id'];
+    if(apotelesma_id){
+        const query = "INSERT INTO history_instance (spcode, apotelesma_id) VALUES (?, ?)";
+        connection.query(query,[spcode,apotelesma_id], function(error,results){
+            if (error) throw error;
+            console.log(results);
+     });
+    }
+    res.sendStatus(200);
 });
