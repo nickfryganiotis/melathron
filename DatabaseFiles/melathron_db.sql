@@ -166,41 +166,6 @@ CREATE TABLE acc (
     PRIMARY KEY(username)
 );
     
-CREATE TABLE aux_ap (
-	apotelesma_name VARCHAR(100),
-    aux_ap_id INT AUTO_INCREMENT,
-    PRIMARY KEY(aux_ap_id)
-);
-
-CREATE TABLE aux_subap (
-	subapotelesma_name VARCHAR(100),
-    aux_subap_id INT AUTO_INCREMENT,
-    PRIMARY KEY(aux_subap_id)
-);
-
-CREATE TABLE aux_sub_cat (
-	sub_cat_name VARCHAR(100),
-    aux_sub_cat_id INT AUTO_INCREMENT,
-    PRIMARY KEY(aux_sub_cat_id)
-);
-
-CREATE TABLE aux_sub (
-	sub_name VARCHAR(100),
-    aux_sub_id INT AUTO_INCREMENT,
-    PRIMARY KEY(aux_sub_id)
-);
-    
-CREATE TABLE aux_cat (
-	cat_name VARCHAR(100),
-    aux_cat_id INT AUTO_INCREMENT,
-    PRIMARY KEY(aux_cat_id)
-);
-
-CREATE TABLE aux_prof (
-	prof_name VARCHAR(100),
-    aux_prof_id INT AUTO_INCREMENT,
-    PRIMARY KEY(aux_prof_id)
-);
     
 DELIMITER //
 CREATE FUNCTION check_paid(s_id INT)
@@ -278,45 +243,6 @@ BEGIN
 END//
 DELIMITER ;
 
-DELIMITER //
-CREATE TRIGGER aux_ap_ins AFTER INSERT ON apotelesma
-FOR EACH ROW
-BEGIN
-	IF NOT EXISTS (SELECT * FROM aux_ap WHERE aux_ap.apotelesma_name = NEW.apotelesma_name) THEN 
-	INSERT INTO aux_ap (apotelesma_name) VALUES (NEW.apotelesma_name);
-    END IF;
-    IF NOT EXISTS (SELECT * FROM aux_subap WHERE aux_subap.subapotelesma_name = NEW.subapotelesma_name) THEN 
-    INSERT INTO aux_subap (subapotelesma_name) VALUES (NEW.subapotelesma_name);
-    END IF;
-END//
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER aux_sub_ins AFTER INSERT ON subscription
-FOR EACH ROW
-BEGIN
-	IF NOT EXISTS (SELECT * FROM aux_sub_cat WHERE aux_sub_cat.sub_cat_name = NEW.subscription_category) THEN
-	INSERT INTO aux_sub_cat (sub_cat_name) VALUES (NEW.subscription_category);
-    END IF;
-    IF NOT EXISTS (SELECT * FROM aux_sub WHERE aux_sub.sub_name = NEW.subscription_name) THEN
-    INSERT INTO aux_sub (sub_name) VALUES (NEW.subscription_name);
-    END IF;
-END//
-DELIMITER
-
-DELIMITER //
-CREATE TRIGGER aux_job_ins AFTER INSERT ON job
-FOR EACH ROW
-BEGIN
-	IF NOT EXISTS (SELECT * FROM aux_sub_cat WHERE aux_sub_cat.sub_cat_name = NEW.subscription_category) THEN
-	INSERT INTO aux_sub_cat (sub_cat_name) VALUES (NEW.subscription_category);
-    END IF;
-    IF NOT EXISTS (SELECT * FROM aux_sub WHERE aux_sub.sub_name = NEW.subscription_name) THEN
-    INSERT INTO aux_sub (sub_name) VALUES (NEW.subscription_name);
-    END IF;
-END//
-DELIMITER 
-
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
@@ -324,18 +250,8 @@ LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Shipping_methods.txt' INTO TABLE shipping_method FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (shipping_method_id, shipping_method_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Subscriptions.txt' INTO TABLE subscription FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subscription_name, subscription_category, country_id);
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
-INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Εύοσμος');
+INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Ωραιόκαστρο');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
 INSERT INTO salesman (salesman_name) VALUES ("Νικόλαος Φρυγανιώτης");
 INSERT INTO job (category, profession) VALUES ("Ιατρός", "Παθολόγος");
 INSERT INTO job (category, profession) VALUES ("Ιατρός", "Γυναικολόγος");
-
-
-SELECT * FROM CUSTOMER;
-SELECT apotelesma_id
-FROM apotelesma a
-WHERE a.continent_id = ? AND a.apotelesma_name = (SELECT apotelesma_name FROM aux_ap WHERE aux_ap_id = ?) AND a.subapotelesma_name = (SELECT subapotelesma_name FROM aux_subap WHERE aux_subap_id = ?);
-
-SELECT subscription_id
-FROM subscription s
-WHERE s.country_id = ? AND s.subscription_category = (SELECT sub_cat_name FROM aux_sub_cat WHERE aux_sub_cat_id = ?) AND s.subscription_name = (SELECT sub_name FROM aux_sub WHERE aux_sub_id = ?); 
