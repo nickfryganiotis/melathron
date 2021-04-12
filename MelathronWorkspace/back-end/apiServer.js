@@ -454,8 +454,10 @@ app.post( "/check_phones" , (req , res) => {
     console.log(req.body);
     var phone = new Set();
     for ( i = 0; i < phones.length; i++ ) {
+        if (phones[i]['phones']){
         const phone_customer = phones[ i ][ 'phones' ].split(",").map( el => el.trim() );
         for ( j = 0; j < phone_customer.length; j++ ) phone.add( phone_customer[ j ] );
+        }
     }
 
     var query = "SELECT * FROM phone";
@@ -476,8 +478,10 @@ app.post( "/check_mobiles" , (req , res) => {
     var mobile = new Set();
 
     for ( i = 0; i < phones.length; i++ ) {
+        if (phones[i]['mobiles']){
         const mobile_customer = phones[ i ][ 'mobiles' ].split(",").map( el => el.trim() );
         for ( j = 0; j < mobile_customer.length; j++ ) mobile.add( mobile_customer [ j ] );
+        }
     }
 
     var query = "SELECT * FROM mobile";
@@ -494,18 +498,16 @@ app.post( "/check_mobiles" , (req , res) => {
     
 });
 
-function stringifyPhones(phones, phoneMethod){
+function stringifyPhones(phones){
     var phone = [];
-    for ( i = 0; i < phones.length; i++ ) {
-        const phone_customer = phones[ i ][ phoneMethod ].split(",").map( el => el.trim() );
-        for ( j = 0; j < phone_customer.length; j++ ) phone.push( phone_customer [ j ] );
-    }
+    const phone_customer = phones.split(",").map( el => el.trim() );
+    for ( j = 0; j < phone_customer.length; j++ ) phone.push( phone_customer [ j ] );
     return phone
 }
 
 app.post("/customer_file",(req,res) => {
     var customer = req.body
-    const args = ['phone','mobile','continent_id','apotelesma_id','salesman_id'];
+    const args = ['phone','mobile','apotelesma_id','salesman_id'];
     args.map(arg => {
         if(customer[arg]){
             auxs[arg] = customer[arg];
@@ -513,6 +515,7 @@ app.post("/customer_file",(req,res) => {
             arg;
         }
     });
+    console.log(auxs);
     //console.log(customer);
     var input = [customer];
     //console.log(input)
@@ -526,11 +529,13 @@ app.post("/customer_file",(req,res) => {
 
 app.get('/aux_customer_file',(req,res) => {
     const spcode = auxs['spcode'];
-    const phones =  auxs['phones'];
+    delete auxs['spcode'];
+    const phones =  auxs['phone'];
+    delete auxs['phone'];
     if(phones){
-        arrPhones = stringifyPhones(phones,'phones');
+        arrPhones = stringifyPhones(phones);
         arrPhones.map(phone => {
-                const query = "INSERT INTO phone VALUES ("+spcode+","+phone['phone_number']+");";
+                const query = "INSERT INTO phone VALUES ("+spcode+","+phone+");";
                 //console.log(query);
                 //console.log(phone);
                 connection.query(query, function (error) {
@@ -540,12 +545,12 @@ app.get('/aux_customer_file',(req,res) => {
             });
     }
 
-    const mobiles = auxs['mobiles'];
-
+    const mobiles = auxs['mobile'];
+    delete auxs['mobile'];
     if(mobiles){
-        arrMobiles = stringifyPhones(mobiles,'mobiles');
+        arrMobiles = stringifyPhones(mobiles);
         arrMobiles.map(mobile => {
-                const query = "INSERT INTO mobile VALUES ("+spcode+","+mobile['mobile_number']+");";
+                const query = "INSERT INTO mobile VALUES ("+spcode+","+mobile+");";
                 //console.log(query);
                 //console.log(phone);
                 connection.query(query, function (error) {
@@ -557,16 +562,20 @@ app.get('/aux_customer_file',(req,res) => {
     }
 
     const salesman_id = auxs['salesman_id'];
+    delete auxs['salesman_id']
+    console.log(salesman_id);
     if(salesman_id){
-        const query = "INSERT INTO works_on VALUES (?,?)"
-        connection.query(query,[spcode,salesman_id],function(error){
+        const query = "INSERT INTO works_on VALUES ("+spcode+","+salesman_id+");";
+        connection.query(query,function(error){
             if (error) throw error;
         });
     }
     const apotelesma_id = auxs['apotelesma_id'];
+    delete auxs['apotelesma_id'];
+    console.log(apotelesma_id);
     if(apotelesma_id){
-        const query = "INSERT INTO history_instance (spcode, apotelesma_id) VALUES (?, ?)";
-        connection.query(query,[spcode,apotelesma_id], function(error,results){
+        const query = "INSERT INTO history_instance (spcode, apotelesma_id) VALUES ("+spcode+","+apotelesma_id+");";
+        connection.query(query, function(error,results){
             if (error) throw error;
             console.log(results);
      });
