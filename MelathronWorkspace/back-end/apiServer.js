@@ -319,16 +319,16 @@ app.post("/search_customer",(req,res) => {
 
     const customer = req.body
     var input = [];
-    var prefix_query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name" // , ,\nFROM("
+    var prefix_query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name"; 
     
-    var query = " SELECT *\n FROM customer\n"
+    var query = " SELECT *\n FROM customer\n";
     var parameters = false;
     if( customer[ 'last_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "last_name LIKE ?\n"; parameters = true; input.push( customer[ 'last_name' ] + '%' ); }
     if( customer[ 'first_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "first_name LIKE ?\n"; parameters = true; input.push( customer[ 'first_name' ] + '%'); }
     if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ?\n"; parameters = true; input.push( customer[ 'email' ] + '%'); }
     if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ?\n"; parameters = true; input.push( customer[ 'website' ] + '%'); }
     if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ?\n"; parameters = true; input.push( customer[ 'company_name' ] + '%' ); }
-    query += ") AS cust\n " 
+    query += ") AS cust\n "; 
     
     parameters = false;
     if( customer[ 'country_id' ] || customer[ 'state' ] || customer [ 'city' ] || customer[ 'area' ] ) {
@@ -449,4 +449,6 @@ app.post("/customer_info",(req,res) =>{
 
 app.post("/customer_file" , (req,res) => {
     res.sendStatus(200);
-})
+});
+
+
