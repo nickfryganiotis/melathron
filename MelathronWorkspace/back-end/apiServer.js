@@ -451,4 +451,28 @@ app.post("/customer_file" , (req,res) => {
     res.sendStatus(200);
 });
 
+app.post( "/check_phones" , (res , req) => {
+    
+    const phones = req.body;
+    phone = new Set(); mobile = new Set();
+    for ( i = 0; i < phones.length; i++ ) {
+        const phone_customer = phones[ i ][ 'phones' ].split(",").map( el => el.trim() ); const mobile_customer = phones[ i ][ 'mobiles' ].split(",").map( el => el.trim() );
+        for ( j = 0; j < phone_customer; j++ ) phone.add( phone_customer[ j ] );
+        for ( j = 0; j < mobile_customer; j++ ) mobile.add( mobile_customer [ j ] );
+    }
+    
+    var query = "SELECT * FROM phone";
+    connection.query( query, function ( error, results ) {
+        if (error) throw error;
+        for (i = 0; i < results.length; i++ ) { if ( phone.has( results[i][ 'phone_number' ] ) )  res.send( { 'spcode': results[ i ][ 'spcode' ]} ); }
+    })
+    
+    query = "SELECT * FROM mobile";
+    connection.query( query, function ( error, results ) {
+        if (error) throw error;
+        for (i = 0; i < results.length; i++ ) { if ( mobile.has( results[i][ 'phone_number' ] ) )  res.send( { 'spcode': results[ i ][ 'spcode' ]} ); }
+    })
 
+    res.sendStatus(200);
+    
+});
