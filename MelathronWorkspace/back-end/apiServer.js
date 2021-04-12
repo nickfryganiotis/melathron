@@ -495,10 +495,10 @@ app.post( "/check_mobiles" , (req , res) => {
 });
 
 function stringifyPhones(phones, phoneMethod){
-    var phone = new Set();
+    var phone = [];
     for ( i = 0; i < phones.length; i++ ) {
         const phone_customer = phones[ i ][ phoneMethod ].split(",").map( el => el.trim() );
-        for ( j = 0; j < phone_customer.length; j++ ) phone.add( phone_customer [ j ] );
+        for ( j = 0; j < phone_customer.length; j++ ) phone.push( phone_customer [ j ] );
     }
     return phone
 }
@@ -528,7 +528,8 @@ app.get('/aux_customer_file',(req,res) => {
     const spcode = auxs['spcode'];
     const phones =  auxs['phones'];
     if(phones){
-        phones.map(phone => {
+        arrPhones = stringifyPhones(phones,'phones');
+        arrPhones.map(phone => {
                 const query = "INSERT INTO phone VALUES ("+spcode+","+phone['phone_number']+");";
                 //console.log(query);
                 //console.log(phone);
@@ -539,10 +540,11 @@ app.get('/aux_customer_file',(req,res) => {
             });
     }
 
-    const mobiles = auxs['mobile'];
+    const mobiles = auxs['mobiles'];
 
     if(mobiles){
-        mobiles.map(mobile => {
+        arrMobiles = stringifyPhones(mobiles,'mobiles');
+        arrMobiles.map(mobile => {
                 const query = "INSERT INTO mobile VALUES ("+spcode+","+mobile['mobile_number']+");";
                 //console.log(query);
                 //console.log(phone);
