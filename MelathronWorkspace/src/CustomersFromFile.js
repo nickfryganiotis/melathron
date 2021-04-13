@@ -48,14 +48,12 @@ export default function CustomersFromFile() {
     e.target.reset();
     setCustomers([]);
     let phons = customers.map((customer) => ({
-      phones: customer["ΣΤΑΘΕΡΑ"],
+      phones: customer['ΣΤΑΘΕΡΑ'] && customer["ΣΤΑΘΕΡΑ"].toString(),
     }));
     let mobls = customers.map((customer) => ({
-      mobiles: customer["ΚΙΝΗΤΑ"],
+      mobiles: customer['ΚΙΝΗΤΑ'] && customer["ΚΙΝΗΤΑ"].toString(),
     }));
-    console.log(mobls);
-    console.log(phons);
-    console.log(customers);
+
     let checkTele = {
       method: "post",
       url: "http://localhost:5000/check_phones",
@@ -78,6 +76,7 @@ export default function CustomersFromFile() {
          console.log(error);
         });
 
+    customers.forEach((customer) => console.log(greekToEnglish(customer)));
     let options = customers.map((customer) => ({
       method: "post",
       url: "http://localhost:5000/customer_file",

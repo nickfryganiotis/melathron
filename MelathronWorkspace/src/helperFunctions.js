@@ -96,7 +96,7 @@ export function greekToEnglish(obj) {
     "Τ.Κ." : "address_postal_code",
     "ΣΧΟΛΙΑ" : "comments",
     "ΣΤΑΘΕΡΑ" : "phone",
-    "KINHTA" : "mobile",
+    "ΚΙΝΗΤΑ" : "mobile",
     "ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ" : "state",
     "ΝΟΜΟΣ" : "state",
     "ΠΟΛΙΤΕΙΑ" : "state",
@@ -105,6 +105,7 @@ export function greekToEnglish(obj) {
     "ΚΩΔΙΚΟΣ ΑΠΟΤΕΛΕΣΜΑΤΟΣ" : "apotelesma_id",
     "ΚΩΔΙΚΟΣ ΕΠΑΓΓΕΛΜΑΤΟΣ" : "job_id",
     "ΚΩΔΙΚΟΣ ΤΟΠΟΘΕΣΙΑΣ" : "location_id",
+    "ΚΩΔΙΚΟΣ ΠΩΛΗΤΗ" : "salesman_id"
   }
 
   let x = {}
