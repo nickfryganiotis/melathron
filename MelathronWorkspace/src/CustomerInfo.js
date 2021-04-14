@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ApHistory from "./customerInfoComponents/ApHistory";
+import SalesMade from "./customerInfoComponents/SalesMade";
+import SalesmenInfo from "./customerInfoComponents/SalesmenInfo";
 import "./info.css";
 export default function CustomerInfo({ sp }) {
   const [customer, setCustomer] = useState([]);
@@ -46,58 +48,11 @@ export default function CustomerInfo({ sp }) {
           </table>
         );
       })}
-
-      {/*hist.length !== 0 && <table className="elli">
-        <tr>
-        {Object.keys(hist[0]).map((key, index) => {
-                return <th>{key}</th>;
-              })}
-        </tr>
-        {hist.map((element) => {
-          return (
-            <tr>
-              {Object.keys(element).map((key, index) => {
-                return <th>{element[key]}</th>;
-              })}
-            </tr>
-          );
-        })}
-      </table>*/}
       { hist.length !== 0 && <ApHistory apHistory={hist} />}
 
-      {salesmen.length !== 0 && <table className="elli">
-        <tr>
-        {Object.keys(salesmen[0]).map((key, index) => {
-                return <th>{key}</th>;
-              })}
-        </tr>
-        {salesmen.map((element) => {
-          return (
-            <tr>
-              {Object.keys(element).map((key, index) => {
-                return <th>{element[key]}</th>;
-              })}
-            </tr>
-          );
-        })}
-      </table>}
+      {salesmen.length!==0 && <SalesmenInfo salesmenn={salesmen} spcode={sp} />}
+      {sales.length !==0 && <SalesMade sales={sales} />}
 
-      {sales.length !== 0 && <table className="elli">
-        <tr>
-        {Object.keys(sales[0]).map((key, index) => {
-                return <th>{key}</th>;
-              })}
-        </tr>
-        {sales.map((element) => {
-          return (
-            <tr>
-              {Object.keys(element).map((key, index) => {
-                return <th>{element[key]}</th>;
-              })}
-            </tr>
-          );
-        })}
-      </table>}
     </>
   );
 }

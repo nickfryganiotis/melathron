@@ -3,7 +3,7 @@ import {React} from 'react';
 
 export default function StaticInfo( {customer} ){
     return(
-        <table className="elli">
+        <table>
             {Object.keys(element).map((key, index) => {
               return (
                 <tr>

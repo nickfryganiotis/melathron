@@ -22,6 +22,7 @@ export default function MySaleSearch() {
   const [status, setStatus] = useState(2);
 
   const getSearchResults = () => {
+    console.log(saleOptions)
     axios
       .get("http://localhost:5000/sales")
       .then((response) => {
