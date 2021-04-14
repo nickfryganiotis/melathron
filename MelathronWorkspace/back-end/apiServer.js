@@ -507,6 +507,7 @@ function stringifyPhones(phones){
 
 app.post("/customer_file",(req,res) => {
     var customer = req.body
+    var auxs = {}
     const args = ['phone','mobile','apotelesma_id','salesman_id'];
     args.map(arg => {
         if(customer[arg]){
@@ -515,15 +516,67 @@ app.post("/customer_file",(req,res) => {
             arg;
         }
     });
-    console.log(auxs);
-    //console.log(customer);
+
     var input = [customer];
-    //console.log(input)
     var query = "INSERT into customer SET ?"; 
     connection.query(query, input,function (error, results) {
       if (error) throw error;
-      auxs['spcode'] = results.insertId;
-      res.redirect('/aux_customer_file');
+      //auxs['spcode'] = results.insertId;
+      args.map(arg => {
+        if(auxs[arg]){
+            customer[arg] = auxs[arg];
+            delete auxs[arg];
+            //arg;
+        }
+    });
+      var spcode = results.insertId;
+      //res.redirect('/aux_customer_file');
+      const phones = customer['phone'];
+      if(phones){
+        arrPhones = stringifyPhones(phones);
+        arrPhones.map(phone => {
+                const query = "INSERT INTO phone VALUES ("+spcode+","+phone+");";
+                //console.log(query);
+                //console.log(phone);
+                connection.query(query, function (error) {
+                    if (error) throw error;
+                });
+                phone;
+            });
+    }
+
+    const mobiles = customer['mobile'];
+    if(mobiles){
+        arrMobiles = stringifyPhones(mobiles);
+        arrMobiles.map(mobile => {
+                const query = "INSERT INTO mobile VALUES ("+spcode+","+mobile+");";
+                //console.log(query);
+                //console.log(phone);
+                connection.query(query, function (error) {
+                    if (error) throw error;
+                });
+                
+                mobile;
+            });       
+    }
+
+    const salesman_id = customer['salesman_id'];
+    console.log(salesman_id);
+    if(salesman_id){
+        const query = "INSERT INTO works_on VALUES ("+spcode+","+salesman_id+");";
+        connection.query(query,function(error){
+            if (error) throw error;
+        });
+    }
+    const apotelesma_id = customer['apotelesma_id'];
+    console.log(apotelesma_id);
+    if(apotelesma_id){
+        const query = "INSERT INTO history_instance (spcode, apotelesma_id) VALUES ("+spcode+","+apotelesma_id+");";
+        connection.query(query, function(error,results){
+            if (error) throw error;
+            console.log(results);
+     });
+    }
     });
 });
 
