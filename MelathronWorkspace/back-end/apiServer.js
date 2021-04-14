@@ -732,8 +732,8 @@ app.post( '/add_salesman', ( req, res ) => {
 app.post( '/add_apotelesma', ( req, res ) => {
 
     const apotelesma = req.body;
-    const query = "UPDATE customer SET apotelesma_id = (SELECT apotelesma_id FROM apotelesma WHERE apotelesma_name = ? AND subapotelesma_name = ? AND continent_id = ? WHERE spcode = ?"
-    connection.query( query, [ apotelesma[ 'apotelesma_name' ], apotelesma[ 'subapotelesma_name' ], apotelesma[ 'continent_id' ], apotelesma[ 'spcode' ] ], function( error, results ) {
+    const query = "INSERT INTO history_instance (spcode, apotelesma_id) VALUES (? , (SELECT apotelesma_id FROM apotelesma WHERE apotelesma_name = ? AND subapotelesma_name = ? AND continent_id = ?));"
+    connection.query( query, [apotelesma[ 'spcode' ] , apotelesma[ 'apotelesma_name' ], apotelesma[ 'subapotelesma_name' ], apotelesma[ 'continent_id' ]], function( error, results ) {
         if ( error ) throw error;
         res.sendStatus(200);
     });
