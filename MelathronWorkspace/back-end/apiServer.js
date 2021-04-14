@@ -635,3 +635,76 @@ app.get('/aux_customer_file',(req,res) => {
     }
     res.sendStatus(200);
 });
+
+app.get( 'search_sale', (req,res) => {
+
+    const sale = req.body;
+    var input = [];
+    var parameters = false;
+    var query = "SELECT sale.sale_id, sale.spcode, sale.salesman_name, sb.subscription_category, sb.subscription_name, sale.voucher, sale.total_amount, sale.order_date, sale.paid\nFROM sale";
+
+    if ( sale[ 'salesman_name' ] ) { 
+        query += "INNER JOIN (\n SELECT * \n FROM salesman WHERE ";
+        const salesman_names = sale[ 'salesman_name' ];
+        for ( i = 0; i < salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman_name = ?"; input.push( salesman_names[i][ 'value' ] ); }
+        query += ")\n"; 
+        query += ") as sm ON sale.salesman_id = sm.salesman_id\n"; }
+    
+    if( sale[ 'subscription_category' ] || sale[ 'subscription_name' ] ) {
+        
+        query += "INNER JOIN (\n SELECT *\n FROM subscription\n ";
+        if ( sale[ 'subscription_category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
+                                                 const subscription_categories = sale[ 'subscription_category' ];
+                                                 for ( i=0; i < subscription_categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subscription.subscription_category = ?"; input.push( subscription_categories[i]['value'] ); }
+                                                 query += ")\n"; }
+        if ( sale[ 'subscription_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
+                                                 const subscription_names = sale[ 'subscription_name' ];
+                                                 for ( i=0; i < subscription_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subscription.subscription_name = ?"; input.push( subscription_names[i]['value'] ); }
+                                                 query += ")\n"; }
+        query += ") as sb ON sale.subscription_id = sb.subscription_id\n"
+    }
+
+    if ( sale[ 'shipping_method' ] ) {
+        query += "INNER JOIN (\n SELECT * \n FROM  shipping_method WHERE ";
+        const shipping_methods = sale[ 'shipping_method' ];
+        for ( i = 0; i < shipping_methods.length; i++ ) { query += i > 0 ? " OR " : ""; query += "shipping_method_name = ?"; input.push( shipping_methods[i][ 'value' ] ); }
+        query += ")\n"; 
+        query += ") sh ON sale.shipping_method_id = sh.shipping_method_id\n"; }
+    
+    parameters = false;
+    if ( sale[ 'spcode' ]) { query += !parameters ? " WHERE " : " AND "; query += "sale.spcode = ?"; parameters = true; input.push( sale[ 'spcode' ] ); }
+    if ( sale[ 'paid' ] || sale[ 'paid' ] !==2 ) { query += !parameters ? " WHERE " : " AND "; query += "sale.paid = ?"; parameters = true; input.push( sale[ 'paid' ] ); }
+    if ( sale[ 'amount1' ]) { query += !parameters ? " WHERE " : " AND "; query += "sale.total_amount >= ?"; parameters = true; input.push( sale[ 'amount1' ] ); }
+    if ( sale[ 'amount2' ]) { query += !parameters ? " WHERE " : " AND "; query += "sale.total_amount <= ?"; parameters = true; input.push( sale[ 'amount2' ] ); }
+    if ( sale[ 'order_date1' ]) { query += !parameters ? " WHERE " : " AND "; query += "date(sale.order_date) >= ?"; parameters = true; input.push( sale[ 'order_date1' ] ); }
+    if ( sale[ 'order_date2' ]) { query += !parameters ? " WHERE " : " AND "; query += "date(sale.order_date) <= ?"; parameters = true; input.push( sale[ 'order_date2' ] ); }
+
+    connection.query( query, input, function( error,results ) {
+        if (error) throw error;
+        res.send(results);
+    } )
+
+
+} );
+
+app.get( 'delete_salesman', ( req,res ) => {
+    
+    const salesman = req.body;
+    const query = "DELETE FROM works_on WHERE salesman_id = ? AND spcode = ?"
+    connection.query( query, [ salesman['salesman_id'], salesman[ 'spcode' ] ] , function( error ) {
+        if (error) throw error; 
+        res.sendStatus(200);
+    } );
+
+} );
+
+app.get( 'add_salesman', ( req, res ) => {
+
+    const salesman = req.body;
+    const query = "INSERT INTO works_on VALUES (?,?) "
+    connection.query( query, [ salesman['salesman_id'], salesman[ 'spcode' ] ] , function( error ) {
+        if (error) throw error; 
+        res.sendStatus(200);
+    } );
+
+} );
