@@ -582,3 +582,7 @@ app.get('/aux_customer_file',(req,res) => {
     }
     res.sendStatus(200);
 });
+
+app.post( 'search_sale', ( req, res ) => {
+    const sale = req.body;
+} )
