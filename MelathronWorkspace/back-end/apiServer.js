@@ -636,6 +636,26 @@ app.get('/aux_customer_file',(req,res) => {
     res.sendStatus(200);
 });
 
+app.post( '/sale_info', ( req, res ) =>{
+
+    const sale_id = req.body[ 'sale_id' ];
+    var output = [];
+    var query = "SELECT * FROM sale LEFT OUTER JOIN salesman s ON s.salesman_id = sale.sale_id LEFT OUTER JOIN subscription sb ON sb.subscription_id = sale.subscription_id LEFT OUTER JOIN shipping_method sm ON sm.shipping_method_id = sale.shipping_method_id WHERE sale.sale_id = ?";
+    connection.query( query, sale_id, function ( error, results) {
+        if (error) throw error;
+        output.push(results);
+    })
+
+    query = "SELECT * FROM payment_info WHERE payment_info.sale_id = ?";
+    connection.query( query, sale, function ( error, results) {
+        if (error) throw error;
+        output.push(results);
+        res.send(output);
+    })
+
+
+} )
+
 app.post( '/search_sale', (req,res) => {
 
     const sale = req.body;
