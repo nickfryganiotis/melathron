@@ -433,7 +433,7 @@ app.post("/customer_info",(req,res) =>{
         if (error) throw error;
         output.push(results);       
     });
-    query = "SELECT * FROM works_on WHERE works_on.spcode = ?"
+    query = "SELECT salesman.salesman_name, salesman.salesman_id FROM works_on LEFT OUTER JOIN salesman ON works_on.salesman_id = salesman.salesman_id WHERE works_on.spcode = ?"
     connection.query(query,spcode,function(error,results){
         if (error) throw error;
         output.push(results);        
