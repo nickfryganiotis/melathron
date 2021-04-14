@@ -739,3 +739,14 @@ app.post( '/add_apotelesma', ( req, res ) => {
     });
 
 } );
+
+app.post( '/delete_apotelesma', ( req, res ) => {
+
+    const apotelesma = req.body;
+    const query = "DELETE FROM history_instance WHERE spcode = ? AND apotelesma_id = (SELECT apotelesma_id FROM apotelesma WHERE apotelesma_name = ? AND subapotelesma_name = ? AND continent_id = ?)"
+    connection.query( query, [apotelesma[ 'spcode' ] , apotelesma[ 'apotelesma_name' ], apotelesma[ 'subapotelesma_name' ], apotelesma[ 'continent_id' ]], function( error, results ) {
+        if ( error ) throw error;
+        res.sendStatus(200);
+    });
+    
+} );
