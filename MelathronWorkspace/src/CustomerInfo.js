@@ -50,7 +50,7 @@ export default function CustomerInfo({ sp }) {
       })}
       { hist.length !== 0 && <ApHistory apHistory={hist} />}
 
-      {salesmen.length!==0 && <SalesmenInfo salesmenn={salesmen} spcode={sp} />}
+      {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
       {sales.length !==0 && <SalesMade sales={sales} />}
 
     </>

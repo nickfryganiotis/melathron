@@ -120,7 +120,7 @@ CREATE TABLE works_on (
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
     ON DELETE CASCADE,
     FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
     );
 
 CREATE TABLE shipping_method (

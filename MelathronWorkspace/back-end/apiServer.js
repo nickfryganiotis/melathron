@@ -636,7 +636,7 @@ app.get('/aux_customer_file',(req,res) => {
     res.sendStatus(200);
 });
 
-app.get( 'search_sale', (req,res) => {
+app.post( '/search_sale', (req,res) => {
 
     const sale = req.body;
     var input = [];
@@ -687,7 +687,7 @@ app.get( 'search_sale', (req,res) => {
 
 } );
 
-app.get( 'delete_salesman', ( req,res ) => {
+app.post( '/delete_salesman', ( req,res ) => {
     
     const salesman = req.body;
     const query = "DELETE FROM works_on WHERE salesman_id = ? AND spcode = ?"
@@ -698,10 +698,10 @@ app.get( 'delete_salesman', ( req,res ) => {
 
 } );
 
-app.get( 'add_salesman', ( req, res ) => {
+app.post( '/add_salesman', ( req, res ) => {
 
     const salesman = req.body;
-    const query = "INSERT INTO works_on VALUES (?,?) "
+    const query = "INSERT INTO works_on(salesman_id, spcode) VALUES (?,?) "
     connection.query( query, [ salesman['salesman_id'], salesman[ 'spcode' ] ] , function( error ) {
         if (error) throw error; 
         res.sendStatus(200);

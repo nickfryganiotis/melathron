@@ -1,10 +1,11 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 
-export default function SalesmenInfo({ salesmenn }, { spcode }) {
+export default function SalesmenInfo({ salesmenn, spcode}) {
   const [salesmen, setSalesmen] = useState([]);
   const [salesman, setSalesman] = useState([]);
   const [addSal, setAddSal] = useState({});
+  const [sp, setSp] = useState(null)
 
   useEffect(() => {
     axios
@@ -12,6 +13,7 @@ export default function SalesmenInfo({ salesmenn }, { spcode }) {
       .then((res) => setSalesman(res.data))
       .catch((error) => console.log(error));
     setSalesmen(salesmenn)
+    setSp(spcode)
   }, []);
 
   function delSalesman(e, id, idx) {
@@ -19,7 +21,7 @@ export default function SalesmenInfo({ salesmenn }, { spcode }) {
     let delOptions = {
       method: "post",
       url: "http://localhost:5000/delete_salesman",
-      data: { salesman_id: id, spcode: spcode },
+      data: { salesman_id: id, spcode: sp },
     };
 
     axios(delOptions)
@@ -40,7 +42,7 @@ export default function SalesmenInfo({ salesmenn }, { spcode }) {
     let addOptions = {
       method: "post",
       url: "http://localhost:5000/add_salesman",
-      data: { salesman_id: addSal["salesman_id"], spcode: spcode },
+      data: { salesman_id: addSal["salesman_name"], spcode: sp },
     };
     console.log(addSal)
     axios(addOptions)
@@ -72,7 +74,7 @@ export default function SalesmenInfo({ salesmenn }, { spcode }) {
           onChange={handleCustomerChange}
         >
           <option></option>
-          {salesman.map((element) => <option value={element["salesman_id"]}>{element["salesman_name"]}</option>)}
+          {salesmenn.map((element) => <option value={element["salesman_id"]}>{element["salesman_name"]}</option>)}
         </select>
       </tr>
       <button onClick={addSalesman}>+</button>
