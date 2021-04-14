@@ -120,7 +120,7 @@ CREATE TABLE works_on (
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
     ON DELETE CASCADE,
     FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id)
-    ON DELETE CASCADE,
+    ON DELETE CASCADE
     );
 
 CREATE TABLE shipping_method (
@@ -242,7 +242,17 @@ BEGIN
     WHERE spcode = NEW.spcode;
 END//
 DELIMITER ;
-SELECT * FROM mobile;
+
+DELIMITER //
+CREATE TRIGGER curr_apotelesma_del AFTER DELETE ON history_instance
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET apotelesma_id = (SELECT apotelesma_id FROM history_instance WHERE spcode=OLD.spcode ORDER BY instance_date DESC LIMIT 1) 
+    WHERE spcode = OLD.spcode;
+END//
+DELIMITER ;
+
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt' INTO TABLE apotelesma FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subapotelesma_name, apotelesma_name, continent_id);

@@ -48,7 +48,7 @@ export default function CustomerInfo({ sp }) {
           </table>
         );
       })}
-      { hist.length !== 0 && <ApHistory apHistory={hist} />}
+      {<ApHistory apHistory={hist} spcode={sp} />}
 
       {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
       {sales.length !==0 && <SalesMade sales={sales} />}
