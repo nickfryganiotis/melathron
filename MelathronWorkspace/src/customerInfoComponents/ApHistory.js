@@ -1,11 +1,13 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
-import { timeConverter, makeToUnique, arrayToOption } from "../helperFunctions";
+import { timeConverter, makeToUnique, arrayToOption, deleteCommon } from "../helperFunctions";
 
 export default function ApHistory({ apHistory, spcode }) {
   const [apotelesmata, setApotelesmata] = useState([]);
   const [newAp, setNewAp] = useState({});
   const [aps, setAps] = useState([])
+  const [updAp, setUpdAp] = useState({})
+  const [status, setStatus] = useState(-1)
 
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
@@ -21,9 +23,9 @@ export default function ApHistory({ apHistory, spcode }) {
   }, []);
 
   useEffect( ()=>{
-    setAps(apHistory)
-    console.log(aps)
+    setAps([...apHistory])
   } , [apHistory])
+
 
   function newApotelesma(e) {
     e.preventDefault();
@@ -43,6 +45,17 @@ export default function ApHistory({ apHistory, spcode }) {
     setNewAp({ ...newAp, [name]: value });
   }
 
+  function handleApotelesmaChange(e){
+    const { value, name } = e.target;
+    setUpdAp({...updAp, [name] : value})
+  }
+
+  function showDropdown(e, dat){
+    let row_id = e.target.parentNode.id
+    if (status == row_id) {setStatus(-1); setUpdAp({})}
+    else {setStatus(row_id) ; setUpdAp( {"instance_date" : Date.parse(dat["instance_date"]), "apotelesma_name" : dat["apotelesma_name"], "subapotelesma_name" : dat["subapotelesma_name"]})}
+  }
+
   function delApotelesma(e, i, ap, subap, insd){
     e.preventDefault()
     let x = [...aps]
@@ -56,6 +69,17 @@ export default function ApHistory({ apHistory, spcode }) {
     axios(delap_options).then((res)=>console.log(res)).catch((error) => console.log(error))
   }
 
+  function updApotelesma(e){
+    e.preventDefault()
+    console.log(updAp)
+    let upd_options = {
+      method:"post",
+      url: "http://localhost:5000/update_apotelesma",
+      data: {...updAp, spcode : spcode, continent_id : newAp['continent_id']}
+    }
+    axios(upd_options).then((res) => console.log(res)).catch((error) => console.log(error))
+  }
+
   return (
     <div>
       <table>
@@ -66,36 +90,36 @@ export default function ApHistory({ apHistory, spcode }) {
         </tr>
         {aps.map((element, i) => {
           return (
-            <tr>
+            <tr id={i} onDoubleClick={(e) => {showDropdown(e, element)}}>
               <td>{timeConverter(element["instance_date"])}</td>
-              <td><select
+              <td>{((status!=i) && element["apotelesma_name"]) || ((status==i) && <select
               name="apotelesma_name"
               id="apotelesma_name"
-              onChange={handleApChange} 
+              onChange={(e) => {handleApotelesmaChange(e, element["instance_date"])}}
             >
-              <option></option>
               <option selected>{element["apotelesma_name"]}</option>
-              {makeToUnique(apotelesmata, "apotelesma_name", newAp).map(
+              <option>{null}</option>
+              {makeToUnique(apotelesmata, "apotelesma_name", updAp).map(
                 arrayToOption
               )}
-            </select></td>
-              <td><select
+            </select> )}</td>
+              <td>{((status !=i) && element["subapotelesma_name"]) || ((status==i) && <select
               name="subapotelesma_name"
               id="subapotelesma_name"
-              onChange={handleApChange}
+              onChange={(e) => {handleApotelesmaChange(e, element["instance_date"])}}
             >
-              <option selected>{element["subapotelesma_name"]}</option>
+              <option>{element["subapotelesma_name"]}</option>
               <option>{null}</option>
               {makeToUnique(
                 apotelesmata,
                 "subapotelesma_name",
-                newAp,
+                updAp,
                 "apotelesma_name"
               ).map(arrayToOption)}
-            </select></td>
+            </select> )}</td>
               <td>
                 <button onClick={(e) => delApotelesma(e,i, element["apotelesma_name"], element["subapotelesma_name"], Date.parse(element["instance_date"]) )}>-</button>
-                <button>ΑΛΛΑΓΗ</button>
+                {status==i && <button onClick={updApotelesma}>ΑΛΛΑΓΗ</button>}
               </td>
             </tr>
           );
