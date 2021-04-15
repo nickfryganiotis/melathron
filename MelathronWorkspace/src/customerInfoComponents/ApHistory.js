@@ -10,7 +10,6 @@ export default function ApHistory({ apHistory, spcode }) {
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
     setNewAp({...newAp , continent_id : area["continent_id"], spcode:spcode})
-    //setAps(apHistory)
     let apotelesmata_options = {
       method: "post",
       url: "http://localhost:5000/apotelesmata",
@@ -20,6 +19,11 @@ export default function ApHistory({ apHistory, spcode }) {
       .then((res) => setApotelesmata(res.data))
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect( ()=>{
+    setAps(apHistory)
+    console.log(aps)
+  } , [apHistory])
 
   function newApotelesma(e) {
     e.preventDefault();
@@ -60,12 +64,35 @@ export default function ApHistory({ apHistory, spcode }) {
           <th>Γενική Κατηγορία Αποτελέσματος</th>
           <th>Αποτέλεσμα</th>
         </tr>
-        {apHistory.map((element, i) => {
+        {aps.map((element, i) => {
           return (
             <tr>
               <td>{timeConverter(element["instance_date"])}</td>
-              <td>{element["apotelesma_name"]}</td>
-              <td>{element["subapotelesma_name"]}</td>
+              <td><select
+              name="apotelesma_name"
+              id="apotelesma_name"
+              onChange={handleApChange} 
+            >
+              <option></option>
+              <option selected>{element["apotelesma_name"]}</option>
+              {makeToUnique(apotelesmata, "apotelesma_name", newAp).map(
+                arrayToOption
+              )}
+            </select></td>
+              <td><select
+              name="subapotelesma_name"
+              id="subapotelesma_name"
+              onChange={handleApChange}
+            >
+              <option selected>{element["subapotelesma_name"]}</option>
+              <option>{null}</option>
+              {makeToUnique(
+                apotelesmata,
+                "subapotelesma_name",
+                newAp,
+                "apotelesma_name"
+              ).map(arrayToOption)}
+            </select></td>
               <td>
                 <button onClick={(e) => delApotelesma(e,i, element["apotelesma_name"], element["subapotelesma_name"], Date.parse(element["instance_date"]) )}>-</button>
                 <button>ΑΛΛΑΓΗ</button>
@@ -76,7 +103,6 @@ export default function ApHistory({ apHistory, spcode }) {
         <tr>
           <td>-</td>
           <td>
-            {" "}
             <select
               name="apotelesma_name"
               id="apotelesma_name"
@@ -94,7 +120,7 @@ export default function ApHistory({ apHistory, spcode }) {
               id="subapotelesma_name"
               onChange={handleApChange}
             >
-              <option></option>
+              <option>{null}</option>
               {makeToUnique(
                 apotelesmata,
                 "subapotelesma_name",

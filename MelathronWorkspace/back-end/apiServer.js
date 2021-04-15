@@ -382,7 +382,7 @@ app.post("/search_customer",(req,res) => {
     parameters = false;
     //query += "WHERE works_on.salesman_name = salesman.salesman_name\n";
     if ( customer['salesman_name'] ) { query += "INNER JOIN (\n SELECT salesman.salesman_name as salesman_name, works_on.spcode as spcode\n FROM works_on, salesman\n WHERE works_on.salesman_id = salesman.salesman_id\n";
-                                       query += "AND("
+                                       query += "AND ("
                                        const salesman_names = customer[ 'salesman_name' ];                                    
                                        for ( i=0; i< salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman.salesman_name = ?"; input.push(salesman_names[i]['value']);  }
                                        query += ")\n) AS wor ON cust.spcode = wor.spcode\n";
@@ -446,7 +446,7 @@ app.post("/customer_info",(req,res) =>{
     });  
 
     query = "SELECT * FROM phone WHERE spcode = ?";
-    connection.query( query , spcode , function( error,result) {
+    connection.query( query , spcode , function( error,results) {
         if ( error ) throw error;
         output.push( results );
     } );

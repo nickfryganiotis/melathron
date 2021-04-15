@@ -11,8 +11,11 @@ export default function SalesmenInfo({ salesmenn, spcode}) {
       .get("http://localhost:5000/salesman")
       .then((res) => setSalesman(res.data))
       .catch((error) => console.log(error));
-    setSalesmen(salesmenn)
   }, []);
+
+  useEffect(() => {
+    setSalesmen(salesmenn)
+  }, [salesmenn])
 
   function delSalesman(e, id, idx) {
     e.preventDefault();
@@ -53,7 +56,7 @@ export default function SalesmenInfo({ salesmenn, spcode}) {
       <tr>
         <th>Πωλητές</th>
       </tr>
-      {salesmenn.map((element, i) => {
+      {salesmen.map((element, i) => {
         return (
           <tr>
             <td>{element["salesman_name"]}</td>
