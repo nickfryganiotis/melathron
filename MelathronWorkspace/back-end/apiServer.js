@@ -763,11 +763,11 @@ app.post( '/delete_apotelesma', ( req, res ) => {
     
 } );
 
-app.post( '/update_apotelesma', ( req, res ) => { 
+app.post( 'update_apotelesma', ( req, res ) => { 
     
     const apotelesma = req.body;
     const query = "UPDATE history_instance SET apotelesma_id = (SELECT apotelesma_id FROM apotelesma WHERE apotelesma_name = ? AND subapotelesma_name = ? AND continent_id = ?) WHERE spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?"
-    connection.query( query , [ apotelesma[ 'apotelesma_name' ] , apotelesma[ 'subapotelesma_name' ] , apotelesma[ 'continent_id' ] , apotelesma[ 'spcode' ], apotelesma [ 'instance_date' ]] , function ( error ) {
+    connection.query( query , [ apotelesma[ 'apotelesma_name' ] , apotelesma[ 'subapotelesma_name' ] , apotelesma[ 'continent_id' ] , apotelesma[ 'spcode' ], apotelesma [ 'instance_date' ] , function ( error ) {
         if (error) throw error;
         res.sendStatus( 200 );
     } )
