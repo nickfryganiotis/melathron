@@ -443,8 +443,20 @@ app.post("/customer_info",(req,res) =>{
     connection.query(query,spcode,function(error,results){
         if (error) throw error;
         output.push(results);
-        res.send(output);
     });  
+
+    query = "SELECT * FROM phone WHERE spcode = ?";
+    connection.query( query , spcode , function( error,result) {
+        if ( error ) throw error;
+        output.push( results );
+    } );
+
+    query = "SELECT * FROM mobile WHERE spcode = ?";
+    connection.query( query, spcode , function( error , results ) {
+        if ( error ) throw error;
+        output.push( results );
+        res.send( output );
+    } );
 });
 
 
