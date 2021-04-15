@@ -3,7 +3,7 @@
 των οποίων το conditional_attribute είναι ίσο με αυτό του dependence_json αντικειμένου*/
 export function makeToUnique(array_of_json, target_attribute, dependence_json ,conditional_attribute) {
   var unique_array = [];
-  if (typeof array_of_json === "undefined") {
+  if (typeof array_of_json === "undefined" || typeof dependence_json === "undefined") {
     return unique_array;
   }
   if (typeof conditional_attribute !== "undefined") {
@@ -79,7 +79,7 @@ export function removeDuplicates( arr, prop ) {
     "Κατηγορία Αποτελέσματος",
     "Αποτέλεσμα",
   ];*/
-
+//<td>{((status[key]) && <MultiComp />)  || ((!status[key]) && cust[key])}</td>
 export function greekToEnglish(obj) {
   const dict = {
     "ΟΝΟΜΑ" : "first_name",
@@ -126,4 +126,21 @@ export function timeConverter(UNIX_timestamp){
   //var sec = a.getSeconds();
   var time = date + '-' + month + '-' + year + ' ' + hour + ':' + min;
   return time;
+}
+
+export function deleteCommon( arr1, arr2){
+  let res = []
+  let common = false;
+  for (let i=0 ; i<arr1.length ; i++){
+    for (let j=0 ; j<arr2.length ; j++){
+      if(JSON.stringify(arr1[i]) == JSON.stringify(arr2[j])){
+        common = true;
+        console.log(arr1[i])
+        console.log(arr2[j])
+      }
+      if (!common) {res.push(arr1[i]);common = false;}
+    }
+  }
+  console.log(res)
+  return res
 }

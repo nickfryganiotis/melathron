@@ -112,7 +112,7 @@ CREATE TABLE salesman (
     salesman_name VARCHAR(60),
     PRIMARY KEY(salesman_id)
     );
-
+SELECT * FROM HISTORY_INSTANCE ;
 CREATE TABLE works_on (
 	spcode INT,
     salesman_id INT,
@@ -252,7 +252,7 @@ BEGIN
     WHERE spcode = OLD.spcode;
 END//
 DELIMITER ;
-
+SELECT * FROM history_instance;
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt' INTO TABLE apotelesma FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subapotelesma_name, apotelesma_name, continent_id);
