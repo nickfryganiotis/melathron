@@ -33,28 +33,10 @@ export default function CustomerInfo({ sp }) {
 
   return (
     <>
-      {customer.map((element) => {
-        return (
-          <table className="elli">
-            {Object.keys(element).map((key, index) => {
-              return (
-                <tr>
-                  <th>{key}</th>
-                  <th>
-                    <input type="text" placeholder={element[key]} />
-                  </th>
-                </tr>
-              );
-            })}
-          </table>
-        );
-      })}
-      {/*<StaticInfo customer={customer[0]}/>*/}
+      {<StaticInfo customer={customer[0]}/>}
       {<ApHistory apHistory={hist} spcode={sp} />}
-
       {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
-      {sales.length !==0 && <SalesMade sales={sales} />}
-
+      {<SalesMade sales={sales} />}
     </>
   );
 }
