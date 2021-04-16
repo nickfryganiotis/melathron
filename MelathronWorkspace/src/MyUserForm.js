@@ -8,6 +8,7 @@ export default function MyUserForm() {
   const [mobileList, setMobileList] = useState([{ mobile_number: "" }]);
   const [customer, setCustomer] = useState({});
   const [locations, setLocations] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [professions, setProfessions] = useState([]);
   const [apotelesmata, setApotelesmata] = useState([]);
   const [salesman, setSalesman] = useState([]);
@@ -34,14 +35,16 @@ export default function MyUserForm() {
     }
     var professions_options = "http://localhost:5000/professions";
     var salesman_options = "http://localhost:5000/salesman";
+    var categories_options = "http://localhost:5000/categories"
     axios
-      .all([axios(apotelesmata_options), axios(locations_options), axios.get(professions_options), axios.get(salesman_options)])
+      .all([axios(apotelesmata_options), axios(locations_options), axios.get(professions_options), axios.get(salesman_options), axios.get(categories_options)])
       .then(
-        axios.spread((obj1, obj2, obj3, obj4) => {
+        axios.spread((obj1, obj2, obj3, obj4, obj5) => {
           setApotelesmata(obj1.data);
           setLocations(obj2.data);
           setProfessions(obj3.data);
           setSalesman(obj4.data);
+          setCategories(obj5.data);
         })
       );
     console.log(areaChoice)
@@ -317,22 +320,22 @@ export default function MyUserForm() {
 
         <div className='user-form-line2'>
         <div className='form-input2 left2'>
-          <label htmlFor="category">Γενική Κατηγορία Επαγγέλματος</label>
-          <select name="category" id="category" onChange={handleCustomerChange}>
+          <label htmlFor="category_name">Γενική Κατηγορία Επαγγέλματος</label>
+          <select name="category_name" id="category_name" onChange={handleCustomerChange}>
             <option></option>
-            {makeToUnique(professions, "category", customer).map(arrayToOption)}
+            {makeToUnique(categories, "category_name", customer).map(arrayToOption)}
           </select>
         </div>
 
         <div className='form-input2'>
-          <label htmlFor="profession">Επάγγελμα</label>
+          <label htmlFor="profession_name">Επάγγελμα</label>
           <select
-            name="profession"
-            id="profession"
+            name="profession_name"
+            id="profession_name"
             onChange={handleCustomerChange}
           >
             <option></option>
-            {makeToUnique(professions, "profession", customer, "category").map(
+            {makeToUnique(professions, "profession_name", customer).map(
               arrayToOption
             )}
           </select>

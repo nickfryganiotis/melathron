@@ -5,6 +5,7 @@ import { makeToUnique, arrayToOption } from "../helperFunctions";
 export default function MultiComp({ x, fun, c }) {
   const [locations, setLocations] = useState([]);
   const [professions, setProfessions] = useState([]);
+  const [categories, setCategories] = useState([]);
   useEffect(() => {
     let area = JSON.parse(localStorage.getItem("area_choice"));
     let locations_options = {
@@ -13,12 +14,14 @@ export default function MultiComp({ x, fun, c }) {
       data: { country_id: area["country_id"] },
     };
     let professions_options = "http://localhost:5000/professions";
+    let categories_options = "http://localhost:5000/categories";
     axios
-      .all([axios(locations_options), axios.get(professions_options)])
+      .all([axios(locations_options), axios.get(professions_options), axios.get(categories_options)])
       .then(
-        axios.spread((obj1, obj2) => {
+        axios.spread((obj1, obj2, obj3) => {
           setLocations(obj1.data);
           setProfessions(obj2.data);
+          setCategories(obj3.data);
         })
       )
       .catch((error) => {
@@ -73,22 +76,22 @@ export default function MultiComp({ x, fun, c }) {
         {makeToUnique(locations, "area", c, "city").map(arrayToOption)}
       </select>
     );
-    else if (x== "category")
+    else if (x== "category_name")
     return (
-        <select name="category" id="category" onChange={handleChange}>
+        <select name="category_name" id="category_name" onChange={handleChange}>
         <option></option>
-        {makeToUnique(professions, "category", c).map(arrayToOption)}
+        {makeToUnique(categories, "category_name", c).map(arrayToOption)}
       </select>
     )
-    else if (x == "profession")
+    else if (x == "profession_name")
     return (
         <select
-        name="profession"
-        id="profession"
+        name="profession_name"
+        id="profession_name"
         onChange={handleChange}
       >
         <option></option>
-        {makeToUnique(professions, "profession", c, "category").map(
+        {makeToUnique(professions, "profession_name", c).map(
           arrayToOption
         )}
       </select>

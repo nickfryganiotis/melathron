@@ -9,6 +9,7 @@ export default function CustomerSearch() {
   const [customerOptions, setCustomerOptions] = useState({});
   const [locations, setLocations] = useState([]);
   const [professions, setProfessions] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [apotelesmata, setApotelesmata] = useState([]);
   const [salesman, setSalesman] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
@@ -56,6 +57,7 @@ export default function CustomerSearch() {
       url: "http://localhost:5000/subscriptions",
       data: {'country_id': area['country_id']}
     }
+    let url6 = "http://localhost:5000/categories"
     axios
       .all([
         axios(apotelesmata_options),
@@ -63,14 +65,16 @@ export default function CustomerSearch() {
         axios.get(url3),
         axios.get(url4),
         axios(subscriptions_options),
+        axios.get(url6)
       ])
       .then(
-        axios.spread((obj1, obj2, obj3, obj4, obj5) => {
+        axios.spread((obj1, obj2, obj3, obj4, obj5, obj6) => {
           setApotelesmata(obj1.data);
           setLocations(obj2.data);
           setProfessions(obj3.data);
           setSalesman(obj4.data);
           setSubscriptions(obj5.data);
+          setCategories(obj6.data);
         })
       );
   }, []);
@@ -246,23 +250,23 @@ export default function CustomerSearch() {
           </div>
           <div className='user-form-line2'>
           <div className='form-input2 left2'>
-            <label htmlFor="category">Γενική Κατηγορία Επαγγέλματος</label>
+            <label htmlFor="category_name">Γενική Κατηγορία Επαγγέλματος</label>
             <ReactSelect
-              name="category"
-              id="category"
+              name="category_name"
+              id="category_name"
               onChange={handleTheChange}
-              options={myFunction(professions, "category")}
+              options={myFunction(categories, "category_name")}
               isMulti={true}
             />
           </div>
 
           <div className='form-input2'>
-            <label htmlFor="profession">Επάγγελμα</label>
+            <label htmlFor="profession_name">Επάγγελμα</label>
             <ReactSelect
-              name="profession"
-              id="profession"
+              name="profession_name"
+              id="profession_name"
               onChange={handleTheChange}
-              options={myFunction(professions, "profession")}
+              options={myFunction(professions, "profession_name")}
               isMulti={true}
             />
           </div>

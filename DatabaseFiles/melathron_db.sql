@@ -1,11 +1,16 @@
 CREATE SCHEMA IF NOT EXISTS melathron;
 USE melathron;
 
-CREATE TABLE job (
-	job_id INT AUTO_INCREMENT,
-    category VARCHAR(50),
-    profession VARCHAR(50),
-    PRIMARY KEY(job_id)
+CREATE TABLE category (
+	category_id INT AUTO_INCREMENT,
+	category_name VARCHAR(200),
+    PRIMARY KEY(category_id)
+);
+
+CREATE TABLE profession (
+	profession_id INT AUTO_INCREMENT,
+    profession_name VARCHAR(200),
+    PRIMARY KEY(profession_id)
 );
 
 CREATE TABLE continent (
@@ -58,11 +63,14 @@ CREATE TABLE customer (
     address_postal_code VARCHAR(20),
     fax VARCHAR(20),
     comments VARCHAR(200),
-    job_id INT,
+    category_id INT,
+    profession_id INT,
     location_id INT,
     apotelesma_id INT,
     PRIMARY KEY(spcode),
-    FOREIGN KEY(job_id) REFERENCES job(job_id)
+    FOREIGN KEY(category_id) REFERENCES category(category_id)
+    ON DELETE CASCADE,
+	FOREIGN KEY(profession_id) REFERENCES profession(profession_id)
     ON DELETE CASCADE,
     FOREIGN KEY(apotelesma_id) REFERENCES apotelesma(apotelesma_id)
     ON DELETE CASCADE,
@@ -112,7 +120,7 @@ CREATE TABLE salesman (
     salesman_name VARCHAR(60),
     PRIMARY KEY(salesman_id)
     );
-SELECT * FROM HISTORY_INSTANCE ;
+
 CREATE TABLE works_on (
 	spcode INT,
     salesman_id INT,
@@ -252,15 +260,16 @@ BEGIN
     WHERE spcode = OLD.spcode;
 END//
 DELIMITER ;
-SELECT * FROM history_instance;
+
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt' INTO TABLE apotelesma FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subapotelesma_name, apotelesma_name, continent_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Shipping_methods.txt' INTO TABLE shipping_method FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (shipping_method_id, shipping_method_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Subscriptions.txt' INTO TABLE subscription FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (subscription_name, subscription_category, country_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Salesmen.txt' INTO TABLE salesman FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (salesman_name);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Categories.txt' INTO TABLE category FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (category_name);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Professions.txt' INTO TABLE profession FIELDS TERMINATED BY ';' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (profession_name);
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Ωραιόκαστρο');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
-INSERT INTO job (category, profession) VALUES ("Ιατρός", "Παθολόγος");
-INSERT INTO job (category, profession) VALUES ("Ιατρός", "Γυναικολόγος");
+

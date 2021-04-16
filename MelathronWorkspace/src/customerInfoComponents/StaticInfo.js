@@ -21,8 +21,8 @@ export default function StaticInfo({ customer }) {
     area: "ΠΕΡΙΟΧΗ",
     apotelesma_name: "ΚΑΤΗΓΟΡΙΑ ΑΠΟΤΕΛΕΣΜΑΤΟΣ",
     subapotelesma_name: "ΑΠΟΤΕΛΕΣΜΑ",
-    category: "ΚΑΤΗΓΟΡΙΑ ΕΠΑΓΓΕΛΜΑΤΟΣ",
-    profession: "ΕΠΑΓΓΕΛΜΑ",
+    category_name: "ΚΑΤΗΓΟΡΙΑ ΕΠΑΓΓΕΛΜΑΤΟΣ",
+    profession_name: "ΕΠΑΓΓΕΛΜΑ",
   });
   const [status, setStatus] = useState({});
   const [cust, setCust] = useState({});
@@ -39,8 +39,8 @@ export default function StaticInfo({ customer }) {
     //let row_id = e.target.parentNode.id
     if(!status.hasOwnProperty(key) ){
 
-      if (key =="category" || key=="profession"){
-        setStatus({...status, "category":"category", "profession":"profession"})
+      if (key =="category_name" || key=="profession_name"){
+        setStatus({...status, "category_name":"category_name", "profession_name":"profession_name"})
       }
       else if (key=="state" || key=="city" || key=="area"){
         setStatus({...status, "state":"state", "city":"city", "area":"area"})
@@ -52,9 +52,9 @@ export default function StaticInfo({ customer }) {
     }
     else{
       let x = status;
-      if (key =="category" || key=="profession"){
-        delete x["category"];
-        delete x["profession"];
+      if (key =="category_name" || key=="profession_name"){
+        delete x["category_name"];
+        delete x["profession_name"];
         setStatus({...x})
       }
       else if (key=="state" || key=="city" || key=="area"){

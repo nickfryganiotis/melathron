@@ -40,7 +40,15 @@ app.post("/locations",(req, res) => {
 });
 
 app.get("/professions",(req, res) => {
-    const query = "SELECT * FROM job;";
+    const query = "SELECT * FROM profession;";
+    connection.query(query, function (error, results) {
+      if (error) throw error;
+      res.send(results);
+    });
+});
+
+app.get("/categories",(req, res) => {
+    const query = "SELECT * FROM category;";
     connection.query(query, function (error, results) {
       if (error) throw error;
       res.send(results);
@@ -107,7 +115,7 @@ app.get("/countries", (req, res) => {
 
 app.post("/send",(req,res) => {
     var customer = req.body
-    const args = ['phone','mobile','continent_id','apotelesma_name','subapotelesma_name','salesman_name','category','profession','country_id','state','city','area'];
+    const args = ['phone','mobile','continent_id','apotelesma_name','subapotelesma_name','salesman_name','category_name','profession_name','country_id','state','city','area'];
     args.map(arg => {
         if(customer[arg]){
             auxs[arg] = customer[arg];
@@ -119,10 +127,13 @@ app.post("/send",(req,res) => {
     var input = [customer];
     //console.log(input)
     var query = "INSERT into customer SET ?"; 
-    if(auxs['category'] && auxs['profession']){
-        query += ", `job_id` = (SELECT job_id FROM job WHERE category = ? and profession = ?)"
-        input.push(auxs['category']);
-        input.push(auxs['profession']); 
+    if(auxs['category_name']){
+        query += ", `category_id` = (SELECT category_id FROM category WHERE category_name = ?)"
+        input.push(auxs['category_name']);
+    }
+    if(auxs['profession_name']){
+        query += ", `profession_id` = (SELECT profession_id FROM profession WHERE profession_name = ?)"
+        input.push(auxs['profession_name']); 
     }
     if(auxs['country_id'] && auxs ['state'] && auxs['city'] && auxs['area']){
         query += ", `location_id` = (SELECT location_id FROM location WHERE country_id = ? and state = ? and city = ? and area = ?)"
@@ -350,18 +361,25 @@ app.post("/search_customer",(req,res) => {
     }
 
     parameters = false;
-    if ( customer[ 'category' ] || customer[ 'profession' ] ) {
-        query += "INNER JOIN\n (SELECT *\n FROM job\n"
-        if( customer[ 'category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true; 
-                                       const categories = customer[ 'category' ];
-                                       for ( i=0; i< categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "category = ?"; input.push(categories[i]['value']);  }
-                                       query += ")\n"; }  
-        if( customer[ 'category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true; 
-                                       const categories = customer[ 'category' ];
-                                       for ( i=0; i< categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "category = ?"; input.push(categories[i]['value']);  }
+    if ( customer[ 'category_name' ] ) {
+        query += "INNER JOIN\n (SELECT *\n FROM category\n"
+        if( customer[ 'category_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true; 
+                                       const categories = customer[ 'category_name' ];
+                                       for ( i=0; i< categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "category_name = ?"; input.push(categories[i]['value']);  }
                                        query += ")\n"; }
-        query += ") AS j ON j.job_id = cust.job_id\n";
-        prefix_query += ", j.category";  
+        query += ") AS j ON j.category_id = cust.category_id\n";
+        prefix_query += ", j.category_name";  
+    }
+
+    parameters = false;
+    if ( customer[ 'profession_name' ] ) {
+        query += "INNER JOIN\n (SELECT *\n FROM profession\n"
+        if( customer[ 'profession_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true; 
+                                       const professions = customer[ 'profession_name' ];
+                                       for ( i=0; i< professions.length; i++ ) { query += i > 0 ? " OR " : ""; query += "profession_name = ?"; input.push(professions[i]['value']);  }
+                                       query += ")\n"; }
+        query += ") AS j2 ON j2.profession_id = cust.profession_id\n";
+        prefix_query += ", j2.profession_name";  
     }
     
     parameters = false;
@@ -423,7 +441,7 @@ app.post("/search_customer",(req,res) => {
 app.post("/customer_info",(req,res) =>{
     const spcode = req.body['spcode'];
     var output = [];
-    var query =  "SELECT * FROM customer c LEFT OUTER JOIN location l ON l.location_id = c.location_id LEFT OUTER JOIN apotelesma a ON a.apotelesma_id = c.apotelesma_id LEFT OUTER JOIN job j ON j.job_id = c.job_id WHERE c.spcode = ?"
+    var query =  "SELECT * FROM customer c LEFT OUTER JOIN location l ON l.location_id = c.location_id LEFT OUTER JOIN apotelesma a ON a.apotelesma_id = c.apotelesma_id LEFT OUTER JOIN category cat ON cat.category_id = c.category_id LEFT OUTER JOIN profession pro ON pro.profession_id = c.profession_id WHERE c.spcode = ?"
     connection.query(query,spcode,function(error,results){
         if (error) throw error;
         output.push(results);

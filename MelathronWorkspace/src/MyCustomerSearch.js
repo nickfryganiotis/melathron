@@ -9,6 +9,7 @@ export default function MyCustomerSearch() {
   const [customerOptions, setCustomerOptions] = useState({});
   const [locations, setLocations] = useState([]);
   const [professions, setProfessions] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [apotelesmata, setApotelesmata] = useState([]);
   const [salesman, setSalesman] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
@@ -46,6 +47,7 @@ export default function MyCustomerSearch() {
     let url3 = "http://localhost:5000/professions";
     let url4 = "http://localhost:5000/salesman";
     let url5 = "http://localhost:5000/subscriptions";
+    let url6 = "http://localhost:5000/categories"
     axios
       .all([
         axios(apotelesmata_options),
@@ -53,14 +55,16 @@ export default function MyCustomerSearch() {
         axios.get(url3),
         axios.get(url4),
         axios.get(url5),
+        axios.get(url6)
       ])
       .then(
-        axios.spread((obj1, obj2, obj3, obj4, obj5) => {
+        axios.spread((obj1, obj2, obj3, obj4, obj5, obj6) => {
           setApotelesmata(obj1.data);
           setLocations(obj2.data);
           setProfessions(obj3.data);
           setSalesman(obj4.data);
           setSubscriptions(obj5.data);
+          setCategories(obj6.data)
         })
       );
   }, [areaChoice]);
@@ -228,28 +232,28 @@ export default function MyCustomerSearch() {
           </div>
 
           <div>
-            <label htmlFor="category">Γενική Κατηγορία Επαγγέλματος</label>
+            <label htmlFor="category_name">Γενική Κατηγορία Επαγγέλματος</label>
             <select
-              name="category"
-              id="category"
+              name="category_name"
+              id="category_name"
               onChange={handleCustomerOptionsChange}
             >
               <option/>
-              {makeToUnique(professions, "category", customerOptions).map(
+              {makeToUnique(categories, "category_name", customerOptions).map(
                 arrayToOption
               )}
             </select>
           </div>
 
           <div>
-            <label htmlFor="profession">Επάγγελμα</label>
+            <label htmlFor="profession_name">Επάγγελμα</label>
             <select
-              name="profession"
-              id="profession"
+              name="profession_name"
+              id="profession_name"
               onChange={handleCustomerOptionsChange}
             >
               <option/>
-              {makeToUnique(professions, "profession", customerOptions).map(
+              {makeToUnique(professions, "profession_name", customerOptions).map(
                 arrayToOption
               )}
             </select>
