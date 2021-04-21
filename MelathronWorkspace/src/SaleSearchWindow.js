@@ -3,6 +3,7 @@ import ReactTable from "react-table-6";
 import "react-table-6/react-table.css";
 //import CustomerInfo from "./CustomerInfo";
 import axios from "axios";
+import SaleInfo from "./SaleInfo";
 
 export default function SaleSearchWindow() {
   const [results, setResults] = useState([]);
@@ -10,36 +11,36 @@ export default function SaleSearchWindow() {
   const [saleOptions, setSaleOptions] = useState({});
 
   const attributes = [
-    { Header: "Κωδικός", accessor: "spcode" },
-    { Header: "Όνομα", accessor: "first_name" },
+    { Header: "Κωδικός Πώλησης", accessor: "sale_id" },
+    { Header: "Πωλητής", accessor: "salesman" },
+    { Header: "Κωδικός Πελάτη", accessor: "spcode" },
     { Header: "Επώνυμο", accessor: "last_name" },
-    { Header: "Πατρώνυμο", accessor: "fathers_name" },
+    { Header: "Όνομα", accessor: "first_name" },
     { Header: "Επωνυμία Εταιρίας", accessor: "company_name" },
-    { Header: "Ιστοσελίδα", accessor: "website" },
-    { Header: "Email", accessor: "email" },
-    { Header: "Οδός", accessor: "address_street" },
-    { Header: "Τ.Κ.", accessor: "address_postal_code" },
-    { Header: "Κατηγορία Αποτελέσματος", accessor: "apotelesma_name" },
-    { Header: "Αποτέλεσμα", accessor: "subapotelesma_name" },
+    { Header: "Κατηγορία Συνδρομής", accessor: "subscription_category" },
+    { Header: "Συνδρομή", accessor: "subscription_name" },
+    { Header: "Ημερομηνία Παραγγελίας", accessor: "order_date" },
+    { Header: "Εξοφλημένη", accessor: "paid" },
   ];
 
-  async function readCustomerOptions() {
-    let x = JSON.parse(localStorage.getItem("customer_search_options"));
+  async function readSaleOptions() {
+    let x = JSON.parse(localStorage.getItem("sale_search_options"));
     return x
   }
 
-  async function customerOptionsSet(){
-    let y = await readCustomerOptions()
-    setCustomerOptions(y)
+  async function saleOptionsSet(){
+    let y = await readSaleOptions()
+    setSaleOptions(y)
   }
 
   useEffect(() => {
-    customerOptionsSet()
-    console.log(customerOptions)
-    let x = JSON.parse(localStorage.getItem("customer_search_options"))
+    saleOptionsSet()
+    console.log(saleOptions)
+    let x = JSON.parse(localStorage.getItem("sale_search_options"))
+    console.log(x)
     let opts = {
       method: "post",
-      url: "http://localhost:5000/search_customer",
+      url: "http://localhost:5000/search_sale",
       data: x,
     };
     axios(opts)
@@ -74,7 +75,7 @@ export default function SaleSearchWindow() {
         SubComponent={(row) => {
           return (
             <div>
-              <CustomerInfo sp={row.original.spcode} />
+              <SaleInfo sale_id={row.original.sale_id} />
             </div>
           );
         }}

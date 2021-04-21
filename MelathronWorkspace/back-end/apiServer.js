@@ -691,14 +691,14 @@ app.post( '/search_sale', (req,res) => {
     const sale = req.body;
     var input = [];
     var parameters = false;
-    var query = "SELECT sale.sale_id, sale.spcode, sale.salesman_name, sb.subscription_category, sb.subscription_name, sale.voucher, sale.total_amount, sale.order_date, sale.paid\nFROM sale";
+    var query = "SELECT sale.sale_id, sale.spcode, sm.salesman_name, sb.subscription_category, sb.subscription_name, sale.voucher, sale.total_amount, sale.order_date, sale.paid\nFROM sale ";
 
     if ( sale[ 'salesman_name' ] ) { 
         query += "INNER JOIN (\n SELECT * \n FROM salesman WHERE ";
         const salesman_names = sale[ 'salesman_name' ];
         for ( i = 0; i < salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman_name = ?"; input.push( salesman_names[i][ 'value' ] ); }
         query += ")\n"; 
-        query += ") as sm ON sale.salesman_id = sm.salesman_id\n"; }
+        query += " as sm ON sale.salesman_id = sm.salesman_id\n"; }
     
     if( sale[ 'subscription_category' ] || sale[ 'subscription_name' ] ) {
         
