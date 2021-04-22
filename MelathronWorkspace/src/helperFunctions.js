@@ -105,7 +105,18 @@ export function greekToEnglish(obj) {
     "ΚΩΔΙΚΟΣ ΑΠΟΤΕΛΕΣΜΑΤΟΣ" : "apotelesma_id",
     "ΚΩΔΙΚΟΣ ΕΠΑΓΓΕΛΜΑΤΟΣ" : "job_id",
     "ΚΩΔΙΚΟΣ ΤΟΠΟΘΕΣΙΑΣ" : "location_id",
-    "ΚΩΔΙΚΟΣ ΠΩΛΗΤΗ" : "salesman_id"
+    "ΚΩΔΙΚΟΣ ΠΩΛΗΤΗ" : "salesman_id",
+    "ΗΜΕΡΟΜΗΝΙΑ ΠΑΡΑΓΓΕΛΙΑΣ" : "order_date",
+    "ΣΥΝΟΛΙΚΟ ΠΟΣΟ" : "total_amount",
+    "VOUCHER" : "voucher",
+    "ΚΩΔΙΚΟΣ ΣΥΝΔΡΟΜΗΣ" : "subscription_id",
+    "ΑΡΙΘΜΟΣ ΔΟΣΕΩΝ" : "number_of_doses",
+    "ΠΟΣΟ ΔΟΣΗΣ" : "dose_amount",
+    "ΠΡΟΘΕΣΜΙΑ ΠΛΗΡΩΜΗΣ" : "dose_deadline",
+    "ΤΡΟΠΟΣ ΠΛΗΡΩΜΗΣ ΔΟΣΗΣ" : "payment_method",
+    "ΠΛΗΡΩΘΕΝ ΠΟΣΟ ΔΟΣΗΣ" : "payment_amount",
+    "ΚΩΔΙΚΟΣ ΤΡΟΠΟΥ ΠΑΡΑΔΟΣΗΣ" : "shipping_method_id",
+    "ΚΩΔΙΚΟΣ ΠΕΛΑΤΗ" : "spcode"
   }
 
   let x = {}
@@ -116,6 +127,7 @@ export function greekToEnglish(obj) {
 }
 
 export function timeConverter(UNIX_timestamp){
+  if (UNIX_timestamp){
   var x = Date.parse(UNIX_timestamp);
   var a = new Date(x);
   var year = a.getFullYear();
@@ -126,4 +138,6 @@ export function timeConverter(UNIX_timestamp){
   //var sec = a.getSeconds();
   var time = date + '-' + month + '-' + year + ' ' + hour + ':' + min;
   return time;
+  }
+  return null;
 }

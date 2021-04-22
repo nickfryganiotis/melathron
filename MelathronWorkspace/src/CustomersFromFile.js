@@ -46,7 +46,7 @@ export default function CustomersFromFile() {
     e.preventDefault();
     console.log(customers);
     e.target.reset();
-    setCustomers([]);
+
     let phons = customers.map((customer) => ({
       phones: customer['ΣΤΑΘΕΡΑ'] && customer["ΣΤΑΘΕΡΑ"].toString(),
     }));
@@ -89,6 +89,7 @@ export default function CustomersFromFile() {
         axios.spread((...responses) => {
           setRes(responses);
           console.log(responses);
+          setCustomers([]);
         })
       )
       .catch((error) => {

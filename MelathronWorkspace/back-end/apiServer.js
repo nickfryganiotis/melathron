@@ -879,42 +879,41 @@ app.post( '/add_mobile', ( req, res ) => {
 } );
 
 function stringifyParams( str ) {
-    
+    if (typeof str == "number") return str
     var arr = [];
     const arr_str = str.split(",").map( el => el.trim() );
     for ( j = 0; j < arr_str.length; j++ ) arr.push( arr_str [ j ] );
     return arr;
 }
 
-app.post(" /sale_file " , ( req , res ) => {
-
+app.post('/sale_file' , ( req , res ) => {
     var payment = req.body;
     const number_of_doses = payment[ 'number_of_doses' ];
     args = [ 'payment_amount1' , 'payment_method1' , 'dose_deadline1' , 'dose_amount1' , 'payment_amount2' , 'payment_method2' , 'dose_deadline2' , 'dose_amount2' ,
     'payment_amount3' , 'payment_method3' , 'dose_deadline3' , 'dose_amount3' , 'payment_amount4' , 'payment_amount4', 'payment_method4' , 'dose_deadline4' , 'dose_amount4' , 'number_of_doses' ];
     
     if ( payment[ 'payment_amount' ] ) {
-        const payment_amount = stringifyParams( payment [ 'payment_amount' ] );
+        const payment_amount = stringifyParams( payment[ 'payment_amount' ] );
         delete payment[ 'payment_amount' ];
-        for ( i = 0; i < payment_amount.length; i++ ) payment[ 'payment_amount' + i.toString() ] = payment_amount[ i ];
+        for ( i = 0; i < payment_amount.length; i++ ) payment[ 'payment_amount' + (i+1).toString() ] = payment_amount[ i ];
     }
     
     if ( payment[ 'payment_method' ] ) {
         const payment_method = stringifyParams( payment [ 'payment_method' ] );
         delete payment[ 'payment_method' ];
-        for ( i = 0; i < payment_method.length; i++ ) payment[ 'payment_method' + i.toString() ] = payment_method[ i ];
+        for ( i = 0; i < payment_method.length; i++ ) payment[ 'payment_method' + (i+1).toString() ] = payment_method[ i ];
     }
 
     if ( payment[ 'dose_deadline' ] ) {
         const dose_deadline = stringifyParams( payment [ 'dose_deadline' ] );
         delete payment[ 'dose_deadline' ];
-        for ( i = 0; i < dose_deadline.length; i++ ) payment[ 'dose_deadline' + i.toString() ] = dose_deadline[ i ];
+        for ( i = 0; i < dose_deadline.length; i++ ) payment[ 'dose_deadline' + (i+1).toString() ] = dose_deadline[ i ];
     }
 
     if ( payment[ 'dose_amount' ] ) {
         const dose_amount = stringifyParams( payment [ 'dose_amount' ] );
         delete payment[ 'dose_amount' ];
-        for ( i = 0; i < dose_amount.length; i++ ) payment[ 'dose_amount' + i.toString() ] = dose_amount[ i ];
+        for ( i = 0; i < dose_amount.length; i++ ) payment[ 'dose_amount' + (i+1).toString() ] = dose_amount[ i ];
     }
     
 
