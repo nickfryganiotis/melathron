@@ -13,6 +13,7 @@ import SalesFromFile from "./SalesFromFile"
 import CustomerSearch from "./CustomerSearch";
 import MySaleSearch from "./MySaleSearch";
 import CodeSearchWindow from "./CodeSearchWindow";
+import SaleSearchWindow from "./SaleSearchWindow";
 
 
 function App() {
@@ -50,6 +51,9 @@ function App() {
           </Route>
           <Route exact path="/search_sale">
             <MySaleSearch />
+          </Route>
+          <Route exact path="/sale_search_window">
+            <SaleSearchWindow />
           </Route>
         <Route path="*">
           <Error />

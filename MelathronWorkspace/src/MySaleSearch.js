@@ -22,18 +22,7 @@ export default function MySaleSearch() {
   const [status, setStatus] = useState(2);
 
   const getSearchResults = () => {
-    console.log(saleOptions)
-    axios
-      .get("http://localhost:5000/sales")
-      .then((response) => {
-        setSales(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    console.log(saleOptions);
-    localStorage.setItem("sale_search_results", JSON.stringify(sales));
+    localStorage.setItem("sale_search_options", JSON.stringify(saleOptions));
     createBrowserWindow();
   };
 
