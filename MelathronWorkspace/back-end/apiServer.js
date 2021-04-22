@@ -850,7 +850,7 @@ app.post( '/delete_mobile' , ( req,res ) => {
 app.post( '/add_phone', ( req, res ) => {
 
     const customer = req.body;
-    const query = "INSERT INTO works_on(phone_number, spcode) VALUES (?,?) "
+    const query = "INSERT INTO phone (phone_number, spcode) VALUES (?,?) "
     connection.query( query, [ customer[ 'phone_number' ], customer[ 'spcode' ] ] , function( error ) {
         if (error) throw error; 
         res.sendStatus(200);
@@ -861,7 +861,7 @@ app.post( '/add_phone', ( req, res ) => {
 app.post( '/add_mobile', ( req, res ) => {
 
     const customer = req.body;
-    const query = "INSERT INTO works_on(mobile_number, spcode) VALUES (?,?) "
+    const query = "INSERT INTO mobile (mobile_number, spcode) VALUES (?,?) "
     connection.query( query, [ customer[ 'mobile_number' ], customer[ 'spcode' ] ] , function( error ) {
         if (error) throw error; 
         res.sendStatus(200);

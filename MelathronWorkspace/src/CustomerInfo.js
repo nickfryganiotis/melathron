@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ApHistory from "./customerInfoComponents/ApHistory";
+import MobilesInfo from "./customerInfoComponents/MobilesInfo";
+import PhonesInfo from "./customerInfoComponents/PhonesInfo";
 import SalesMade from "./customerInfoComponents/SalesMade";
 import SalesmenInfo from "./customerInfoComponents/SalesmenInfo";
 import StaticInfo from "./customerInfoComponents/StaticInfo";
@@ -10,6 +12,8 @@ export default function CustomerInfo({ sp }) {
   const [hist, setHist] = useState([]);
   const [salesmen, setSalesmen] = useState([]);
   const [sales, setSales] = useState([]);
+  const [phones, setPhones] = useState([]);
+  const [mobiles, setMobiles] = useState([]);
 
   useEffect(() => {
     let url = "http://localhost:5000/customer_info";
@@ -24,6 +28,8 @@ export default function CustomerInfo({ sp }) {
         setHist(response.data[1]);
         setSalesmen(response.data[2]);
         setSales(response.data[3]);
+        setPhones(response.data[4]);
+        setMobiles(response.data[5]);
         console.log(response.data);
       })
       .catch((error) => {
@@ -37,6 +43,8 @@ export default function CustomerInfo({ sp }) {
       {<ApHistory apHistory={hist} spcode={sp} />}
       {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
       {<SalesMade sales={sales} />}
+      {<PhonesInfo phoness={phones} spcode={sp} />}
+      {<MobilesInfo mobiless={mobiles} spcode={sp} />}
     </>
   );
 }
