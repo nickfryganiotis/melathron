@@ -6,6 +6,7 @@ function loadIfNotLoaded(currentWindow, page) {
   if (currentWindow.webContents.getURL() !== page) {
     currentWindow.loadURL(page);
   }
+  currentWindow.loadURL(page);
 }
 let win;
 function createWindow() {
@@ -48,6 +49,7 @@ function createWindow() {
             loadIfNotLoaded(win, "http://localhost:3000/insert_sale");
           },
         },
+        
       ],
     },
     {
@@ -83,6 +85,47 @@ function createWindow() {
           label: "Εισαγωγή Πωλήσεων",
           click: function () {
             loadIfNotLoaded(win, "http://localhost:3000/load_from_file_sales");
+          },
+        },
+      ],
+    },
+    {
+      label: "Παράμετροι",
+      submenu: [
+        {
+          label: "Τοποθεσίες",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/locations_page");
+          },
+        },
+        {
+          label: "Επαγγέλματα",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/jobs_page");
+          },
+        },
+        {
+          label: "Αποτελέσματα",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/apotelesmata_page");
+          },
+        },
+        {
+          label: "Συνδρομές",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/subscriptions_page");
+          },
+        },
+        {
+          label: "Τρόποι Παράδοσης",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/shipping_methods_page");
+          },
+        },
+        {
+          label: "Πωλητές",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/salesman_page");
           },
         },
       ],

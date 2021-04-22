@@ -796,24 +796,25 @@ app.post( '/update_apotelesma', ( req, res ) => {
 app.post ( '/update_customer', ( req,res ) => {
 
     const customer = req.body;
-    const parameters = false;
-    var query = "";
+    var parameters = false;
+    var query = "UPDATE customer SET ";
     var input = [];
 
-    if ( customer[ 'state' ] || customer[ 'city' ] || customer[ 'area' ] || customer[ 'country_id' ] ) {
+    if ( customer[ 'state' ] || customer[ 'city' ] || customer[ 'area' ] ) {
         query += "location_id = (SELECT location_id FROM location "
         if ( customer[ 'state' ] ) { query += !parameters ? " WHERE " : " AND "; query += "state = ?"; parameters = true; input.push( customer[ 'state' ] ); delete customer[ 'state' ]; }
         if ( customer[ 'city' ] ) { query += !parameters ? " WHERE " : " AND "; query += "city = ?"; parameters = true; input.push( customer[ 'city' ] ); delete customer[ 'city' ]; }
         if ( customer[ 'area' ] ) { query += !parameters ? " WHERE " : " AND "; query += "area = ?"; parameters = true; input.push( customer[ 'area' ] ); delete customer[ 'area' ]; }
         if ( customer[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?"; parameters = true; input.push( customer[ 'country_id' ] ); delete customer[ 'country_id' ]; }
+        query += ") ";
     }
 
     for ( key in customer ) {
-        if (key == 'spcode') continue; 
+        if (key == 'spcode' || key == 'continent_id' || key == 'country_id') continue; 
         query += " " + key + "=?\n"; parameters = true; input.push( customer[ key ] );  
     }
     if ( customer['spcode'] ) { query += "WHERE spcode=?"; parameters = true; input.push( customer[ 'spcode' ]); }
-    
+
     if ( parameters ) {
         connection.query( query, input, function( error) {
             if ( error ) throw error;

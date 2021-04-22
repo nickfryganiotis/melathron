@@ -78,22 +78,24 @@ export default function MultiComp({ x, fun, c }) {
     );
     else if (x== "category_name")
     return (
-        <select name="category_name" id="category_name" onChange={handleChange}>
+        <select name="category_id" id="category_id" onChange={handleChange}>
         <option></option>
-        {makeToUnique(categories, "category_name", c).map(arrayToOption)}
+        {/*makeToUnique(categories, "category_name", c).map(arrayToOption)*/}
+        {categories.map((element) => <option value={element["category_id"]}> {element["category_name"]} </option>)}
       </select>
     )
     else if (x == "profession_name")
     return (
         <select
-        name="profession_name"
-        id="profession_name"
+        name="profession_id"
+        id="profession_id"
         onChange={handleChange}
       >
         <option></option>
-        {makeToUnique(professions, "profession_name", c).map(
+        {/*makeToUnique(professions, "profession_name", c).map(
           arrayToOption
-        )}
+        )*/}
+        {professions.map((element) => <option value={element["profession_id"]}> {element["profession_name"]} </option>)}
       </select>
     )
     else return null

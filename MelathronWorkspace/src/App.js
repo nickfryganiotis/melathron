@@ -14,7 +14,12 @@ import CustomerSearch from "./CustomerSearch";
 import MySaleSearch from "./MySaleSearch";
 import CodeSearchWindow from "./CodeSearchWindow";
 import SaleSearchWindow from "./SaleSearchWindow";
-
+import LocationsPage from "./parametersComponents/LocationsPage";
+import JobsPage from "./parametersComponents/JobsPage";
+import ApotelesmataPage from "./parametersComponents/ApotelesmataPage"
+import SubscriptionsPage from "./parametersComponents/SubscriptionsPage"
+import ShippingMethodsPage from "./parametersComponents/ShippingMethodsPage"
+import SalesmanPage from "./parametersComponents/SalesmanPage";
 
 function App() {
 
@@ -54,6 +59,24 @@ function App() {
           </Route>
           <Route exact path="/sale_search_window">
             <SaleSearchWindow />
+          </Route>
+          <Route exact path="/locations_page">
+            <LocationsPage />
+          </Route>
+          <Route exact path="/jobs_page">
+            <JobsPage />
+          </Route>
+          <Route exact path="/apotelesmata_page">
+            <ApotelesmataPage />
+          </Route>
+          <Route exact path="/subscriptions_page">
+            <SubscriptionsPage />
+          </Route>
+          <Route exact path="/shipping_methods_page">
+            <ShippingMethodsPage/>
+          </Route>
+          <Route exact path="/salesman_page">
+            <SalesmanPage/>
           </Route>
         <Route path="*">
           <Error />
