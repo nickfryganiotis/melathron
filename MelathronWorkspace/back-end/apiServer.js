@@ -877,3 +877,105 @@ app.post( '/add_mobile', ( req, res ) => {
     } );
 
 } );
+
+app.post("/sale_file" , ( req , res ) => {
+
+    var payment = req.body;
+    const number_of_doses = payment[ 'number_of_doses' ];
+    args = [ 'payment_amount1' , 'payment_method1' , 'dose_deadline1' , 'dose_amount1' , 'payment_amount2' , 'payment_method2' , 'dose_deadline2' , 'dose_amount2' ,
+    'payment_amount3' , 'payment_method3' , 'dose_deadline3' , 'dose_amount3' , 'payment_amount4' , 'payment_amount4', 'payment_method4' , 'dose_deadline4' , 'dose_amount4' , 'number_of_doses' ];
+    
+    args.map(arg => {
+        if(payment[arg]){
+            params[arg] = payment[arg];
+            delete payment[arg];
+            arg;
+        }
+    });
+
+    var input = [payment];
+    var query = "INSERT INTO sale SET ?";
+
+    query += ", `number_of_doses` = ?";
+    input.push( number_of_doses );
+
+    connection.query( query , input , function ( error , results ) {
+        if ( error ) throw error;
+        const sale_id = results.insertId;
+
+        if ( number_of_doses == 1 ) {
+            
+            vals = {};
+            vals[ 'dose_number' ] = 1;
+            vals[ 'sale_id' ] = sale_id;
+            
+            if( payment[ 'total_amount' ] ) vals[ 'dose_amount' ] = payment[ 'total_amount' ];
+            if( payment[ 'payment_amount1' ] ) vals[ 'payment_amount' ] = payment[ 'payment_amount1' ];
+            if( payment[ 'payment_method1' ] ) vals['payment_method'] = payment[ 'payment_method1' ];
+            if( payment[ 'dose_deadline1' ] ) vals[ 'dose_deadline' ] = payment[ 'dose_deadline1' ];
+            const query = "INSERT INTO payment_info SET ?";
+            connection.query( query , [ vals ] ,function( error ) {
+                if ( error ) throw error;
+                res.sendStatus( 200 );
+            })           
+        }
+        
+        else {
+            vals = [{},{},{},{}];
+            if( number_of_doses >= 1 ) {
+                vals[ 0 ][ 'dose_number' ] = 1;
+                vals[ 0 ][ 'sale_id' ] = sale_id;
+                if( payment[ 'dose_amount1' ] ) vals[ 0 ][ 'dose_amount' ] = payment[ 'dose_amount1' ];
+                if( payment[ 'payment_amount1' ] ) vals[ 0 ][ 'payment_amount' ] = payment[ 'payment_amount1' ];
+                if( payment[ 'payment_method1' ]) vals[ 0 ][ 'payment_method' ] = payment[ 'payment_method1' ];
+                if( payment[ 'dose_deadline1' ]) vals[ 0 ][ 'dose_deadline' ] = payment[ 'dose_deadline1' ];
+                const query = "INSERT INTO payment_info SET ? ";
+                connection.query( query , vals[ 0 ] ,function( error ) {
+                    if ( error ) throw error;
+                });
+            }
+
+            if( number_of_doses >= 2 ) {
+                vals[ 1 ][ 'dose_number' ] = 2;
+                vals[ 1 ][ 'sale_id' ] = sale_id;
+                if( payment[ 'dose_amount2' ] ) vals[ 1 ][ 'dose_amount' ] = payment[ 'dose_amount2' ];
+                if( payment[ 'payment_amount2' ] ) vals[ 1 ][ 'payment_amount' ] = payment[ 'payment_amount2' ];
+                if( payment[ 'payment_method2' ] ) vals[ 1 ][ 'payment_method' ] = payment[ 'payment_method2' ];
+                if( payment[ 'dose_deadline2' ] ) vals[ 1 ][ 'dose_deadline' ] = payment[ 'dose_deadline2' ];
+                const query = "INSERT INTO payment_info SET ? ";
+                connection.query( query , vals[ 1 ] , function( error ) {
+                    if ( error ) throw error;
+                });
+            }
+
+            if( number_of_doses >= 3 ) {
+                vals[ 2 ][ 'dose_number' ] = 3;
+                vals[ 2 ][ 'sale_id' ] = payment[ 'sale_id' ];
+                if( payment[ 'dose_amount3' ] ) vals[ 2 ][ 'dose_amount' ] = payment[ 'dose_amount3' ];
+                if( payment[ 'payment_amount3' ] ) vals[ 2 ][ 'payment_amount' ] = payment[ 'payment_amount3' ];
+                if( payment[ 'payment_method3' ] ) vals[ 2 ][ 'payment_method' ] = payment[ 'payment_method3' ];
+                if( payment[ 'dose_deadline3' ] ) vals[ 2 ][ 'dose_deadline' ] = payment[ 'dose_deadline3' ];
+                const query = "INSERT INTO payment_info SET ? ";
+                connection.query(query , vals[ 2 ] , function( error ) {
+                    if ( error ) throw error;
+                });
+            }
+
+            if( number_of_doses >= 4 ) {
+                vals[ 3 ][ 'dose_number' ] = 4;
+                vals[ 3 ][ 'sale_id' ] = sale_id;
+                if( payment[ 'dose_amount4' ] ) vals[ 3 ][ 'dose_amount' ] = payment[ 'dose_amount4' ];
+                if( payment[ 'payment_amount4' ] ) vals[ 3 ][ 'payment_amount' ] = payment[ 'payment_amount4' ];
+                if( payment[ 'payment_method4' ] ) vals[ 3 ][ 'payment_method' ] = payment[ 'payment_method4' ];
+                if( payment[ 'dose_deadline4' ] ) vals[ 3 ][ 'dose_deadline' ] = payment[ 'dose_deadline4' ];
+                const query = "INSERT INTO payment_info SET ? ";
+                connection.query( query , vals[ 3 ] , function( error ) {
+                    if ( error ) throw error;
+                    res.sendStatus( 200 );
+                });
+            }
+    
+        }
+    } );     
+
+} );
