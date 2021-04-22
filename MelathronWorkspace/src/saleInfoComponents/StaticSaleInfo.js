@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import MultiCompSale from './MultiCompSale'
 import axios from 'axios'
+import {timeConverter} from '../helperFunctions';
 
-export default function StaticSaleInfo({ssale}){
+export default function StaticSaleInfo({ssale, sale_id}){
 
     const [sale, setSale] = useState({});
     const [stat, setStat] = useState({});
@@ -69,7 +70,13 @@ export default function StaticSaleInfo({ssale}){
     return(
     <div>
     <table>
-      {Object.keys(sale).map((key) => { return (
+      {Object.keys(sale).map((key) => { if (key == "order_date") return(        
+      
+        <tr onDoubleClick={(e) => {handleUpdate(e, key)}}>
+          <th>{dicto.hasOwnProperty(key) && dicto[key]}</th>
+          <td>{dicto.hasOwnProperty(key) && (stat.hasOwnProperty(key) ? <MultiCompSale x={key} fun={setNewSale} c={newSale} /> : timeConverter(sale[key]))}</td>
+        </tr>)
+      else return (
         <tr onDoubleClick={(e) => {handleUpdate(e, key)}}>
           <th>{dicto.hasOwnProperty(key) && dicto[key]}</th>
           <td>{dicto.hasOwnProperty(key) && (stat.hasOwnProperty(key) ? <MultiCompSale x={key} fun={setNewSale} c={newSale} /> : sale[key])}</td>

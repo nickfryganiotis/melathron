@@ -1017,14 +1017,14 @@ app.post("/update_sale" , ( req , res ) => {
     
     const sale = req.body;
     var parameters = false;
-    var query = "UPDATE customer SET ";
+    var query = "UPDATE sale SET ";
     var input = [];
 
     if( sale[ 'subscription_category' ] || sale[ 'subscription_name' ] ) {
         query += "subscription_id = (SELECT subscription_id FROM subscription ";
         if ( sale[ 'subscription_category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "subscription_category = ?"; parameters = true; input.push( sale[ 'subscription_category' ] ); delete sale[ 'subscription_category' ]; }
         if ( sale[ 'subscription_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "subscription_name = ?"; parameters = true; input.push( sale[ 'subscription_name' ] ); delete sale[ 'subscription_name' ]; }
-        if ( sale[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?"; parameters = true; input.push( sale[ 'country_id' ] ); delete sale[ 'country_id' ]; }
+        if ( sale[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?) "; parameters = true; input.push( sale[ 'country_id' ] ); delete sale[ 'country_id' ]; }
     }
 
     for ( key in sale ) {
