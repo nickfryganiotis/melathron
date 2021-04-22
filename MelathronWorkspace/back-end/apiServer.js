@@ -921,7 +921,7 @@ app.post("/sale_file" , ( req , res ) => {
         }
         
         else {
-            vals = [{},{},{},{}];
+            vals = [ {} , {} , {} , {} ];
             if( number_of_doses >= 1 ) {
                 vals[ 0 ][ 'dose_number' ] = 1;
                 vals[ 0 ][ 'sale_id' ] = sale_id;
