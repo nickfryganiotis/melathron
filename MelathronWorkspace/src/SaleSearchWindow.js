@@ -12,7 +12,7 @@ export default function SaleSearchWindow() {
 
   const attributes = [
     { Header: "Κωδικός Πώλησης", accessor: "sale_id" },
-    { Header: "Πωλητής", accessor: "salesman" },
+    { Header: "Πωλητής", accessor: "salesman_name" },
     { Header: "Κωδικός Πελάτη", accessor: "spcode" },
     { Header: "Επώνυμο", accessor: "last_name" },
     { Header: "Όνομα", accessor: "first_name" },
