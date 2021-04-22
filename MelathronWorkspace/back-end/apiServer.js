@@ -823,3 +823,26 @@ app.post ( '/update_customer', ( req,res ) => {
     }
 
 } );
+
+
+app.post( '/delete_phone' , ( req,res ) => {
+    
+    const customer = req.body;
+    const query = "DELETE from phone WHERE spcode = ? AND phone_number = ?";
+    connection.query( query , [ customer[ 'spcode' ] , customer[ 'phone_number' ] ] , function ( error ) {
+        if ( error ) throw error;
+        res.sendStatus( 200 );
+    } );
+
+}  );
+
+app.post( '/delete_mobile' , ( req,res ) => {
+    
+    const customer = req.body;
+    const query = "DELETE from mobile WHERE spcode = ? AND mobile_number = ?";
+    connection.query( query , [ customer[ 'spcode' ] , customer[ 'mobile_number' ] ] , function ( error ) {
+        if ( error ) throw error;
+        res.sendStatus( 200 );
+    } );
+
+}  );
