@@ -675,16 +675,17 @@ app.post( '/search_sale', (req,res) => {
     var parameters = false;
     var query = "SELECT sale.sale_id, sale.spcode, sale.salesman_name, sb.subscription_category, sb.subscription_name, sale.voucher, sale.total_amount, sale.order_date, sale.paid\nFROM sale";
 
+    query += "INNER JOIN (\n SELECT * \n FROM salesman "
     if ( sale[ 'salesman_name' ] ) { 
-        query += "INNER JOIN (\n SELECT * \n FROM salesman WHERE ";
+        query += "WHERE ";
         const salesman_names = sale[ 'salesman_name' ];
-        for ( i = 0; i < salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman_name = ?"; input.push( salesman_names[i][ 'value' ] ); }
+        for ( i = 0; i < salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman_name = ?"; input.push( salesman_names[ i ][ 'value' ] ); }
         query += ")\n"; 
         query += ") as sm ON sale.salesman_id = sm.salesman_id\n"; }
     
+    query += "INNER JOIN (\n SELECT *\n FROM subscription\n ";
     if( sale[ 'subscription_category' ] || sale[ 'subscription_name' ] ) {
         
-        query += "INNER JOIN (\n SELECT *\n FROM subscription\n ";
         if ( sale[ 'subscription_category' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
                                                  const subscription_categories = sale[ 'subscription_category' ];
                                                  for ( i=0; i < subscription_categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subscription.subscription_category = ?"; input.push( subscription_categories[i]['value'] ); }
@@ -695,9 +696,10 @@ app.post( '/search_sale', (req,res) => {
                                                  query += ")\n"; }
         query += ") as sb ON sale.subscription_id = sb.subscription_id\n"
     }
-
+    
+    query += "INNER JOIN (\n SELECT * \n FROM  shipping_method"; 
     if ( sale[ 'shipping_method' ] ) {
-        query += "INNER JOIN (\n SELECT * \n FROM  shipping_method WHERE ";
+        query += "WHERE ";
         const shipping_methods = sale[ 'shipping_method' ];
         for ( i = 0; i < shipping_methods.length; i++ ) { query += i > 0 ? " OR " : ""; query += "shipping_method_name = ?"; input.push( shipping_methods[i][ 'value' ] ); }
         query += ")\n"; 
@@ -773,3 +775,33 @@ app.post( '/update_apotelesma', ( req, res ) => {
     } )
     
 } );
+
+app.post ( '/update_customer', ( req,res ) => {
+
+    const customer = req.body;
+    const parameters = false;
+    var query = "";
+    var input = [];
+
+    if ( customer[ 'state' ] || customer[ 'city' ] || customer[ 'area' ] || customer[ 'country_id' ] ) {
+        query += "location_id = (SELECT location_id FROM location "
+        if ( customer[ 'state' ] ) { query += !parameters ? " WHERE " : " AND "; query += "state = ?"; parameters = true; input.push( customer[ 'state' ] ); delete customer[ 'state' ]; }
+        if ( customer[ 'city' ] ) { query += !parameters ? " WHERE " : " AND "; query += "city = ?"; parameters = true; input.push( customer[ 'city' ] ); delete customer[ 'city' ]; }
+        if ( customer[ 'area' ] ) { query += !parameters ? " WHERE " : " AND "; query += "area = ?"; parameters = true; input.push( customer[ 'area' ] ); delete customer[ 'area' ]; }
+        if ( customer[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?"; parameters = true; input.push( customer[ 'country_id' ] ); delete customer[ 'country_id' ]; }
+    }
+
+    for ( key in customer ) {
+        if (key == 'spcode') continue; 
+        query += " " + key + "=?\n"; parameters = true; input.push( customer[ key ] );  
+    }
+    if ( customer['spcode'] ) { query += "WHERE spcode=?"; parameters = true; input.push( customer[ 'spcode' ]); }
+    
+    if ( parameters ) {
+        connection.query( query, input, function( error) {
+            if ( error ) throw error;
+            res.sendStatus(200);
+        } )
+    }
+
+} )
