@@ -1046,7 +1046,7 @@ app.post("/update_sale" , ( req , res ) => {
 app.post( "/mass_assignment" , function( req , res ) {
 
     const spcodes = req.body[ 'spcode' ];
-    const sale_id = req.body[ 'sale_id' ];
+    const sale_id = req.body[ 'salesman_id' ];
 
     let query = "";
     let input = [];

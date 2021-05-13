@@ -28,17 +28,33 @@ CREATE TABLE country (
     ON DELETE CASCADE
 );
 
-CREATE TABLE location (
-	location_id INT AUTO_INCREMENT,
+/*CREATE TABLE state(
+	state_id INT AUTO_INCREMENT,
+    state_name VARCHAR(50),
     country_id INT,
-    state VARCHAR(20),
-    city VARCHAR(20),
-    area VARCHAR(20),
-    PRIMARY KEY(location_id),
+    PRIMARY KEY(state_id),
     FOREIGN KEY(country_id) REFERENCES country(country_id)
-    ON DELETE CASCADE
-    );
-    
+);
+
+CREATE TABLE city(
+	city_id INT AUTO_INCREMENT,
+    city_name VARCHAR(50),
+    state_id INT,
+    country_id INT,
+    PRIMARY KEY(city_id),
+    FOREIGN KEY(state_id) REFERENCES state(state_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
+);
+
+CREATE TABLE area(
+	area_id INT AUTO_INCREMENT,
+    area_name VARCHAR(50),
+    city_id INT,
+    country_id INT,
+    PRIMARY KEY(area_id),
+    FOREIGN KEY(city_id) REFERENCES city(city_id)
+);
+*/
 CREATE TABLE apotelesma (
 	apotelesma_id INT AUTO_INCREMENT,
     apotelesma_name VARCHAR(100),
@@ -47,6 +63,16 @@ CREATE TABLE apotelesma (
     PRIMARY KEY(apotelesma_id),
     FOREIGN KEY(continent_id) REFERENCES continent(continent_id)
     ON DELETE CASCADE
+);
+
+CREATE TABLE location (
+	location_id INT AUTO_INCREMENT,
+    country_id INT,
+    state_name VARCHAR(100),
+    city_name VARCHAR(100),
+    area_name VARCHAR(100),
+    PRIMARY KEY(location_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
 
 CREATE TABLE customer (
@@ -65,8 +91,11 @@ CREATE TABLE customer (
     comments VARCHAR(200),
     category_id INT,
     profession_id INT,
-    location_id INT,
     apotelesma_id INT,
+    continent_id INT,
+    country_id INT,
+    location_id INT,
+    date_changed DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(spcode),
     FOREIGN KEY(category_id) REFERENCES category(category_id)
     ON DELETE CASCADE,
@@ -74,8 +103,9 @@ CREATE TABLE customer (
     ON DELETE CASCADE,
     FOREIGN KEY(apotelesma_id) REFERENCES apotelesma(apotelesma_id)
     ON DELETE CASCADE,
+    FOREIGN KEY(continent_id) REFERENCES continent(continent_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id),
     FOREIGN KEY(location_id) REFERENCES location(location_id)
-    ON DELETE CASCADE
     );
 
 CREATE TABLE phone (
@@ -148,11 +178,15 @@ CREATE TABLE sale (
     spcode INT,
     subscription_id INT,
     salesman_id INT,
+    continent_id INT,
+    country_id INT,
     PRIMARY KEY(sale_id),
     FOREIGN KEY(spcode) REFERENCES customer(spcode) ON DELETE CASCADE,
     FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id) ON DELETE CASCADE,
     FOREIGN KEY(subscription_id) REFERENCES subscription(subscription_id) ON DELETE CASCADE,
-    FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id) ON DELETE CASCADE
+    FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id) ON DELETE CASCADE,
+    FOREIGN KEY(continent_id) REFERENCES continent(continent_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
     );
 
 CREATE TABLE payment_info (
@@ -174,7 +208,7 @@ CREATE TABLE acc (
     PRIMARY KEY(username)
 );
     
-    
+
 DELIMITER //
 CREATE FUNCTION check_paid(s_id INT)
 RETURNS BOOLEAN
@@ -272,4 +306,3 @@ LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Professions.txt'
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Ωραιόκαστρο');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
-

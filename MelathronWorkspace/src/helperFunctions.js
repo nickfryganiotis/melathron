@@ -141,3 +141,15 @@ export function timeConverter(UNIX_timestamp){
   }
   return null;
 }
+
+export function getRandomCustomers(arr, n) {
+  var result = new Array(n),
+      len = arr.length,
+      taken = new Array(len);
+  while (n--) {
+      var x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x]["spcode"];
+      taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
+}
