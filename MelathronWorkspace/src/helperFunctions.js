@@ -153,3 +153,44 @@ export function getRandomCustomers(arr, n) {
   }
   return result;
 }
+
+
+export function makeIntoExcel(custs){
+  const dict = {
+    "first_name" : "ΟΝΟΜΑ",
+    "last_name" : "ΕΠΩΝΥΜΟ",
+    "fathers_name" : "ΠΑΤΡΩΝΥΜΟ",
+    "company_name" : "ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ",
+    "personnel" : "ΔΥΝΑΜΙΚΟ",
+    "fax" : "FAX",
+    "email" : "EMAIL",
+    "website" : "ΙΣΤΟΣΕΛΙΔΑ",
+    "address_street" : "ΟΔΟΣ",
+    "address_number" : "ΑΡΙΘΜΟΣ",
+    "address_postal_code" : "Τ.Κ.",
+    "comments" : "ΣΧΟΛΙΑ",
+    "phone" : "ΣΤΑΘΕΡΑ",
+    "mobile" : "ΚΙΝΗΤΑ",
+    "state_id" : "ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ",
+    "city_id" : "ΠΟΛΗ",
+    "area_id" : "ΠΕΡΙΟΧΗ",
+    "apotelesma_id" : "ΚΩΔΙΚΟΣ ΑΠΟΤΕΛΕΣΜΑΤΟΣ",
+    "job_id" : "ΚΩΔΙΚΟΣ ΕΠΑΓΓΕΛΜΑΤΟΣ",
+    "location_id" : "ΚΩΔΙΚΟΣ ΤΟΠΟΘΕΣΙΑΣ",
+    "state" : "ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ",
+    "city" : "ΠΟΛΗ",
+    "area" : "ΠΕΡΙΟΧΗ",
+    "salesman_id" : "ΚΩΔΙΚΟΣ ΠΩΛΗΤΗ",
+    "spcode" : "ΚΩΔΙΚΟΣ ΠΕΛΑΤΗ"
+  }
+
+  let res = custs.map( (cust) => {
+    let kappa = {}
+    Object.keys(dict).forEach((key)=>{ 
+      if (cust.hasOwnProperty(key)) kappa[dict[key]] = cust[key]
+      else kappa[dict[key]] = null
+   });
+   return kappa
+  })
+  return res
+}

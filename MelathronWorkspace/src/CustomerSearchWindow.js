@@ -4,6 +4,7 @@ import "react-table-6/react-table.css";
 import CustomerInfo from "./CustomerInfo";
 import axios from "axios";
 import SalesmanAssignment from "./SalesmanAssignment";
+import CustomerToFile from "./CustomerToFile";
 
 export default function CustomerSearchWindow() {
   const [results, setResults] = useState([]);
@@ -81,6 +82,7 @@ export default function CustomerSearchWindow() {
         }}
       />
       <SalesmanAssignment customers={results} />
+      <CustomerToFile customers={results} />
     </div>
   );
 }
