@@ -1040,8 +1040,24 @@ app.post("/update_sale" , ( req , res ) => {
         } )
     }
 
+} );
 
 
+app.post( "/mass_assignment" , function( req , res ) {
 
+    const spcodes = req.body[ 'spcode' ];
+    const sale_id = req.body[ 'sale_id' ];
+
+    let query = "";
+    let input = [];
+    for( let i = 0; i < spcodes.length; i++ ) {
+        query += i === 0 ? "INSERT INTO works_on VALUES (? , ?)" : ", (? , ?)";
+        input.push( spcodes[ i ] ) , input.push( sale_id );  
+    }
+
+    connection.query( query , input , function( error) {
+        if ( error ) throw error;
+        res.send( "Mass Assignment, completed successfully" );
+    } )
 
 } );
