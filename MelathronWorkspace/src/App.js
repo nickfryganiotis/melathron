@@ -20,6 +20,8 @@ import ApotelesmataPage from "./parametersComponents/ApotelesmataPage"
 import SubscriptionsPage from "./parametersComponents/SubscriptionsPage"
 import ShippingMethodsPage from "./parametersComponents/ShippingMethodsPage"
 import SalesmanPage from "./parametersComponents/SalesmanPage";
+import Login from "./Login";
+import HomePage from "./HomePage";
 
 function App() {
 
@@ -28,6 +30,9 @@ function App() {
     <Router>
       <Switch>
           <Route exact path="/">
+            <HomePage />
+          </Route>
+          <Route exact path="/area_choice">
             <AreaChoice />
           </Route>
           <Route exact path="/insert_customer">
@@ -77,6 +82,9 @@ function App() {
           </Route>
           <Route exact path="/salesman_page">
             <SalesmanPage/>
+          </Route>
+          <Route exact path="/login">
+            <Login />
           </Route>
         <Route path="*">
           <Error />
