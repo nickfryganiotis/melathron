@@ -92,7 +92,7 @@ export default function MySaleForm() {
         <div className='form-input2'>
           <label htmlFor="order_date">Ημερομηνία Παραγγελίας</label>
           <input
-            type="date"
+            type="datetime-local"
             name="order_date"
             id="order_date"
             onChange={handleSaleChange}

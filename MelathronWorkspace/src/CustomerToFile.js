@@ -17,7 +17,6 @@ export default function CustomerToFile({customers}){
 
     useEffect( () => {
         console.log(makeIntoExcel(customers))
-        console.log("HELLO")
     }, [])
 
     return(

@@ -18,7 +18,7 @@ export default function Doses({ i, onChange }) {
         <div className="form-input2 left2">
           <label htmlFor="dose_deadline">Προσθεσμία Εξόφλησης Δόσης {i}</label>
           <input
-            type="date"
+            type="datetime-local"
             name={"dose_deadline" + i}
             id={"dose_deadline" + i}
             onChange={onChange}

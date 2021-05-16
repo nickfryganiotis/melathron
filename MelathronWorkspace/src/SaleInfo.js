@@ -29,7 +29,7 @@ export default function SaleInfo({sale_id}){
             <StaticSaleInfo ssale = {sale[0]} sale_id = {sale_id} />    
         </div>
         <div>
-            <DosesInfo dosess = {doses} />
+            <DosesInfo dosess = {doses} sale_id = {sale_id} />
         </div>
         </>
     )

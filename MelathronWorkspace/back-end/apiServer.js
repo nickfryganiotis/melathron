@@ -1068,12 +1068,13 @@ app.post( "/insert_dose" , function( req , res ) {
     let input = [];
     const sale_id = dose[ "sale_id" ];
     input.push( sale_id ) , delete dose[ "sale_id" ];
-    const dose_id = dose[ "dose_id" ];
-    input.push( dose_id ) , delete dose[ "dose_id" ];
+    //const dose_id = dose[ "dose_number" ];
+    //input.push( dose_id ) , delete dose[ "dose_number" ];
     
-    let query = "INSERT INTO payment_info (sale_id,dose_id";
+    let query = "INSERT INTO payment_info (sale_id";
     
-    for( k in Object.keys( dose ) ) {
+    for( k of Object.keys( dose ) ) {
+        console.log(k)
         query += "," + k , input.push( dose[ k ] );
     }
     query += ") VALUES ("
@@ -1092,7 +1093,7 @@ app.post( "/delete_dose" , function( req, res ) {
 
     const sale_id = req.body[ 'sale_id' ];
     const dose_number = req.body[ 'dose_number' ];
-    const query = "DELETE FROM payment_info WHERE (dose_number,sale_id) VALUES (?,?)";
+    const query = "DELETE FROM payment_info WHERE (dose_number,sale_id) = (?,?)";
     const input = [ dose_number , sale_id ];
 
     connection.query( query , input , function( error ) {

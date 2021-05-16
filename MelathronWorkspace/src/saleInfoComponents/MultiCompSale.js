@@ -45,7 +45,7 @@ export default function MultiCompSale({ x, fun, c }) {
   const text_list = ["voucher"];
 
   if (date_list.includes(x))
-    return <input type="date" name={x} id={x} onChange={handleChange}></input>;
+    return <input type="datetime-local" name={x} id={x} onChange={handleChange}></input>;
   else if (number_list.includes(x))
     return (
       <input type="number" name={x} id={x} onChange={handleChange}></input>

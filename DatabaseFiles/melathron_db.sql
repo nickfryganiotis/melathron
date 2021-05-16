@@ -68,9 +68,9 @@ CREATE TABLE apotelesma (
 CREATE TABLE location (
 	location_id INT AUTO_INCREMENT,
     country_id INT,
-    state_name VARCHAR(100),
-    city_name VARCHAR(100),
-    area_name VARCHAR(100),
+    state VARCHAR(100),
+    city VARCHAR(100),
+    area VARCHAR(100),
     PRIMARY KEY(location_id),
     FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
@@ -190,13 +190,13 @@ CREATE TABLE sale (
     );
 
 CREATE TABLE payment_info (
-	dose_number INT,
+	dose_number INT AUTO_INCREMENT,
     sale_id INT,
     dose_amount FLOAT,
     payment_amount FLOAT DEFAULT 0,
     dose_deadline DATETIME,
     payment_date DATETIME,
-    payment_method VARCHAR(15),
+    payment_method VARCHAR(50),
     PRIMARY KEY(dose_number,sale_id),
     FOREIGN KEY(sale_id) REFERENCES sale(sale_id) ON DELETE CASCADE
     );
@@ -239,7 +239,7 @@ CREATE TRIGGER ins_paid AFTER INSERT ON payment_info
 FOR EACH ROW
 BEGIN
 	UPDATE sale
-	SET paid = check_paid(NEW.sale_id)
+	SET paid = check_paid(NEW.sale_id), number_of_doses = number_of_doses + 1
     WHERE sale_id = NEW.sale_id;
 END//
 
@@ -262,6 +262,17 @@ BEGIN
 	UPDATE sale
 	SET paid = check_paid(NEW.sale_id)
     WHERE sale_id = NEW.sale_id;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER del_paid AFTER DELETE ON payment_info
+FOR EACH ROW
+BEGIN
+	UPDATE sale
+	SET paid = check_paid(OLD.sale_id), number_of_doses = number_of_doses - 1
+    WHERE sale_id = OLD.sale_id;
+    
 END//
 DELIMITER ;
 
@@ -294,6 +305,7 @@ BEGIN
     WHERE spcode = OLD.spcode;
 END//
 DELIMITER ;
+
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
