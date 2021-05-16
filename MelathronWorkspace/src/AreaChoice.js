@@ -3,6 +3,7 @@ import axios from "axios";
 import "./MyForm.css";
 import { makeToUnique, arrayToOption } from "./helperFunctions";
 import { useHistory } from "react-router-dom";
+const ipc = window.require('electron').ipcRenderer
 
 export default function AreaChoice() {
   const [continents, setContinents] = useState([]);
@@ -42,7 +43,8 @@ export default function AreaChoice() {
     e.preventDefault();
     localStorage.setItem('area_choice', JSON.stringify(choice) )
     //console.log(JSON.parse(localStorage.getItem('area_choice')))
-    history.push("/insert_customer");
+    ipc.send('authenticated', true)
+    history.push("/");
   };
  
   return (

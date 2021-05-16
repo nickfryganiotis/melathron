@@ -1,14 +1,13 @@
-const { app, BrowserWindow, Menu } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 
 function loadIfNotLoaded(currentWindow, page) {
-  if (currentWindow.webContents.getURL() !== page) {
-    currentWindow.loadURL(page);
-  }
   currentWindow.loadURL(page);
 }
+
 let win;
+
 function createWindow() {
   win = new BrowserWindow({
     width: 800,
@@ -21,11 +20,11 @@ function createWindow() {
   win.webContents.openDevTools();
   win.loadURL(
     isDev
-      ? "http://localhost:3000"
+      ? "http://localhost:3000/login"
       : 'file://${path.join(__dirname, "../build/index.html")}'
   );
-  //win.setMenu(null)
-  //win.removeMenu()
+
+  win.menuBarVisible = false
   //console.log(win.webContents)
   const template = [
     {
@@ -152,3 +151,10 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+ipcMain.on('authenticated', (event, arg) => {
+  if (arg)
+    win.menuBarVisible = true
+  else
+    win.menuBarVisible = false
+})

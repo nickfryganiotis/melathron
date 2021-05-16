@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const session = require('express-session')
+const passport = require('passport')
 const { response, query } = require("express");
 const app = express();
 const LocalStrategy = require( 'passport-local' ).Strategy;
@@ -1107,22 +1108,21 @@ app.post( "/delete_dose" , function( req, res ) {
 } );
 
 passport.use( 'sign-in' , new LocalStrategy( function( username , password , done ) {
-
                 const query = "SELECT * from acc WHERE (username = ? AND passcode = ?)"
                 const input = [ username , password ];
                 connection.query( query , input , function ( error , result ) {
                     if ( error ) throw error;
-                    if ( ( result[ "username" ] === undefined ) || ( result[ "passcode" ] === undefined ) ) {
+                    if ( result === [] ) {
                         return done( null , false );
                     }
                     else {
-                        return done( null , result );
+                        return done( null , result[0] );
                     }
                 } )
         } ) 
 );
 
-app.post( '/sign_in' , passport.authenticate( 'signin' , {session: false } ) , function( req , res ) {
+app.post( '/sign_in' , passport.authenticate( 'sign-in' , {session: false } ) , function( req , res ) {
     res.json( { 
         user: req.user,
         timestamp : Date.now()

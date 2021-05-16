@@ -1,35 +1,39 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./MyUserForm.css";
+import "./MyForm.css";
 
 export default function HomePage() {
   return (
-    <div className='user-form'>
-        <h1>Καλωσήρθατε στην Εφαρμογή!</h1>
-        <fieldset>
-          <legend>Μεταβείτε σε μια σελίδα</legend>
-      <div >
-        <Link to="/insert_customer">Εισαγωγή Πελάτη</Link>
+    <div className='total-main-page'>
+      <div className="user-form-div">
+      <div className="user-form">
+        <h1>ΜΕΛΑΘΡΟ ΟΙΚΟΥΜΕΝΙΚΟΥ ΕΛΛΗΝΙΣΜΟΥ</h1>
+      <div className='center'>
+        <Link to="/insert_customer" className="link-to-btn">ΕΙΣΑΓΩΓΗ ΠΕΛΑΤΗ</Link>
       </div>
-      <div>
-        <Link to="/insert_sale">Εισαγωγή Πώλησης</Link>
+      <div className='center'>
+        <Link to="/insert_sale"  className="link-to-btn">ΕΙΣΑΓΩΓΗ ΠΩΛΗΣΗΣ</Link>
       </div>
-      <div>
-        <Link to="/search_customer">Αναζήτηση Πελάτη</Link>
+      <div className='center'>
+        <Link to="/search_customer"  className="link-to-btn">ΑΝΑΖΗΤΗΣΗ ΠΕΛΑΤΗ</Link>
       </div>
-      <div>
-        <Link to="/search_sale">Αναζήτηση Πώλησης</Link>
+      <div className='center'>
+        <Link to="/search_sale" className="link-to-btn">ΑΝΑΖΗΤΗΣΗ ΠΩΛΗΣΗΣ</Link>
       </div>
-      <div>
-        <Link to="/load_from_file_customers">Μαζική Εισαγωγή Πελατών</Link>
+      <div className='center'>
+        <Link to="/load_from_file_customers" className="link-to-btn">ΜΑΖΙΚΗ ΕΙΣΑΓΩΓΗ ΠΕΛΑΤΩΝ</Link>
       </div>
-      <div>
-        <Link to="/load_from_file_sales">Μαζική Εισαγωγή Πωλήσεων</Link>
+      <div className='center'>
+        <Link to="/area_choice" className="link-to-btn">ΠΕΡΙΟΧΗ ΕΡΓΑΣΙΑΣ</Link>
       </div>
-      <div>
-        <Link to="/area_choice">Επιλογή Περιοχής Εργασίας</Link>
+      <br></br>
+      <br></br>
+      <br></br>
+      <div className='center'>
+        <Link to="/login" className="link-to-btn">ΑΠΟΣΥΝΔΕΣΗ</Link>
       </div>
-      </fieldset>
+    </div>
+    </div>
     </div>
   );
 }

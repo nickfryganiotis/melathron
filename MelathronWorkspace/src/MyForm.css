@@ -18,6 +18,7 @@
 .user-form input[type="date"],
 .user-form input[type="email"],
 .user-form input[type="file"],
+.user-form input[type="password"],
 .user-form select,
 .user-form textarea {
   width: 100%;
@@ -176,4 +177,16 @@ input {
   background-color: #dfdfdfa1;
   border-radius: 5px 5px 0 0 !important;
   outline: none;
+}
+
+.link-to-btn {
+  font: bold 20px 'Raleway', sans-serif;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 4px 6px 4px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
 }
