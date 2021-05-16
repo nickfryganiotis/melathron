@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const session = require('express-session')
 const { response, query } = require("express");
 const app = express();
+const LocalStrategy = require( 'passport-local' ).Strategy;
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
@@ -1102,3 +1105,26 @@ app.post( "/delete_dose" , function( req, res ) {
     } )
 
 } );
+
+passport.use( 'sign-in' , new LocalStrategy( function( username , password , done ) {
+
+                const query = "SELECT * from acc WHERE (username = ? AND passcode = ?)"
+                const input = [ username , password ];
+                connection.query( query , input , function ( error , result ) {
+                    if ( error ) throw error;
+                    if ( ( result[ "username" ] === undefined ) || ( result[ "passcode" ] === undefined ) ) {
+                        return done( null , false );
+                    }
+                    else {
+                        return done( null , result );
+                    }
+                } )
+        } ) 
+);
+
+app.post( '/sign_in' , passport.authenticate( 'signin' , {session: false } ) , function( req , res ) {
+    res.json( { 
+        user: req.user,
+        timestamp : Date.now()
+    } );
+} )
