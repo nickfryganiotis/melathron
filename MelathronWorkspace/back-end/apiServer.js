@@ -6,6 +6,7 @@ const passport = require('passport')
 const { response, query } = require("express");
 const app = express();
 const LocalStrategy = require( 'passport-local' ).Strategy;
+const e = require("express");
 
 
 
@@ -1133,7 +1134,7 @@ app.post( '/update_dose' , function ( req , res ) {
     const sale_id = req.body[ 'sale_id' ];
     const doses = req.body[ 'doses' ];
     
-    if ( doses[ 0 ].length !== 0 ) {
+    if ( Object.keys( doses[ 0 ] ).length !== 0 ) {
         let query = "UPDATE payment_info SET ";
         let input = [];
         let first = true;
@@ -1151,7 +1152,7 @@ app.post( '/update_dose' , function ( req , res ) {
         } )
     }
 
-    if ( doses[ 1 ].length !== 0 ) {
+    if ( Object.keys( doses[ 1 ] ).length !== 0 ) {
         let query = "UPDATE payment_info SET ";
         let input = [];
         let first = true;
@@ -1169,7 +1170,7 @@ app.post( '/update_dose' , function ( req , res ) {
         } )
     }
 
-    if ( doses[ 2 ].length !== 0 ) {
+    if ( Object.keys( doses[ 2 ] ).length !== 0 ) {
         let query = "UPDATE payment_info SET ";
         let input = [];
         let first = true;
@@ -1187,7 +1188,7 @@ app.post( '/update_dose' , function ( req , res ) {
         } )
     }
 
-    if ( doses[ 3 ].length !== 0 ) {
+    if ( Object.keys( doses[ 3 ] ).length !== 0 ) {
         let query = "UPDATE payment_info SET ";
         let input = [];
         let first = true;
@@ -1203,5 +1204,21 @@ app.post( '/update_dose' , function ( req , res ) {
         connection.query( query , input , function( error ) {
             if ( error ) throw error;
         } )
+        res.send( "Doses were updated successfuly" );
     }
+    else {
+        res.send( "Doses were updated successfuly" );
+    }
+    
+} )
+
+app.post( '/delete_customer' , function( req , res ) {
+
+    let spcode = req.body[ 'spcode' ];
+    const query = "DELETE from CUSTOMER WHERE spcode = ?";
+    connection.query( query , [ spcode ] , function( error ) {
+        if ( error ) throw error;
+        res.send( "Customer was deleted successfuly" );
+    } );
+    
 } )
