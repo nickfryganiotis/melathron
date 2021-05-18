@@ -1222,3 +1222,20 @@ app.post( '/delete_customer' , function( req , res ) {
     } );
     
 } )
+
+app.post( '/delete_customers' , function( req , res ) {
+
+    let spcodes = req.body[ 'spcodes' ];
+    let input = [];
+    let query = "DELETE from CUSTOMER WHERE ("
+    for( let i = 0; i < spcodes.length; i++ ) {
+        query += i === 0 ? "spcode = ?" : " OR spcode = ?";
+        input.push( spcodes[ i ][ 'spcode' ] );
+    }
+    query += ")";
+    connection.query( query , input , function( error ) {
+        if( error ) throw error;
+        res.send( "Customers were deleted successfully" );
+    } );
+
+} )
