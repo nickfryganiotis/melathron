@@ -541,9 +541,21 @@ function stringifyPhones(phones){
 }
 
 app.post("/customer_file",(req,res) => {
+    
+    const qery = `SELECT location_id FROM location\n  
+                  WHERE (state = (SELECT state_name FROM STATE\n 
+                  WHERE state_id = ?) and area = (SELECT area_name FROM AREA\n
+                  WHERE area_id = ?) and city = (SELECT city_name FROM city\n
+                  WHERE city_id = ?) and country_id = ?)`;
+    let location_id;                
+    let qery_input = [ req.body[ 'state_id'] , req.body[ 'area_id'] , req.body[ 'city_id'] , req.body[ 'country_id'] ];
+    connection.query( qery , qery_input , function( error , result ) {
+        if ( error ) throw error;
+        location_id = result[ 0 ][ 'location_id' ];
+    } );    
     var customer = req.body
     var auxs = {}
-    const args = ['phone','mobile','apotelesma_id','salesman_id'];
+    const args = [ 'phone' , 'mobile' , 'apotelesma_id' , 'salesman_id' , 'country_id' , 'state_id' , 'city_id' , 'area_id' ];
     args.map(arg => {
         if(customer[arg]){
             auxs[arg] = customer[arg];
@@ -551,8 +563,9 @@ app.post("/customer_file",(req,res) => {
             arg;
         }
     });
-
-    var input = [customer];
+    
+    customer[ "location_id" ] = location_id;
+    var input = [ customer ];
     var query = "INSERT into customer SET ?"; 
     connection.query(query, input,function (error, results) {
       if (error) throw error;
