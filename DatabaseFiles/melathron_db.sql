@@ -207,7 +207,41 @@ CREATE TABLE acc (
     admin_priv BOOL default 0,
     PRIMARY KEY(username)
 );
+
+CREATE TABLE state (
+	state_id INT AUTO_INCREMENT,
+    state_name VARCHAR(100),
+    PRIMARY KEY(state_id)
+);
+
+CREATE TABLE city (
+	city_id INT AUTO_INCREMENT,
+    city_name VARCHAR(100),
+    PRIMARY KEY(city_id)
+);
+
+CREATE TABLE area (
+	area_id INT AUTO_INCREMENT,
+    area_name VARCHAR(100),
+    PRIMARY KEY(area_id)
+);
     
+INSERT INTO acc VALUES ("kserodivine", "1234", 1);
+
+DELIMITER //
+CREATE TRIGGER ins_loc BEFORE INSERT ON location
+FOR EACH ROW
+BEGIN
+    IF NEW.state IS NOT NULL THEN
+    INSERT INTO state(state_name) VALUES (NEW.state);
+    END IF;
+	IF NEW.city IS NOT NULL THEN
+    INSERT INTO city(city_name) VALUES (NEW.city);
+    END IF;
+	IF NEW.area IS NOT NULL THEN
+    INSERT INTO area(area_name) VALUES (NEW.area);
+    END IF;
+END//
 
 DELIMITER //
 CREATE FUNCTION check_paid(s_id INT)
