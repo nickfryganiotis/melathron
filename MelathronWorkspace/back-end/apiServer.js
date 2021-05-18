@@ -1078,7 +1078,6 @@ app.post( "/insert_dose" , function( req , res ) {
     let query = "INSERT INTO payment_info (sale_id";
     
     for( k of Object.keys( dose ) ) {
-        console.log(k)
         query += "," + k , input.push( dose[ k ] );
     }
     query += ") VALUES ("
@@ -1127,4 +1126,82 @@ app.post( '/sign_in' , passport.authenticate( 'sign-in' , {session: false } ) , 
         user: req.user,
         timestamp : Date.now()
     } );
+} )
+
+app.post( '/update_dose' , function ( req , res ) {
+
+    const sale_id = req.body[ 'sale_id' ];
+    const doses = req.body[ 'doses' ];
+    
+    if ( doses[ 0 ].length !== 0 ) {
+        let query = "UPDATE payment_info SET ";
+        let input = [];
+        let first = true;
+        for( k of Object.keys( doses[ 0 ] ) ) {
+            query += ( first ) ? k + " = ?" : ", " + k + " = ?";
+            first = false; 
+            input.push( doses[ 0 ][ k ] );
+        }
+        
+        query += " WHERE (sale_id = ? AND dose_number = ?)"
+        input.push( sale_id );
+        input.push( 1 );
+        connection.query( query , input , function( error ) {
+            if ( error ) throw error;
+        } )
+    }
+
+    if ( doses[ 1 ].length !== 0 ) {
+        let query = "UPDATE payment_info SET ";
+        let input = [];
+        let first = true;
+        for( k of Object.keys( doses[ 1 ] ) ) {
+            query += ( first ) ? k + " = ?" : ", " + k + " = ?";
+            first = false; 
+            input.push( doses[ 1 ][ k ] );
+        }
+        
+        query += " WHERE (sale_id = ? AND dose_number = ?)"
+        input.push( sale_id );
+        input.push( 2 );
+        connection.query( query , input , function( error ) {
+            if ( error ) throw error;
+        } )
+    }
+
+    if ( doses[ 2 ].length !== 0 ) {
+        let query = "UPDATE payment_info SET ";
+        let input = [];
+        let first = true;
+        for( k of Object.keys( doses[ 2 ] ) ) {
+            query += ( first ) ? k + " = ?" : ", " + k + " = ?";
+            first = false; 
+            input.push( doses[ 2 ][ k ] );
+        }
+        
+        query += " WHERE (sale_id = ? AND dose_number = ?)"
+        input.push( sale_id );
+        input.push( 3 );
+        connection.query( query , input , function( error ) {
+            if ( error ) throw error;
+        } )
+    }
+
+    if ( doses[ 3 ].length !== 0 ) {
+        let query = "UPDATE payment_info SET ";
+        let input = [];
+        let first = true;
+        for( k of Object.keys( doses[ 3 ] ) ) {
+            query += ( first ) ? k + " = ?" : ", " + k + " = ?";
+            first = false; 
+            input.push( doses[ 3 ][ k ] );
+        }
+        
+        query += " WHERE (sale_id = ? AND dose_number = ?)"
+        input.push( sale_id );
+        input.push( 4 );
+        connection.query( query , input , function( error ) {
+            if ( error ) throw error;
+        } )
+    }
 } )
