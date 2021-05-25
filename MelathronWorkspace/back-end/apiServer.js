@@ -1251,4 +1251,14 @@ app.post( '/delete_customers' , function( req , res ) {
         res.send( "Customers were deleted successfully" );
     } );
 
+} );
+
+app.post( '/add_parameters' , ( req , res ) => {
+
+    let parameter = Object.keys( req.body )[ 0 ];
+    switch( parameter ) {
+        case apotelesma:
+            let query = "INSERT INTO "
+    }
+
 } )
