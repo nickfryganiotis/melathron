@@ -1256,9 +1256,20 @@ app.post( '/delete_customers' , function( req , res ) {
 app.post( '/add_parameters' , ( req , res ) => {
 
     let parameter = Object.keys( req.body )[ 0 ];
-    switch( parameter ) {
-        case apotelesma:
-            let query = "INSERT INTO "
+    let input = [];
+    let first = true;
+    let query = "INSERT INTO " + parameter + " (";
+    for( k of Object.keys( req.body[ parameter ] ) ) {
+        query += first ? k : "," + k , input.push( req.body[ parameter ][ k ] );
+        first = false;   
     }
+    query += ") VALUES (";
+    for ( let i = 0; i < input.length; i++ ) query += ( i === 0 ) ? "?" : ",?"
+    query += ")";
+    connection.query( query , input , ( error ) => {
+        if ( error ) throw error;
+        res.send( "Parameter was added successfully" );
+    } );
+    
 
 } )
