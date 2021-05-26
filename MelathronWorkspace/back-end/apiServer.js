@@ -120,11 +120,12 @@ app.get("/countries", (req, res) => {
 
 app.post("/send",(req,res) => {
     var customer = req.body
-    const args = ['phone','mobile','continent_id','apotelesma_name','subapotelesma_name','salesman_name','category_name','profession_name','country_id','state','city','area'];
-    args.map(arg => {
-        if(customer[arg]){
-            auxs[arg] = customer[arg];
-            delete customer[arg];
+    const args = [ 'phone' , 'mobile' , 'continent_id' , 'apotelesma_name', 'subapotelesma_name' ,
+    'salesman_name' , 'category_name' , 'profession_name' , 'state' , 'city' , 'area' ];
+    args.map( arg => {
+        if( customer[ arg ] ){
+            auxs[ arg ] = customer[ arg ];
+            delete customer[ arg ];
             arg;
         }
     });
@@ -134,19 +135,39 @@ app.post("/send",(req,res) => {
     var query = "INSERT into customer SET ?"; 
     if(auxs['category_name']){
         query += ", `category_id` = (SELECT category_id FROM category WHERE category_name = ?)"
-        input.push(auxs['category_name']);
+        input.push( auxs['category_name'] );
     }
     if(auxs['profession_name']){
         query += ", `profession_id` = (SELECT profession_id FROM profession WHERE profession_name = ?)"
-        input.push(auxs['profession_name']); 
+        input.push( auxs['profession_name'] ); 
     }
-    if(auxs['country_id'] && auxs ['state'] && auxs['city'] && auxs['area']){
-        query += ", `location_id` = (SELECT location_id FROM location WHERE country_id = ? and state = ? and city = ? and area = ?)"
-        input.push(auxs['country_id']);
-        input.push(auxs['state']);
-        input.push(auxs['city']);
-        input.push(auxs['area']);        
+
+    
+    if( auxs [ 'state' ] ) { 
+        query += ", `location_id` = (SELECT location_id FROM location WHERE country_id = ? and state = ?"        
+        input.push( customer[ 'country_id' ] );
+        input.push( auxs['state'] );
     }
+    else {
+        query += ", `location_id` = (SELECT location_id FROM location WHERE country_id = ? and state is NULL"
+        input.push( customer[ 'country_id' ] );
+    }
+    if ( auxs[ 'city' ] ) {
+        query += " and city = ?"
+        input.push( auxs[ 'city' ] );
+    }
+    else {
+        query += " and city is NULL";
+    }
+
+    if( auxs[ 'area' ] ) {
+        query += " and area = ?)"
+        input.push(auxs['area']); 
+    }
+    else {
+        query += " and area is NULL)";
+    }
+               
     connection.query(query, input,function (error, results) {
       if (error) throw error;
       auxs['spcode'] = results.insertId;
@@ -211,7 +232,7 @@ app.post("/send_sale",(req,res)=>{
     const status = payment['status'];
     args = ['status','salesman_name','shipping_method_name','subscription_category','subscription_name',
     'payment_amount1','payment_method1','dose_deadline1','dose_amount1','payment_amount2','payment_method2','dose_deadline2','dose_amount2',
-    'payment_amount3','payment_method3','dose_deadline3','dose_amount3','payment_amount4','payment_method4','dose_deadline4','dose_amount4','continent_id','country_id','number_of_doses'];
+    'payment_amount3','payment_method3','dose_deadline3','dose_amount3','payment_amount4','payment_method4','dose_deadline4','dose_amount4','continent_id','number_of_doses'];
     args.map(arg => {
         if(payment[arg]){
             params[arg] = payment[arg];
@@ -229,7 +250,7 @@ app.post("/send_sale",(req,res)=>{
         query+=", `subscription_id`= (SELECT subscription_id FROM subscription WHERE subscription_category = ? AND subscription_name = ? AND country_id = ?)";
         input.push(params['subscription_category']);
         input.push(params['subscription_name']);
-        input.push(params['country_id']);
+        input.push(payment['country_id']);
     }
     if(params['salesman_name']){
         query+=", `salesman_id` = (SELECT salesman_id FROM salesman WHERE salesman_name = ?)";
@@ -344,6 +365,7 @@ app.post("/search_customer",(req,res) => {
     if( customer[ 'email' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "email LIKE ?\n"; parameters = true; input.push( customer[ 'email' ] + '%'); }
     if( customer[ 'website' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "website LIKE ?\n"; parameters = true; input.push( customer[ 'website' ] + '%'); }
     if( customer[ 'company_name' ] ) {  query += !parameters ? " WHERE " : " AND ";  query += "company_name LIKE ?\n"; parameters = true; input.push( customer[ 'company_name' ] + '%' ); }
+    if( customer[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND ";  query += "country_id = ?\n"; parameters = true; input.push( customer[ 'country_id' ]  ); }
     query += ") AS cust\n "; 
     
     parameters = false;
@@ -354,14 +376,23 @@ app.post("/search_customer",(req,res) => {
                                     const states = customer['state'];
                                     for ( i=0; i< states.length; i++ ) { query += i > 0 ? " OR " : ""; query += "state = ?"; input.push(states[i]['value']);  }
                                     query += ")\n" }
+        else {
+            query += !parameters ? " WHERE " : " AND "; query += "state is NULL"; parameters = true; 
+        }
         if( customer[ 'city' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
                                     const cities = customer['city'];
                                     for ( i=0; i< cities.length; i++ ) { query += i > 0 ? " OR " : ""; query += "city = ?"; input.push(cities[i]['value']);  }
                                     query += ")\n" }
+        else {
+            query += !parameters ? " WHERE " : " AND "; query += "city is NULL"; parameters = true; 
+        }
         if( customer[ 'area' ] ) { query += !parameters ? " WHERE " : " AND "; query += "( "
                                     const areas = customer['area'];
                                     for ( i=0; i< areas.length; i++ ) { query += i > 0 ? " OR " : ""; query += "area = ?"; input.push(areas[i]['value']);  }
                                     query += ")\n" }
+        else {
+            query += !parameters ? " WHERE " : " AND "; query += "area is NULL"; parameters = true; 
+            }
         query += ") AS loc ON cust.location_id = loc.location_id\n"
     }
 
@@ -542,20 +573,44 @@ function stringifyPhones(phones){
 
 app.post("/customer_file",(req,res) => {
     
+    let customer = req.body;
+    let qery_input  = [];
     const qery = `SELECT location_id FROM location\n  
-                  WHERE (state = (SELECT state_name FROM STATE\n 
-                  WHERE state_id = ?) and area = (SELECT area_name FROM AREA\n
-                  WHERE area_id = ?) and city = (SELECT city_name FROM city\n
-                  WHERE city_id = ?) and country_id = ?)`;
+                  WHERE (`;
+    
+    if( customer[ 'state_id' ] ) {
+        qery += " state = (SELECT state_name FROM STATE\n WHERE state_id = ?)"
+        qery_input.push( customer[ 'state_id' ] );
+    }
+    else {
+        qery += " state is NULL";
+    }
+    if( customer[ 'area_id' ] ) {
+        qery += " and area = (SELECT area_name FROM AREA\n WHERE area_id = ?)"
+        qery_input.push( customer[ 'area_id' ] );
+    }
+    else {
+        qery += " and area is NULL";
+    }
+
+    if( customer[ 'city_id' ] ) {
+        qery += " and city = (SELECT city_name FROM CITY\n WHERE city_id = ?)"
+        qery_input.push( customer[ 'city_id' ] );
+    }
+    else {
+        qery += " and city is NULL";
+    }
+    qery += " and country_id = ?)";
+    qery_input.push( customer[ 'country_id' ] );
+
     let location_id;                
-    let qery_input = [ req.body[ 'state_id'] , req.body[ 'area_id'] , req.body[ 'city_id'] , req.body[ 'country_id'] ];
     connection.query( qery , qery_input , function( error , result ) {
         if ( error ) throw error;
         location_id = result[ 0 ][ 'location_id' ];
     } );    
-    var customer = req.body
+    
     var auxs = {}
-    const args = [ 'phone' , 'mobile' , 'apotelesma_id' , 'salesman_id' , 'country_id' , 'state_id' , 'city_id' , 'area_id' ];
+    const args = [ 'phone' , 'mobile' , 'apotelesma_id' , 'salesman_id' , 'state_id' , 'city_id' , 'area_id' ];
     args.map(arg => {
         if(customer[arg]){
             auxs[arg] = customer[arg];
