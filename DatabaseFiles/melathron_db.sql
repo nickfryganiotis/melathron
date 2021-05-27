@@ -1,6 +1,12 @@
 CREATE SCHEMA IF NOT EXISTS melathron;
 USE melathron;
 
+CREATE TABLE biography (
+	biography_id INT AUTO_INCREMENT,
+    biography_name VARCHAR(200),
+    PRIMARY KEY(biography_id)
+);
+
 CREATE TABLE category (
 	category_id INT AUTO_INCREMENT,
 	category_name VARCHAR(200),
@@ -28,33 +34,7 @@ CREATE TABLE country (
     ON DELETE CASCADE
 );
 
-/*CREATE TABLE state(
-	state_id INT AUTO_INCREMENT,
-    state_name VARCHAR(50),
-    country_id INT,
-    PRIMARY KEY(state_id),
-    FOREIGN KEY(country_id) REFERENCES country(country_id)
-);
 
-CREATE TABLE city(
-	city_id INT AUTO_INCREMENT,
-    city_name VARCHAR(50),
-    state_id INT,
-    country_id INT,
-    PRIMARY KEY(city_id),
-    FOREIGN KEY(state_id) REFERENCES state(state_id),
-    FOREIGN KEY(country_id) REFERENCES country(country_id)
-);
-
-CREATE TABLE area(
-	area_id INT AUTO_INCREMENT,
-    area_name VARCHAR(50),
-    city_id INT,
-    country_id INT,
-    PRIMARY KEY(area_id),
-    FOREIGN KEY(city_id) REFERENCES city(city_id)
-);
-*/
 CREATE TABLE apotelesma (
 	apotelesma_id INT AUTO_INCREMENT,
     apotelesma_name VARCHAR(100),
@@ -95,6 +75,7 @@ CREATE TABLE customer (
     continent_id INT,
     country_id INT,
     location_id INT,
+    biography_id INT,
     date_changed DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(spcode),
     FOREIGN KEY(category_id) REFERENCES category(category_id)
@@ -105,7 +86,8 @@ CREATE TABLE customer (
     ON DELETE CASCADE,
     FOREIGN KEY(continent_id) REFERENCES continent(continent_id),
     FOREIGN KEY(country_id) REFERENCES country(country_id),
-    FOREIGN KEY(location_id) REFERENCES location(location_id)
+    FOREIGN KEY(location_id) REFERENCES location(location_id),
+    FOREIGN KEY(biography_id) REFERENCES biography(biography_id)
     );
 
 CREATE TABLE phone (
@@ -132,6 +114,17 @@ CREATE TABLE history_instance (
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
     ON DELETE CASCADE,
     FOREIGN KEY(apotelesma_id) REFERENCES apotelesma(apotelesma_id)
+    ON DELETE CASCADE
+    );
+    
+CREATE TABLE biography_history (
+	instance_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    spcode INT,
+    biography_id INT,
+    PRIMARY KEY(instance_date, spcode, biography_id),
+    FOREIGN KEY(spcode) REFERENCES customer(spcode)
+    ON DELETE CASCADE,
+    FOREIGN KEY(biography_id) REFERENCES biography(biography_id)
     ON DELETE CASCADE
     );
 
@@ -340,6 +333,44 @@ BEGIN
 END//
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER upd_date BEFORE UPDATE ON customer
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET date_changed = CURRENT_TIMESTAMP;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER curr_bio_in AFTER INSERT ON biography_history
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET biography_id = NEW.biography_id
+    WHERE spcode = NEW.spcode;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER curr_bio_upd AFTER UPDATE ON biography_history
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET biography_id = NEW.biography_id
+    WHERE spcode = NEW.spcode;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER curr_bio_del AFTER DELETE ON biography_history
+FOR EACH ROW
+BEGIN
+	UPDATE customer
+    SET biography_id = (SELECT biography_id FROM biography WHERE spcode=OLD.spcode ORDER BY instance_date DESC LIMIT 1) 
+    WHERE spcode = OLD.spcode;
+END//
+DELIMITER ;
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
@@ -349,6 +380,8 @@ LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Subscriptions.tx
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Salesmen.txt' INTO TABLE salesman FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (salesman_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Categories.txt' INTO TABLE category FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (category_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Professions.txt' INTO TABLE profession FIELDS TERMINATED BY ';' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (profession_name);
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Biographies.txt' INTO TABLE biography FIELDS TERMINATED BY ';' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (biography_name);
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα', 'Χαλάνδρι');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Ωραιόκαστρο');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
+INSERT INTO location (country_id, state, city) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα');
