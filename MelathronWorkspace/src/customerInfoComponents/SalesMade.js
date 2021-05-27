@@ -2,7 +2,7 @@ import { React } from "react";
 
 export default function SalesMade({ sales }) {
   return (
-    <div>
+    <div className='salesMade'>
       <table>
         <tr>
           <th>Κωδικός Πώλησης</th>

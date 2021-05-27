@@ -85,7 +85,7 @@ export default function StaticInfo({ customer }) {
 
 
   return (
-    <div>
+    <div className='static-info'>
     <table>
       {Object.keys(cust).map((key) => { return (
         <tr onDoubleClick={(e) => {handleUpdate(e, key)}}>
@@ -95,7 +95,7 @@ export default function StaticInfo({ customer }) {
       )
       })}
     </table>
-    <div>{newCustomer !== {} && <button onClick={submitChange}>ΑΛΛΑΓΗ</button>}</div>
+    <div className='static-info-button'>{newCustomer !== {} && <button onClick={submitChange} className="choice-btn3">ΑΛΛΑΓΗ</button>}</div>
     </div>
   );
 }

@@ -81,7 +81,7 @@ export default function ApHistory({ apHistory, spcode }) {
   }
 
   return (
-    <div>
+    <div className='ap-history'>
       <table>
         <tr>
           <th>Ημερομηνία Αλλαγής</th>
@@ -118,7 +118,7 @@ export default function ApHistory({ apHistory, spcode }) {
               ).map(arrayToOption)}
             </select> )}</td>
               <td>
-                <button onClick={(e) => delApotelesma(e,i, element["apotelesma_name"], element["subapotelesma_name"], Date.parse(element["instance_date"]) )}>-</button>
+                <button onClick={(e) => delApotelesma(e,i, element["apotelesma_name"], element["subapotelesma_name"], Date.parse(element["instance_date"]) )} className="btn-plus2">-</button>
                 {status==i && <button onClick={updApotelesma}>ΑΛΛΑΓΗ</button>}
               </td>
             </tr>
@@ -131,6 +131,7 @@ export default function ApHistory({ apHistory, spcode }) {
               name="apotelesma_name"
               id="apotelesma_name"
               onChange={handleApChange}
+              className='search-select'
             >
               <option></option>
               {makeToUnique(apotelesmata, "apotelesma_name", newAp).map(
@@ -143,6 +144,7 @@ export default function ApHistory({ apHistory, spcode }) {
               name="subapotelesma_name"
               id="subapotelesma_name"
               onChange={handleApChange}
+              className='search-select'
             >
               <option>{null}</option>
               {makeToUnique(
@@ -153,9 +155,11 @@ export default function ApHistory({ apHistory, spcode }) {
               ).map(arrayToOption)}
             </select>
           </td>
+          <td>
+            <button onClick={newApotelesma} className="btn-plus2">+</button>
+          </td>
         </tr>
       </table>
-      <button onClick={newApotelesma}>+</button>
     </div>
   );
 }

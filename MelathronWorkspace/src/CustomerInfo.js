@@ -39,12 +39,22 @@ export default function CustomerInfo({ sp }) {
 
   return (
     <>
-      {<StaticInfo customer={customer[0]}/>}
-      {<ApHistory apHistory={hist} spcode={sp} />}
-      {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
+    <div className='customerMatrixColumn'>
+      <div className='customerMatrix'>
+        <div className='customerMatrixColumn2'>
+        {<StaticInfo customer={customer[0]}/>}
+        </div>
+        <div className='customerMatrixColumn2'>
+          {<ApHistory apHistory={hist} spcode={sp} />}
+          <div className='customerMatrixRow'>
+            {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
+            {<MobilesInfo mobiless={mobiles} spcode={sp} />}
+            {<PhonesInfo phoness={phones} spcode={sp} />}
+          </div>
+        </div>
+      </div>
       {<SalesMade sales={sales} />}
-      {<PhonesInfo phoness={phones} spcode={sp} />}
-      {<MobilesInfo mobiless={mobiles} spcode={sp} />}
+    </div>
     </>
   );
 }
