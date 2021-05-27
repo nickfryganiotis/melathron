@@ -246,7 +246,7 @@ app.post("/send_sale",(req,res)=>{
         query+= ", `shipping_method_id` = (SELECT shipping_method_id FROM shipping_method WHERE shipping_method_name = ?)";
         input.push(params['shipping_method_name']);
     }
-    if(params['subscription_category'] && params['subscription_name'] && params['country_id']){
+    if(params['subscription_category'] && params['subscription_name']){
         query+=", `subscription_id`= (SELECT subscription_id FROM subscription WHERE subscription_category = ? AND subscription_name = ? AND country_id = ?)";
         input.push(params['subscription_category']);
         input.push(params['subscription_name']);
@@ -369,7 +369,7 @@ app.post("/search_customer",(req,res) => {
     query += ") AS cust\n "; 
     
     parameters = false;
-    if( customer[ 'country_id' ] || customer[ 'state' ] || customer [ 'city' ] || customer[ 'area' ] ) {
+    if( customer[ 'state' ] || customer [ 'city' ] || customer[ 'area' ] ) {
         query += "INNER JOIN (\n SELECT *\n FROM location\n"
         if( customer[ 'country_id' ] ) { query += !parameters ? " WHERE " : " AND "; query += "country_id = ?\n"; parameters = true; input.push( customer['country_id'] ); }
         if( customer[ 'state' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("
@@ -393,6 +393,7 @@ app.post("/search_customer",(req,res) => {
         else {
             query += !parameters ? " WHERE " : " AND "; query += "area is NULL"; parameters = true; 
             }
+        
         query += ") AS loc ON cust.location_id = loc.location_id\n"
     }
 
@@ -467,6 +468,7 @@ app.post("/search_customer",(req,res) => {
                                         query += ") AS mob ON cust.spcode = mob.spcode" }
     
     const fquery = prefix_query +"\nFROM ( \n" + query;
+    console.log(fquery)
     connection.query( fquery, input, function ( error, results ) {
         if (error) throw error;
         res.send(results);   
@@ -511,7 +513,7 @@ app.post("/customer_info",(req,res) =>{
         output.push( results );
     } );
     
-    query = "SELECT * FROM biography_history WHERE spcode = ?";
+    query = "SELECT * FROM biography_history h LEFT OUTER JOIN biography b ON b.biography_id = h.biography_id WHERE spcode = ?";
     connection.query( query , spcode , ( error , results ) => {
         if ( error ) throw error;
         output.push( results );
@@ -1337,7 +1339,7 @@ app.post( '/add_parameters' , ( req , res ) => {
 } )
 
 app.get( '/biographies' , ( req , res ) => {
-    const query = "SELECT * FROM biographies";
+    const query = "SELECT * FROM biography";
     connection.query( query , ( error , results ) => {
         if ( error ) throw error;
         res.send( results );
@@ -1345,9 +1347,9 @@ app.get( '/biographies' , ( req , res ) => {
 } );
 
 app.post( '/add_biography' , ( req , res ) => {
-    const biography_name = req.body[ 'biography' ];
+    const biography_name = req.body[ 'biography_name' ];
     const spcode = req.body[ 'spcode' ];
-    const query = "INSERT INTO biography_history SET `biography_id` = ( SELECT biography_id FROM biographies WHERE biography_name = ?) , `spocde` = ?";
+    const query = "INSERT INTO biography_history SET `biography_id` = ( SELECT biography_id FROM biography WHERE biography_name = ?) , `spcode` = ?";
     connection.query( query , [ biography_name , spcode ] , ( error ) => {
         if ( error ) throw error;
         res.send( "Biography added successfully" );
@@ -1355,19 +1357,18 @@ app.post( '/add_biography' , ( req , res ) => {
 } );
 
 app.post( '/delete_biography' , ( req , res ) => {
-    const biography_name = req.body[ 'biography' ];
+    const biography_name = req.body[ 'biography_name' ];
     const instance_date = req.body[ 'instance_date' ];
     const spcode = req.body[ 'spcode' ];
-    const query = `DELETE FROM biography_history WHERE( spcode = ? AND insstance_date = ? and biography_id = 
-                   (SELECT biography_id FROM biography WHERE biography_name = ?))`
-    connection.query( query , [ spcode , instance_date , biography_name ] , ( error ) => {
+    const query = "DELETE FROM biography_history WHERE (biography_id = (SELECT biography_id FROM biography WHERE biography_name = ?) AND spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?)"
+    connection.query( query , [ biography_name , spcode , instance_date ] , ( error ) => {
         if ( error ) throw  error;
         res.send( "Biography deleted successfully" );
     } );
 } );
 
 app.post( '/update_biography' , ( req , res ) => { 
-    const biography_name = req.body[ 'biography' ];
+    const biography_name = req.body[ 'biography_name' ];
     const instance_date = req.body[ 'instance_date' ];
     const spcode = req.body[ 'spcode' ];
     const query = "UPDATE biography_history SET biography_id = (SELECT biography_id FROM biography WHERE biography_name = ?) WHERE spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?"

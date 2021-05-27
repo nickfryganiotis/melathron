@@ -78,6 +78,10 @@ export default function MySaleSearch() {
     const win3 = new BrowserWindow({
       height: 600,
       width: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
     });
     win3.setMenu(null);
     win3.webContents.openDevTools();

@@ -16,7 +16,7 @@ export default function BioHistory({ bioHistory, spcode }) {
       url: "http://localhost:5000/biographies",
     };
     axios(bio_options)
-      .then((res) => setBios(res.data))
+      .then((res) => setBiographies(res.data))
       .catch((error) => console.log(error));
   }, []);
 
@@ -62,7 +62,7 @@ export default function BioHistory({ bioHistory, spcode }) {
     let delbio_options = {
       method:"post",
       url : "http://localhost:5000/delete_biography",
-      data: {"spcode":spcode, "biography_name" : bio, "instance_date": insd }
+      data: {"spcode":spcode, "biography_name" : bio, instance_date: insd }
     }
     axios(delbio_options).then((res)=>console.log(res)).catch((error) => console.log(error))
   }
@@ -73,7 +73,7 @@ export default function BioHistory({ bioHistory, spcode }) {
     let upd_options = {
       method:"post",
       url: "http://localhost:5000/update_biography",
-      data: {...updBio, spcode : spcode}
+      data: {...updBio, "spcode" : spcode}
     }
     axios(upd_options).then((res) => console.log(res)).catch((error) => console.log(error))
   }

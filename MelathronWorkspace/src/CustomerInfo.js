@@ -65,7 +65,7 @@ export default function CustomerInfo({ sp }) {
     <>
       {<StaticInfo customer={customer[0]}/>}
       {<ApHistory apHistory={hist} spcode={sp} />}
-      {<BioHistory bioHistory={[]} spcode={sp} />}
+      {<BioHistory bioHistory={biohist} spcode={sp} />}
       {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
       {<SalesMade sales={sales} />}
       {<PhonesInfo phoness={phones} spcode={sp} />}
