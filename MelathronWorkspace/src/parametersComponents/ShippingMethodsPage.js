@@ -38,7 +38,8 @@ export default function ShippingMethodsPage() {
       }
 
     return (
-      <div>
+      <div className="total-main-page2">
+        <div className="user-form2">
         <table>
           <tr>
             <th>ΚΩΔΙΚΟΣ</th>
@@ -54,6 +55,7 @@ export default function ShippingMethodsPage() {
           })}
         </table>
         {adminPriv && <button onClick={(e) => createBrowserWindow("add_shipping_method")}>ΝΕΟΣ ΤΡΟΠΟΣ ΠΑΡΑΔΟΣΗΣ</button>}
+      </div>
       </div>
     );
 

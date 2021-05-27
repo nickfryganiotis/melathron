@@ -61,7 +61,7 @@ export default function SalesmenInfo({ salesmenn, spcode}) {
           <tr>
             <td>{element["salesman_name"]}</td>
             <td>
-              <button onClick={(e) => delSalesman(e, element["salesman_id"], i)}>
+            <button onClick={(e) => delSalesman(e, element["salesman_id"], i)} className="btn-plus2 btn-minus">
                 -
               </button>
             </td>
@@ -69,16 +69,21 @@ export default function SalesmenInfo({ salesmenn, spcode}) {
         );
       })}
       <tr>
-        <select
-          name="salesman_name"
-          id="salesman_name"
-          onChange={handleCustomerChange}
-        >
-          <option></option>
-          {salesman.map((element) => <option value={element["salesman_id"]}>{element["salesman_name"]}</option>)}
-        </select>
+      <td>
+          <select
+            name="salesman_name"
+            id="salesman_name"
+            onChange={handleCustomerChange}
+            className='search-select'
+          >
+            <option></option>
+            {salesman.map((element) => <option value={element["salesman_id"]}>{element["salesman_name"]}</option>)}
+          </select>
+        </td>
+        <td>
+          <button onClick={addSalesman} className="btn-plus2">+</button>
+        </td>
       </tr>
-      <button onClick={addSalesman}>+</button>
     </table>
   );
 }

@@ -79,7 +79,7 @@ export default function BioHistory({ bioHistory, spcode }) {
   }
 
   return (
-    <div>
+    <div className='ap-history'>
       <table>
         <tr>
           <th>ΗΜΕΡΟΜΗΝΙΑ ΑΛΛΑΓΗΣ</th>
@@ -101,7 +101,7 @@ export default function BioHistory({ bioHistory, spcode }) {
               )}
             </select> )}</td>
               <td>
-                <button onClick={(e) => delBiography(e,i, element["biography_name"], Date.parse(element["instance_date"]) )}>-</button>
+                <button onClick={(e) => delBiography(e,i, element["biography_name"], Date.parse(element["instance_date"]) )} className="btn-plus2">-</button>
                 {status==i && <button onClick={updBiography}>ΑΛΛΑΓΗ</button>}
               </td>
             </tr>
@@ -121,9 +121,11 @@ export default function BioHistory({ bioHistory, spcode }) {
               )}
             </select>
           </td>
+          <td>
+          <button onClick={newBiography} className="btn-plus2">+</button>
+          </td>
         </tr>
       </table>
-      <button onClick={newBiography}>+</button>
     </div>
   );
 }

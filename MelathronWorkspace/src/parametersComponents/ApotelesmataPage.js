@@ -53,7 +53,8 @@ export default function ApotelesmataPage() {
   }
 
   return (
-    <div>
+    <div className="total-main-page2">
+    <div className="user-form2">
       <table>
         <tr>
           <th>ΚΩΔΙΚΟΣ</th>
@@ -72,6 +73,7 @@ export default function ApotelesmataPage() {
       </table>
       {adminPriv && <button onClick={(e) => createBrowserWindow("add_apotelesma")}>ΝΕA ΚΑΤΗΓΟΡΙΑ ΑΠΟΤΕΛΕΣΜΑΤΟΣ</button>}
       {adminPriv && <button onClick={(e) => createBrowserWindow("add_subapotelesma")}>ΝΕΟ ΑΠΟΤΕΛΕΣΜΑ</button>}
+    </div>
     </div>
   );
 }

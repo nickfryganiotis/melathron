@@ -112,7 +112,6 @@ export default function CustomerSearchWindow() {
 
   return (
     <div>
-      {JSON.stringify(areaChoice)}
       <ReactTable
         data={results}
         columns={attributes}
@@ -138,10 +137,16 @@ export default function CustomerSearchWindow() {
           );
         }}
       />
+      <div>
       <SalesmanAssignment customers={results} />
+      </div>
+      <div>
       <CustomerToFile customers={results} />
+      </div>
+      <div>
       <button onClick={previewPrint}>ΕΚΤΥΠΩΣΗ ΚΑΡΤΕΛΩΝ</button>
       {adminPriv && <button onClick={massDelete}>ΜΑΖΙΚΗ ΔΙΑΓΡΑΦΗ</button>}
+      </div>
     </div>
   );
 }

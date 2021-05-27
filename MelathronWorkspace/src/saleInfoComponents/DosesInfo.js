@@ -138,14 +138,16 @@ export default function DosesInfo({ dosess,sale_id }) {
   );*/
 
   return (
-    <div>
+    <div className='ap-history2'>
       <table>
+      <tr>
         {<th>ΑΡΙΘΜΟΣ ΔΟΣΗΣ</th>}
         {doses.length > 1 ? <th>ΣΥΝΟΛΙΚΟ ΠΟΣΟ ΔΟΣΗΣ</th> : <th>ΣΥΝΟΛΙΚΟ ΠΟΣΟ</th>}
         <th>ΠΛΗΡΩΘΕΝ ΠΟΣΟ</th>
         {doses.length > 1 ? <th>ΠΡΟΘΕΣΜΙΑ ΕΞΟΦΛΗΣΗΣ ΔΟΣΗΣ</th> : <th>ΠΡΟΘΕΣΜΙΑ ΕΞΟΦΛΗΣΗΣ</th>}
         <th>ΗΜΕΡΟΜΗΝΙΑ ΕΞΟΦΛΗΣΗΣ</th>
         <th>ΜΕΘΟΔΟΣ ΠΛΗΡΩΜΗΣ</th>
+        </tr>
         {doses.map((element, i) => {
           return (
             <tr>
@@ -159,7 +161,9 @@ export default function DosesInfo({ dosess,sale_id }) {
           );
         })}
       </table>
-      <button onClick={handleSubmit}>ΑΛΛΑΓΗ</button>
+      <div className='static-info-button'>
+        <button onClick={handleSubmit} className="choice-btn3">ΑΛΛΑΓΗ</button>
+      </div>
     </div>
   );
 }

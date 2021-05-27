@@ -25,10 +25,10 @@ export default function SaleInfo({sale_id}){
 
     return(
         <>
-        <div>
+        <div className='customerMatrixColumn'>
             <StaticSaleInfo ssale = {sale[0]} sale_id = {sale_id} />    
         </div>
-        <div>
+        <div className='customerMatrixColumn'>
             <DosesInfo dosess = {doses} sale_id = {sale_id} />
         </div>
         </>

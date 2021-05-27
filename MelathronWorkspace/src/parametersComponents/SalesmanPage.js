@@ -38,7 +38,8 @@ export default function SalesmanPage() {
       }
 
     return (
-      <div>
+      <div className="total-main-page2">
+        <div className="user-form2">
         <table>
           <tr>
             <th>ΚΩΔΙΚΟΣ</th>
@@ -54,6 +55,7 @@ export default function SalesmanPage() {
           })}
         </table>
         {adminPriv && <button onClick={(e) => createBrowserWindow("add_salesman")}>ΝΕΟΣ ΠΩΛΗΤΗΣ</button>}
+      </div>
       </div>
     );
 

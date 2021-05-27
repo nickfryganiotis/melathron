@@ -53,7 +53,8 @@ export default function SubscriptionsPage() {
       }
 
     return (
-      <div>
+      <div className="total-main-page2">
+        <div className="user-form2">
         <table>
           <tr>
             <th>ΚΩΔΙΚΟΣ</th>
@@ -72,6 +73,7 @@ export default function SubscriptionsPage() {
         </table>
         {adminPriv && <button onClick={(e) => createBrowserWindow("add_subscription_category")}>ΝΕA ΚΑΤΗΓΟΡΙΑ ΣΥΝΔΡΟΜΗΣ</button>}
         {adminPriv && <button onClick={(e) => createBrowserWindow("add_subscription")}>ΝΕΑ ΣΥΝΔΡΟΜΗ</button>}
+      </div>
       </div>
     );
 
