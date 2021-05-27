@@ -51,6 +51,7 @@ export default function SalesmanAssignment({ customers }) {
 
   return (
     <div>
+      <div>
       <label htmlFor="salesman_id">ΠΩΛΗΤΗΣ</label>
       <select name="salesman_id" id="salesman_id" onChange={handleChange}>
         <option value={null}></option>
@@ -60,6 +61,8 @@ export default function SalesmanAssignment({ customers }) {
           </option>
         ))}
       </select>
+      </div>
+      <div>
       <label htmlFor="num">ΑΡΙΘΜΟΣ ΠΕΛΑΤΩΝ</label>
       <input
         name="num"
@@ -68,6 +71,7 @@ export default function SalesmanAssignment({ customers }) {
         onChange={handleCustomerChange}
         max={customers.length}
       ></input>
+      </div>
       <button onClick={assignSalesman}>ΑΝΑΘΕΣΗ</button>
     </div>
   );

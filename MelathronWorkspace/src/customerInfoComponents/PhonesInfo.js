@@ -53,7 +53,7 @@ export default function PhonesInfo({ phoness, spcode }) {
           <tr>
             <td>{element["phone_number"]}</td>
             <td>
-              <button onClick={(e) => delPhone(e, element["phone_number"], i)} className="btn-plus2 btn-minus">
+            <button onClick={(e) => delPhone(e, element["phone_number"], i)} className="btn-plus2 btn-minus">
                 -
               </button>
             </td>
@@ -61,7 +61,7 @@ export default function PhonesInfo({ phoness, spcode }) {
         );
       })}
       <tr>
-        <td>
+      <td>
           <input
             type="text"
             name="phone_number"

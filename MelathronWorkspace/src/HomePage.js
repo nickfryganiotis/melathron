@@ -20,7 +20,7 @@ export default function HomePage() {
           </div>
           <div className='home-page-column'>
             <div className='center'>
-              <Link to="/search_customer"  className="link-to-btn  home-page-button">ΑΝΑΖΗΤΗΣΗ ΠΕΛΑΤΗ</Link>
+              <Link to="/cs"  className="link-to-btn  home-page-button">ΑΝΑΖΗΤΗΣΗ ΠΕΛΑΤΗ</Link>
             </div>
             <div className='center'>
               <Link to="/search_sale" className="link-to-btn  home-page-button">ΑΝΑΖΗΤΗΣΗ ΠΩΛΗΣΗΣ</Link>
@@ -36,17 +36,11 @@ export default function HomePage() {
             </div>
         </div>
 
-
-
-
-
-      
-
       <br></br>
       <br></br>
       <br></br>
       <div className='center'>
-        <Link to="/login" className="link-to-btn sign-out">ΑΠΟΣΥΝΔΕΣΗ</Link>
+      <Link to="/login" className="link-to-btn sign-out">ΑΠΟΣΥΝΔΕΣΗ</Link>
       </div>
       </div>
     </div>

@@ -61,7 +61,7 @@ export default function SalesmenInfo({ salesmenn, spcode}) {
           <tr>
             <td>{element["salesman_name"]}</td>
             <td>
-              <button onClick={(e) => delSalesman(e, element["salesman_id"], i)} className="btn-plus2 btn-minus">
+            <button onClick={(e) => delSalesman(e, element["salesman_id"], i)} className="btn-plus2 btn-minus">
                 -
               </button>
             </td>
@@ -69,7 +69,7 @@ export default function SalesmenInfo({ salesmenn, spcode}) {
         );
       })}
       <tr>
-        <td>
+      <td>
           <select
             name="salesman_name"
             id="salesman_name"

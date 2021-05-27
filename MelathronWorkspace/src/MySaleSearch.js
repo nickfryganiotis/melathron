@@ -79,8 +79,9 @@ export default function MySaleSearch() {
       height: 600,
       width: 800,
       webPreferences: {
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
     });
     win3.setMenu(null);
     win3.webContents.openDevTools();

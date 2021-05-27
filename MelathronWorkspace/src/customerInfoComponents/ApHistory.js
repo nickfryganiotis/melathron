@@ -118,7 +118,7 @@ export default function ApHistory({ apHistory, spcode }) {
               ).map(arrayToOption)}
             </select> )}</td>
               <td>
-                <button onClick={(e) => delApotelesma(e,i, element["apotelesma_name"], element["subapotelesma_name"], Date.parse(element["instance_date"]) )} className="btn-plus2">-</button>
+              <button onClick={(e) => delApotelesma(e,i, element["apotelesma_name"], element["subapotelesma_name"], Date.parse(element["instance_date"]) )} className="btn-plus2">-</button>
                 {status==i && <button onClick={updApotelesma}>ΑΛΛΑΓΗ</button>}
               </td>
             </tr>

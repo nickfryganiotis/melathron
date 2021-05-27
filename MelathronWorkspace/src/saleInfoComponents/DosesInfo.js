@@ -140,7 +140,7 @@ export default function DosesInfo({ dosess,sale_id }) {
   return (
     <div className='ap-history2'>
       <table>
-        <tr>
+      <tr>
         {<th>ΑΡΙΘΜΟΣ ΔΟΣΗΣ</th>}
         {doses.length > 1 ? <th>ΣΥΝΟΛΙΚΟ ΠΟΣΟ ΔΟΣΗΣ</th> : <th>ΣΥΝΟΛΙΚΟ ΠΟΣΟ</th>}
         <th>ΠΛΗΡΩΘΕΝ ΠΟΣΟ</th>

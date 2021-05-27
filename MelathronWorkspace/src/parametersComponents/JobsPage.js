@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 export default function LocationsPage() {
   const [professions, setProfessions] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [adminPriv, setAdminPriv] = useState(true);
 
   useEffect(() => {
     axios
@@ -20,6 +21,31 @@ export default function LocationsPage() {
         console.log(error);
       });
   }, []);
+
+  function createBrowserWindow(window_type) {
+    const BrowserWindow = window.require("electron").remote.BrowserWindow;
+    const remote = window.require('electron').remote;
+    const win2 = new BrowserWindow({
+      height: 200,
+      width: 400,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
+      parent: remote.getCurrentWindow(),
+      modal: true
+    });
+    win2.setMenu(null);
+    win2.webContents.openDevTools();
+    if (window_type == "add_category") {
+      win2.loadURL("http://localhost:3000/add_category_window");
+    } else if (window_type == "add_profession") {
+      win2.loadURL("http://localhost:3000/add_profession_window");
+    } else {
+      console.log("ERROR");
+    }
+  }
+
 
     return (
       <div className="total-main-page2">
@@ -38,6 +64,7 @@ export default function LocationsPage() {
             );
           })}
         </table>
+        {adminPriv && <button onClick={(e) => createBrowserWindow("add_category")}>ΝΕA ΚΑΤΗΓΟΡΙΑ ΕΠΑΓΓΕΛΜΑΤΟΣ</button>}
         <table>
           <tr>
             <th>ΚΩΔΙΚΟΣ</th>
@@ -52,6 +79,7 @@ export default function LocationsPage() {
             );
           })}
         </table>
+        {adminPriv && <button onClick={(e) => createBrowserWindow("add_profession")}>ΝΕΟ ΕΠΑΓΓΕΛΜΑ</button>}
       </div>
       </div>
     );

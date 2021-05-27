@@ -1,3 +1,5 @@
+
+import axios from 'axios'
 /*Συνάρτηση που παίρνει έναν πίνακα απο JSON, και επιστρέφει έναν πίνακα με ένα attribute αυτόν χωρίς διπλότυπα
 Αν καθοριστεί η παράμετρος conditional_attribute επιλέγονται μόνο attributes αντικειμένων 
 των οποίων το conditional_attribute είναι ίσο με αυτό του dependence_json αντικειμένου*/
@@ -193,4 +195,17 @@ export function makeIntoExcel(custs){
    return kappa
   })
   return res
+}
+
+export function sendParameterRequest(tablename, datum){
+
+  let d = {}
+  d[tablename] = datum
+  let paroptions = {
+    method: "post",
+    url: "http://localhost:5000/add_parameters",
+    data : d
+  }
+
+  axios(paroptions).then((res)=> console.log(res)).catch((err)=> console.log(err))
 }

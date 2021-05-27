@@ -53,7 +53,7 @@ export default function MobilesInfo({ mobiless, spcode }) {
           <tr>
             <td>{element["mobile_number"]}</td>
             <td>
-              <button onClick={(e) => delMobile(e, element["mobile_number"], i)} className="btn-plus2 btn-minus">
+            <button onClick={(e) => delMobile(e, element["mobile_number"], i)} className="btn-plus2 btn-minus">
                 -
               </button>
             </td>
@@ -61,7 +61,7 @@ export default function MobilesInfo({ mobiless, spcode }) {
         );
       })}
       <tr>
-        <td>
+      <td>
           <input
             type="text"
             name="mobile_number"

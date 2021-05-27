@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { loadAreaChoice } from "../helperFunctions";
 import "../MyUserForm";
 
-
 export default function LocationsPage() {
   const [locs, setLocs] = useState([]);
   const [areaChoice, setAreaChoice] = useState({});

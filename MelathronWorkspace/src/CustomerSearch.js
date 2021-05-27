@@ -111,13 +111,17 @@ export default function CustomerSearch() {
       height: 600,
       width: 800,
       webPreferences: {
-        nodeIntegration: true
-      }
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
     });
     win2.setMenu(null);
     win2.webContents.openDevTools();
     if (window_type == "customer_search") {
       win2.loadURL("http://localhost:3000/customer_search_window");
+      win2.webContents.on('did-finish-load', () => {
+        win2.webContents.send('area-choice', areaChoice);
+    });
     } else if (window_type == "spcode_search") {
       win2.loadURL("http://localhost:3000/code_search_window");
     } else {
