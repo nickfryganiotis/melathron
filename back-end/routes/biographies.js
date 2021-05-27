@@ -41,6 +41,15 @@ router.post( '/delete_biography' , ( req , res ) => {
     } );
 } );
 
-
+router.post( '/update_biography' , ( req , res ) => {
+    const biography_name = req.body[ 'biography' ];
+    const instance_date = req.body[ 'instance_date' ];
+    const spcode = req.body[ 'spcode' ];
+    const query = "UPDATE biography_history SET biography_id = (SELECT biography_id FROM biography WHERE biography_name = ?) WHERE spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?"
+    connection.query( query , [ biography_name , spcode , instance_date ] , function ( error ) {
+        if ( error ) throw error;
+        res.send( "Biography updated successfully" );
+    } )
+} )
 
 module.exports = router;

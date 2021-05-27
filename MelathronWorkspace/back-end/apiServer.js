@@ -509,6 +509,12 @@ app.post("/customer_info",(req,res) =>{
     connection.query( query, spcode , function( error , results ) {
         if ( error ) throw error;
         output.push( results );
+    } );
+    
+    query = "SELECT * FROM biography_history WHERE spcode = ?";
+    connection.query( query , spcode , ( error , results ) => {
+        if ( error ) throw error;
+        output.push( results );
         res.send( output );
     } );
 });
@@ -1358,5 +1364,16 @@ app.post( '/delete_biography' , ( req , res ) => {
         if ( error ) throw  error;
         res.send( "Biography deleted successfully" );
     } );
+} );
+
+app.post( '/update_biography' , ( req , res ) => { 
+    const biography_name = req.body[ 'biography' ];
+    const instance_date = req.body[ 'instance_date' ];
+    const spcode = req.body[ 'spcode' ];
+    const query = "UPDATE biography_history SET biography_id = (SELECT biography_id FROM biography WHERE biography_name = ?) WHERE spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?"
+    connection.query( query , [ biography_name , spcode , instance_date ] , function ( error ) {
+        if ( error ) throw error;
+        res.send( "Biography updated successfully" );
+    } )    
 } );
 
