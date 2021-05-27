@@ -217,8 +217,6 @@ CREATE TABLE area (
     PRIMARY KEY(area_id)
 );
     
-INSERT INTO acc VALUES ("kserodivine", "1234", 1);
-
 DELIMITER //
 CREATE TRIGGER ins_loc BEFORE INSERT ON location
 FOR EACH ROW
@@ -369,7 +367,7 @@ BEGIN
     WHERE spcode = OLD.spcode;
 END//
 DELIMITER ;
-select * from sale;
+
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt' INTO TABLE apotelesma FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' (subapotelesma_name, apotelesma_name, continent_id);
@@ -383,3 +381,4 @@ INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Θεσσαλονίκης', 'Θεσσαλονίκη', 'Ωραιόκαστρο');
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
 INSERT INTO location (country_id, state, city) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα');
+INSERT INTO acc VALUES ("melathron", "melathron2021", 1);
