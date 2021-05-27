@@ -110,6 +110,9 @@ export default function CustomerSearch() {
     const win2 = new BrowserWindow({
       height: 600,
       width: 800,
+      webPreferences: {
+        nodeIntegration: true
+      }
     });
     win2.setMenu(null);
     win2.webContents.openDevTools();
