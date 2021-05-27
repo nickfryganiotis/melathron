@@ -22,7 +22,8 @@ export default function SubscriptionsPage() {
       }, []);
 
     return (
-      <div>
+      <div className="total-main-page2">
+        <div className="user-form2">
         <table>
           <tr>
             <th>ΚΩΔΙΚΟΣ</th>
@@ -39,6 +40,7 @@ export default function SubscriptionsPage() {
             );
           })}
         </table>
+      </div>
       </div>
     );
 

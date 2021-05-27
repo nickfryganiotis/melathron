@@ -283,3 +283,22 @@
 ::-webkit-file-upload-button:focus {
     outline: none;
 }
+
+.user-form2 table {
+    width: 80%;
+    margin-top: 4%;
+    border: 1px solid #c8dbe2;
+}
+
+.user-form2 table tr td {
+    text-align: center;
+    padding: 10px 0;
+    border: 1px solid #c8dbe2;
+}
+
+.user-form2 table tr th {
+    background-color: #c8dbe2;
+    border: 1px solid #c8dbe2;
+    text-align: center;
+    padding: 10px 0;
+}

@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { loadAreaChoice } from "../helperFunctions";
+import "../MyUserForm";
+
 
 export default function LocationsPage() {
   const [locs, setLocs] = useState([]);
@@ -24,25 +26,27 @@ export default function LocationsPage() {
   }, []);
 
     return (
-      <div>
-        <table>
-          <tr>
-            <th>ΚΩΔΙΚΟΣ</th>
-            <th>ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ</th>
-            <th>ΠΟΛΗ</th>
-            <th>ΠΕΡΙΟΧΗ</th>
-          </tr>
-          {locs.map((element) => {
-            return (
-              <tr>
-                <td>{element["location_id"]}</td>
-                <td>{element["state"]}</td>
-                <td>{element["city"]}</td>
-                <td>{element["area"]}</td>
-              </tr>
-            );
-          })}
-        </table>
+      <div className="total-main-page2">
+        <div className="user-form2">
+          <table>
+            <tr>
+              <th>ΚΩΔΙΚΟΣ</th>
+              <th>ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ</th>
+              <th>ΠΟΛΗ</th>
+              <th>ΠΕΡΙΟΧΗ</th>
+            </tr>
+            {locs.map((element) => {
+              return (
+                <tr>
+                  <td>{element["location_id"]}</td>
+                  <td>{element["state"]}</td>
+                  <td>{element["city"]}</td>
+                  <td>{element["area"]}</td>
+                </tr>
+              );
+            })}
+          </table>
+        </div>
       </div>
     );
 
