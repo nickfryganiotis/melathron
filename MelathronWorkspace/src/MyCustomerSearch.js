@@ -97,6 +97,10 @@ export default function MyCustomerSearch() {
     const win2 = new BrowserWindow({
       height: 600,
       width: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+      },
     });
     win2.setMenu(null);
     //win2.webContents.openDevTools();

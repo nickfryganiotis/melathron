@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 
 export default function SubscriptionsPage() {
     const [subscriptions, setSubscriptions] = useState([])
+    const [adminPriv, setAdminPriv] = useState(true);
 
     useEffect(() => {
         let area = JSON.parse(localStorage.getItem("area_choice"));
@@ -20,6 +21,36 @@ export default function SubscriptionsPage() {
             console.log(error);
           });
       }, []);
+
+      function createBrowserWindow(window_type) {
+        const BrowserWindow = window.require("electron").remote.BrowserWindow;
+        const remote = window.require('electron').remote;
+        const win2 = new BrowserWindow({
+          height: 200,
+          width: 400,
+          webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true,
+          },
+          parent: remote.getCurrentWindow(),
+          modal: true
+        });
+        win2.setMenu(null);
+        win2.webContents.openDevTools();
+        if (window_type == "add_subscription_category") {
+          win2.loadURL("http://localhost:3000/add_subscription_category_window");
+          win2.webContents.on("did-finish-load", () => {
+            win2.webContents.send("sundromes", subscriptions[0]['country_id']);
+          });
+        } else if (window_type == "add_subscription") {
+          win2.loadURL("http://localhost:3000/add_subscription_window");
+          win2.webContents.on("did-finish-load", () => {
+            win2.webContents.send("subsundromes", subscriptions);
+          });
+        } else {
+          console.log("ERROR");
+        }
+      }
 
     return (
       <div>
@@ -39,6 +70,8 @@ export default function SubscriptionsPage() {
             );
           })}
         </table>
+        {adminPriv && <button onClick={(e) => createBrowserWindow("add_subscription_category")}>ΝΕA ΚΑΤΗΓΟΡΙΑ ΣΥΝΔΡΟΜΗΣ</button>}
+        {adminPriv && <button onClick={(e) => createBrowserWindow("add_subscription")}>ΝΕΑ ΣΥΝΔΡΟΜΗ</button>}
       </div>
     );
 

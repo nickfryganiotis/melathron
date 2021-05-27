@@ -22,6 +22,15 @@ import ShippingMethodsPage from "./parametersComponents/ShippingMethodsPage"
 import SalesmanPage from "./parametersComponents/SalesmanPage";
 import Login from "./Login";
 import HomePage from "./HomePage";
+import AddAp from "./parametersComponents/apotelesmataComponents/AddAp";
+import AddSubAp from "./parametersComponents/apotelesmataComponents/AddSubAp";
+import AddCategory from "./parametersComponents/jobsComponents/AddCategory";
+import AddProfession from "./parametersComponents/jobsComponents/AddProfession";
+import AddSalesman from "./parametersComponents/salesmanComponents/AddSalesman";
+import AddShippingMethod from "./parametersComponents/shippingMethodsComponents.js/AddShippingMethod";
+import AddSubscriptionCategory from "./parametersComponents/subscriptionsComponents/AddSubscriptionCategory";
+import AddSubscription from "./parametersComponents/subscriptionsComponents/AddSubscription";
+import PelatesKartela from "./printComponents/PelatesKartela";
 
 function App() {
 
@@ -85,6 +94,33 @@ function App() {
           </Route>
           <Route exact path="/login">
             <Login />
+          </Route>
+          <Route exact path="/add_apotelesma_window">
+            <AddAp />
+          </Route>
+          <Route exact path="/add_subapotelesma_window">
+            <AddSubAp />
+          </Route>
+          <Route exact path="/add_category_window">
+            <AddCategory />
+          </Route>
+          <Route exact path="/add_profession_window">
+            <AddProfession />
+          </Route>
+          <Route exact path="/add_salesman_window">
+            <AddSalesman />
+          </Route>
+          <Route exact path="/add_shipping_method_window">
+            <AddShippingMethod />
+          </Route>
+          <Route exact path="/add_subscription_category_window">
+            <AddSubscriptionCategory />
+          </Route>
+          <Route exact path="/add_subscription_window">
+            <AddSubscription />
+          </Route>
+          <Route exact path="/pelates_kartela">
+            <PelatesKartela/>
           </Route>
         <Route path="*">
           <Error />

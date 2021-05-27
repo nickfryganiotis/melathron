@@ -15,7 +15,7 @@ export default function HomePage() {
         <Link to="/insert_sale"  className="link-to-btn">ΕΙΣΑΓΩΓΗ ΠΩΛΗΣΗΣ</Link>
       </div>
       <div className='center'>
-        <Link to="/search_customer"  className="link-to-btn">ΑΝΑΖΗΤΗΣΗ ΠΕΛΑΤΗ</Link>
+        <Link to="/cs"  className="link-to-btn">ΑΝΑΖΗΤΗΣΗ ΠΕΛΑΤΗ</Link>
       </div>
       <div className='center'>
         <Link to="/search_sale" className="link-to-btn">ΑΝΑΖΗΤΗΣΗ ΠΩΛΗΣΗΣ</Link>
