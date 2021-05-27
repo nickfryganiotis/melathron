@@ -68,8 +68,8 @@ export default function StaticSaleInfo({ssale, sale_id}){
       }
 
     return(
-    <div>
-    <table>
+    <div className='static-info'>
+    <table className='sales-info-table'>
       {Object.keys(sale).map((key) => { if (key == "order_date") return(        
       
         <tr onDoubleClick={(e) => {handleUpdate(e, key)}}>
@@ -84,7 +84,7 @@ export default function StaticSaleInfo({ssale, sale_id}){
       )
       })}
     </table>
-    <div>{newSale !== {} && <button onClick={submitChange}>ΑΛΛΑΓΗ</button>}</div>
+    <div className='static-info-button'>{newSale !== {} && <button onClick={submitChange} className="choice-btn3">ΑΛΛΑΓΗ</button>}</div>
     </div>
     )
 }
