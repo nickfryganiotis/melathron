@@ -127,6 +127,12 @@ function createWindow() {
             loadIfNotLoaded(win, "http://localhost:3000/salesman_page");
           },
         },
+        {
+          label: "Βιογραφίες",
+          click: function () {
+            loadIfNotLoaded(win, "http://localhost:3000/biographies_page");
+          },
+        },
       ],
     },
     {

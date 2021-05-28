@@ -1,37 +1,36 @@
 import React from "react";
 
-export default function PelatesToPrint({ customer }) {
+export default function PelatesToPrint({ customer, offsett }) {
   return (
-    <div>
+    <>
+    <div position="relative">
       <meta name="Author" content="Crystal Reports 14.0" />
       <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8" />
       <style
         dangerouslySetInnerHTML={{
           __html:
-            "   div {position:absolute; }\n   .fc1ie1uk6zcyk0-0 {font-size:14pt;color:#000000;font-family:Courier New;font-weight:normal;text-decoration:underline;}\n    .fc1ie1uk6zcyk0-1 {font-size:8pt;color:#000000;font-family:Courier New;font-weight:normal;}\n    .fc1ie1uk6zcyk0-2 {font-size:9pt;color:#000000;font-family:Courier New;font-weight:normal;}\n    .ad1ie1uk6zcyk0-0 {border-color:#000000;border-left-width:0;border-right-width:0;border-top-width:0;border-bottom-width:0;}\n",
+            "   .asdf {position:absolute; }\n   .fc1ie1uk6zcyk0-0 {font-size:14pt;color:#000000;font-family:Courier New;font-weight:normal;text-decoration:underline;}\n    .fc1ie1uk6zcyk0-1 {font-size:8pt;color:#000000;font-family:Courier New;font-weight:normal;}\n    .fc1ie1uk6zcyk0-2 {font-size:9pt;color:#000000;font-family:Courier New;font-weight:normal;}\n    .ad1ie1uk6zcyk0-0 {border-color:#000000;border-left-width:0;border-right-width:0;border-top-width:0;border-bottom-width:0;position:absolute;}\n",
         }}
-      />
+      /> 
       <div
-        style={{
           //3,
-          clip: "rect(0px,746px,34px,0px)",
-          top: "0px",
-          left: "0px",
-          width: "746px",
-          height: "34px",
-        }}
+          clip = "rect(0px,746px,34px,0px)"
+          top = "0px"
+          left = "0px"
+          width = "746px"
+          height = "34px"
+          position = "absolute"
       />
       <div
         className="ad1ie1uk6zcyk0-0"
         nowrap="true"
-        style={{
           //25,
-          top: "0px",
-          left: "4px",
-          width: "742px",
-          height: "25px",
-          clip: "rect(0px,742px,25px,0px)",
-        }}
+          top = "0px"
+          left = "4px"
+          width = "742px"
+          height = "25px"
+          clip = "rect(0px,742px,25px,0px)"
+          position = "absolute"
       >
         <table width="742px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -54,6 +53,7 @@ export default function PelatesToPrint({ customer }) {
           width: "746px",
           height: "288px",
         }}
+        position = "absolute"
       />
       <div
         className="ad1ie1uk6zcyk0-0"
@@ -65,6 +65,7 @@ export default function PelatesToPrint({ customer }) {
           width: "80px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="80px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -86,6 +87,7 @@ export default function PelatesToPrint({ customer }) {
           width: "80px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="80px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -107,6 +109,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -128,6 +131,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -149,6 +153,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -170,6 +175,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -191,6 +197,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -212,6 +219,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -233,6 +241,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -254,6 +263,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -275,6 +285,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -296,6 +307,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "15px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -317,6 +329,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "15px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -338,6 +351,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -359,6 +373,7 @@ export default function PelatesToPrint({ customer }) {
           width: "80px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="80px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -380,6 +395,7 @@ export default function PelatesToPrint({ customer }) {
           width: "80px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="80px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -401,6 +417,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -422,6 +439,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -443,6 +461,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -467,6 +486,7 @@ export default function PelatesToPrint({ customer }) {
           height: "14px",
           textAlign: "right",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -488,6 +508,7 @@ export default function PelatesToPrint({ customer }) {
           width: "80px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="80px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -500,6 +521,7 @@ export default function PelatesToPrint({ customer }) {
         </table>
       </div>
       <div
+        className = "asdf"
         style={{
           //3,
           clip: "rect(0px,746px,329px,0px)",
@@ -508,8 +530,10 @@ export default function PelatesToPrint({ customer }) {
           width: "746px",
           height: "329px",
         }}
+        position = "absolute"
       />
       <div
+      className = "asdf"
         style={{
           //3,
           clip: "rect(0px,746px,42px,0px)",
@@ -518,6 +542,7 @@ export default function PelatesToPrint({ customer }) {
           width: "746px",
           height: "42px",
         }}
+        position = "absolute"
       />
       <div
         className="ad1ie1uk6zcyk0-0"
@@ -529,6 +554,7 @@ export default function PelatesToPrint({ customer }) {
           width: "143px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <span className="fc1ie1uk6zcyk0-2">27/05/2021</span>
       </div>
@@ -542,6 +568,7 @@ export default function PelatesToPrint({ customer }) {
           width: "273px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <span className="fc1ie1uk6zcyk0-2">1</span>
       </div>
@@ -555,6 +582,7 @@ export default function PelatesToPrint({ customer }) {
           width: "169px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="169px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -576,6 +604,7 @@ export default function PelatesToPrint({ customer }) {
           width: "80px",
           height: "14px",
         }}
+        position = "absolute"
       >
         <table width="80px" border={0} cellPadding={0} cellSpacing={0}>
           <tbody>
@@ -588,6 +617,7 @@ export default function PelatesToPrint({ customer }) {
         </table>
       </div>
       <div
+      className = "asdf"
         id="pageNavigator"
         style={{
           top: "1075px",
@@ -596,9 +626,11 @@ export default function PelatesToPrint({ customer }) {
           fontWeight: 100,
           fontSize: "smaller",
         }}
+        position = "absolute"
       >
-        <hr />
       </div>
     </div>
+    <p style={{pageBreakAfter : "always"}}></p>
+    </>
   );
 }

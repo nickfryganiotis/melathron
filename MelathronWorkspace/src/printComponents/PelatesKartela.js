@@ -26,8 +26,15 @@ export default function PelatesKartela() {
 
   return (
     <>
-    {(customers.length !== 0) && customers.map((customer) => 
-    <PelatesToPrint customer={customer}/>)}
+    {(customers.length !== 0) && customers.map((customer, idx) => {
+      return(
+
+        <PelatesToPrint customer={customer} offsett={746*idx}/>
+
+      )
+    } 
+
+)}
     </>
   )
 }
