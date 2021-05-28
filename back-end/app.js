@@ -4,6 +4,7 @@ const cookieParser = require( 'cookie-parser' );
 const logger = require( 'morgan' );
 const signInRouter = require( './routes/sign-in' );
 const gettersRouter = require( './routes/getters' );
+const locationParametersRouter = require( './routes/location-parameters')
 const passport = require('passport');
 
 let app = express();
@@ -16,6 +17,7 @@ app.use( cookieParser() );
 app.use( passport.initialize() );
 app.use( '/' , signInRouter );
 app.use( '/' , gettersRouter );
+app.use( '/' , locationParametersRouter );
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
