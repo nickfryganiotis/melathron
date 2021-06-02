@@ -202,33 +202,39 @@ CREATE TABLE acc (
 CREATE TABLE state (
 	state_id INT AUTO_INCREMENT,
     state_name VARCHAR(100),
-    PRIMARY KEY(state_id)
+    country_id INT,
+    PRIMARY KEY(state_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
 
 CREATE TABLE city (
 	city_id INT AUTO_INCREMENT,
     city_name VARCHAR(100),
-    PRIMARY KEY(city_id)
+	country_id INT,
+    PRIMARY KEY(city_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
 
 CREATE TABLE area (
 	area_id INT AUTO_INCREMENT,
     area_name VARCHAR(100),
-    PRIMARY KEY(area_id)
+	country_id INT,
+    PRIMARY KEY(area_id),
+    FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
     
 DELIMITER //
 CREATE TRIGGER ins_loc BEFORE INSERT ON location
 FOR EACH ROW
 BEGIN
-    IF NEW.state IS NOT NULL THEN
-    INSERT INTO state(state_name) VALUES (NEW.state);
+    IF NEW.state IS NOT NULL AND (SELECT state_name FROM state WHERE state_name = NEW.state) IS NULL THEN
+    INSERT INTO state(state_name, country_id) VALUES (NEW.state, NEW.country_id);
     END IF;
-	IF NEW.city IS NOT NULL THEN
-    INSERT INTO city(city_name) VALUES (NEW.city);
+	IF NEW.city IS NOT NULL AND (SELECT city_name FROM city WHERE city_name = NEW.city) IS NULL THEN
+    INSERT INTO city(city_name, country_id) VALUES (NEW.city, NEW.country_id);
     END IF;
-	IF NEW.area IS NOT NULL THEN
-    INSERT INTO area(area_name) VALUES (NEW.area);
+	IF NEW.area IS NOT NULL AND (SELECT area_name FROM area WHERE area_name = NEW.area) IS NULL THEN
+    INSERT INTO area(area_name, country_id) VALUES (NEW.area, NEW.country_id);
     END IF;
 END//
 

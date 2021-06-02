@@ -13,8 +13,10 @@ export default function MultiCompSale({ x, fun, c }) {
   const [salesman, setSalesman] = useState([]);
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
-    loadAreaChoice(setAreaChoice);
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+    //loadAreaChoice(setAreaChoice);
+    setAreaChoice(area)
     let url1 = "http://localhost:5000/shipping_methods";
     let subscriptions_options = {
       method: "post",

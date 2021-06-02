@@ -10,7 +10,8 @@ export default function ApHistory({ apHistory, spcode }) {
   const [status, setStatus] = useState(-1)
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
     setNewAp({...newAp , continent_id : area["continent_id"], spcode:spcode})
     let apotelesmata_options = {
       method: "post",

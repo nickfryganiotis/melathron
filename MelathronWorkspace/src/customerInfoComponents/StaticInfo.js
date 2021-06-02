@@ -30,7 +30,8 @@ export default function StaticInfo({ customer }) {
   const [area, setArea] = useState({});
 
   useEffect(()=>{
-    let ar = JSON.parse(localStorage.getItem("area_choice"));
+    //let ar = JSON.parse(localStorage.getItem("area_choice"));
+    let ar = window.require("electron").remote.getGlobal("contexts").areaChoice
     setArea({...ar})
     setCust({...customer})
   }, [customer])

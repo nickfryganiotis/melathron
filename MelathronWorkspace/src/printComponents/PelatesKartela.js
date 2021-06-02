@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import PelatesToPrint from "./PelatesToPrint";
+import {useReactToPrint} from "react-to-print"
+//import "./pelateskartela.css"
 
 export default function PelatesKartela() {
   const [customers, setCustomers] = useState([]);
@@ -24,17 +26,27 @@ export default function PelatesKartela() {
     }
   });
 
+  const componentRef = useRef();
+  const printCustomers = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   return (
     <>
+    <button onClick={printCustomers}>
+      ΕΚΤΥΠΩΣΗ
+    </button>
+    <div ref={componentRef}>
     {(customers.length !== 0) && customers.map((customer, idx) => {
       return(
 
-        <PelatesToPrint customer={customer} offsett={746*idx}/>
+        <PelatesToPrint customer={customer}/>
 
       )
     } 
 
 )}
+</div>
     </>
   )
 }

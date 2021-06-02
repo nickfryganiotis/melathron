@@ -43,6 +43,7 @@ export default function CustomerInfo({ sp }) {
       .catch((error) => {
         console.log(error);
       });
+      setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
   }, []);
 
   function delCustomer(){

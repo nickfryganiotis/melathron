@@ -18,6 +18,7 @@ export default function CustomerSearchWindow() {
   const ipc = window.require('electron').ipcRenderer;
   ipc.on('area-choice', (event, message) => {
     setAreaChoice(message);
+    setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
   })
 
   const remote = window.require('electron').remote;
@@ -29,7 +30,8 @@ export default function CustomerSearchWindow() {
       webPreferences: {
         nodeIntegration: true,
         enableRemoteModule: true,
-        webSecurity: false
+        webSecurity: false,
+        contextIsolation: false
       },
     });
     win2.setMenu(null);
@@ -85,6 +87,8 @@ export default function CustomerSearchWindow() {
       .catch((error) => {
         console.log(error);
       });
+    let y = localStorage.getItem("is-admin")
+    setAdminPriv(y)
   }, []);
 
   function massDelete(){
@@ -101,7 +105,7 @@ export default function CustomerSearchWindow() {
         data: {"spcodes" : x}
       }
   
-      axios(massdeloptions).then((res) => console.log(res)).catch((err) => console.log(err))
+      axios(massdeloptions).then((res) => alert(res)).catch((err) => console.log(err))
       alert("Οι πελάτες διαγράφηκαν επιτυχώς.")
       remote.getCurrentWindow().close()
     } else {
@@ -138,7 +142,7 @@ export default function CustomerSearchWindow() {
         }}
       />
       <div>
-      <SalesmanAssignment customers={results} />
+      {adminPriv && <SalesmanAssignment customers={results} />}
       </div>
       <div>
       <CustomerToFile customers={results} />

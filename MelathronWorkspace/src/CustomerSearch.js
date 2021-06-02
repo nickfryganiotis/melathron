@@ -33,8 +33,10 @@ export default function CustomerSearch() {
   };
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
-    loadAreaChoice(setAreaChoice);
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
+    //loadAreaChoice(setAreaChoice);
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+    setAreaChoice(area)
     setCustomerOptions({
       ...customerOptions,
       continent_id: area["continent_id"],
@@ -113,6 +115,7 @@ export default function CustomerSearch() {
       webPreferences: {
         nodeIntegration: true,
         enableRemoteModule: true,
+        contextIsolation: false
       },
     });
     win2.setMenu(null);

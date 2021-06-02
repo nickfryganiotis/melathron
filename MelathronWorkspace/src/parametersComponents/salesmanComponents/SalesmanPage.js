@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 
 export default function SalesmanPage() {
     const [salesman, setSalesman] = useState([])
-    const [adminPriv, setAdminPriv] = useState(true);
+    const [adminPriv, setAdminPriv] = useState(false);
 
     useEffect(() => {
+        setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
         axios.get("http://localhost:5000/salesman")
           .then((res) => {
             setSalesman(res.data);

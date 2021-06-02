@@ -18,8 +18,10 @@ export default function MySaleForm() {
   }, []);*/
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem('area_choice'))
-    loadAreaChoice(setAreaChoice)
+    //let area = JSON.parse(localStorage.getItem('area_choice'))
+    //loadAreaChoice(setAreaChoice)
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+    setAreaChoice(area)
     setSale({...sale, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
     let url1 = "http://localhost:5000/shipping_methods";
     let subscriptions_options = {

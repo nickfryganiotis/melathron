@@ -7,6 +7,7 @@ export default function LocationsPage() {
   const [adminPriv, setAdminPriv] = useState(true);
 
   useEffect(() => {
+    setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
     axios
     .all([
       axios.get("http://localhost:5000/categories"),

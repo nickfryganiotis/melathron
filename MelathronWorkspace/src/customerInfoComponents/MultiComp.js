@@ -7,7 +7,8 @@ export default function MultiComp({ x, fun, c }) {
   const [professions, setProfessions] = useState([]);
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
     let locations_options = {
       method: "post",
       url: "http://localhost:5000/locations",

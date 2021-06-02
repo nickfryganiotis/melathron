@@ -5,10 +5,12 @@ import { makeToUnique, arrayToOption } from "./helperFunctions";
 import { useHistory } from "react-router-dom";
 const ipc = window.require('electron').ipcRenderer
 
+
 export default function AreaChoice() {
   const [continents, setContinents] = useState([]);
   const [countries, setCountries] = useState([]);
   const [choice, setChoice] = useState({});
+
 
   const history = useHistory();
 
@@ -41,61 +43,64 @@ export default function AreaChoice() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem('area_choice', JSON.stringify(choice) )
-    //console.log(JSON.parse(localStorage.getItem('area_choice')))
-    ipc.send('authenticated', true)
+    //localStorage.setItem("area_choice", JSON.stringify(choice));
+    window.require("electron").remote.getGlobal("contexts").areaChoice = choice
     history.push("/");
+    ipc.send('authenticated', true)
   };
- 
+
   return (
-    <div className='total-main-page'>
+    <div className="total-main-page">
       <div className="user-form-div">
         <div className="user-form-image"></div>
-    <div className="user-form">
-      <h1>Επιλέξτε Περιοχή Εργασίας</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="continent_name">Ήπειρος</label>
-          <select className='user-form-select'
-            name="continent_name"
-            id="continent_name"
-            onChange={handleContinentChange}
-            required
-          >
-            <option></option>
-            {makeToUnique(continents, "continent_name").map(arrayToOption)}
-          </select>
-        </div>
+        <div className="user-form">
+          <h1>Επιλέξτε Περιοχή Εργασίας</h1>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="continent_name">Ήπειρος</label>
+              <select
+                className="user-form-select"
+                name="continent_name"
+                id="continent_name"
+                onChange={handleContinentChange}
+                required
+              >
+                <option></option>
+                {makeToUnique(continents, "continent_name").map(arrayToOption)}
+              </select>
+            </div>
 
-        <div>
-          <label htmlFor="country">Χώρα</label>
-          <select className='user-form-select'
-            type='text'
-            name="country"
-            id="country"
-            onChange={handleCountryChange}
-            required
-          >
-            <option></option>
-            {makeToUnique(
-              countries,
-              "country_name",
-              choice,
-              "continent_id"
-            ).map(arrayToOption)}
-          </select>
+            <div>
+              <label htmlFor="country">Χώρα</label>
+              <select
+                className="user-form-select"
+                type="text"
+                name="country"
+                id="country"
+                onChange={handleCountryChange}
+                required
+              >
+                <option></option>
+                {makeToUnique(
+                  countries,
+                  "country_name",
+                  choice,
+                  "continent_id"
+                ).map(arrayToOption)}
+              </select>
+            </div>
+            <br></br>
+            <br></br>
+            <br></br>
+            <div className="center">
+              <button type="submit" className="btn btn-danger choice-btn">
+                Επιλογή
+              </button>
+            </div>
+          </form>
         </div>
-        <br></br>
-        <br></br>
-        <br></br>
-        <div className='center'>
-          <button type="submit" className="btn btn-danger choice-btn">
-            Επιλογή
-          </button>
-        </div>
-      </form>
-      </div>
       </div>
     </div>
   );
 }
+

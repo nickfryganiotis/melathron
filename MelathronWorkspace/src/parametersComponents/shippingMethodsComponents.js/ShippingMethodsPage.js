@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 
 export default function ShippingMethodsPage() {
     const [shippingMethods, setShippingMethods] = useState([])
-    const [adminPriv, setAdminPriv] = useState(true);
+    const [adminPriv, setAdminPriv] = useState(false);
 
     useEffect(() => {
+      setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
         axios.get("http://localhost:5000/shipping_methods")
           .then((res) => {
             setShippingMethods(res.data);

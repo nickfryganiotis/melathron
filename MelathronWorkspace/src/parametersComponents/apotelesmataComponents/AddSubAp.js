@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {makeToUnique, arrayToOption, sendParameterRequest} from "../../helperFunctions"
 
-export default function AddAp() {
+export default function AddSubAp() {
   const [apotelesmata, setApotelesmata] = useState([]);
   const [newsubap, setNewsubap] = useState("");
   const ipc = window.require("electron").ipcRenderer;

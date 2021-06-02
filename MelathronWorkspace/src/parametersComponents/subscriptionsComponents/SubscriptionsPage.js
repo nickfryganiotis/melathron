@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 
 export default function SubscriptionsPage() {
     const [subscriptions, setSubscriptions] = useState([])
-    const [adminPriv, setAdminPriv] = useState(true);
+    const [adminPriv, setAdminPriv] = useState(false);
 
     useEffect(() => {
-        let area = JSON.parse(localStorage.getItem("area_choice"));
+        //let area = JSON.parse(localStorage.getItem("area_choice"));
+        let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+        setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
         //loadAreaChoice(setAreaChoice);
         let subscriptions_options = {
           method: "post",

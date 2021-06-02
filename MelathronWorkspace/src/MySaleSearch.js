@@ -31,8 +31,10 @@ export default function MySaleSearch() {
   }, []);*/
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
-    loadAreaChoice(setAreaChoice);
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
+    //loadAreaChoice(setAreaChoice);
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+    setAreaChoice(area)
     //setCustomerOptions({...customerOptions, 'continent_id': area['continent_id'], 'country_id': area['country_id'] })
     let url1 = "http://localhost:5000/salesman";
     let subscriptions_options = {

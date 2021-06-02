@@ -8,6 +8,11 @@ function loadIfNotLoaded(currentWindow, page) {
 
 let win;
 
+global.contexts = {
+  isAdmin: false,
+  areaChoice: {}
+};
+
 function createWindow() {
   win = new BrowserWindow({
     width: 800,
@@ -15,6 +20,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
+      contextIsolation: false
     },
   });
   win.webContents.openDevTools();
@@ -57,7 +63,7 @@ function createWindow() {
         {
           label: "Αναζήτηση Πελατών",
           click: function () {
-            loadIfNotLoaded(win, "http://localhost:3000/cs");
+            loadIfNotLoaded(win, "http://localhost:3000/search_customer");
           },
         },
         {

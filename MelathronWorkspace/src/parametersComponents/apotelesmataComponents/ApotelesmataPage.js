@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 
 export default function ApotelesmataPage() {
   const [apotelesmata, setApotelesmata] = useState([]);
-  const [adminPriv, setAdminPriv] = useState(true);
+  const [adminPriv, setAdminPriv] = useState(false);
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
     //loadAreaChoice(setAreaChoice);
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+    setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
     let apotelesmata_options = {
       method: "post",
       url: "http://localhost:5000/apotelesmata",

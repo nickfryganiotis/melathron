@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 
 export default function BiographiesPage() {
     const [biography, setBiography] = useState([])
-    const [adminPriv, setAdminPriv] = useState(true);
+    const [adminPriv, setAdminPriv] = useState(false);
 
     useEffect(() => {
+        setAdminPriv(window.require("electron").remote.getGlobal("contexts").isAdmin)
         axios.get("http://localhost:5000/biographies")
           .then((res) => {
             setBiography(res.data);

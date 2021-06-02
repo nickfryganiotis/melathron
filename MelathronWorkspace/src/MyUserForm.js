@@ -4,6 +4,7 @@ import axios from "axios";
 import { makeToUnique, arrayToOption, loadAreaChoice } from "./helperFunctions";
 import { useRef } from "react";
 
+
 export default function MyUserForm() {
   const [phoneList, setPhoneList] = useState([{ phone_number: "" }]);
   const [mobileList, setMobileList] = useState([{ mobile_number: "" }]);
@@ -16,13 +17,12 @@ export default function MyUserForm() {
   const [phones, setPhones] = useState({});
   const [areaChoice, setAreaChoice] = useState({});
   const apref = useRef(null);
-  /*useEffect(() => {
-    loadAreaChoice(setAreaChoice);
-  }, []);*/
 
   useEffect(() => {
-    let area = JSON.parse(localStorage.getItem("area_choice"));
-    loadAreaChoice(setAreaChoice);
+    //let area = JSON.parse(localStorage.getItem("area_choice"));
+    //loadAreaChoice(setAreaChoice);
+    let area = window.require("electron").remote.getGlobal("contexts").areaChoice
+    setAreaChoice(area)
     setCustomer({
       ...customer,
       continent_id: area["continent_id"],
@@ -101,7 +101,14 @@ export default function MyUserForm() {
 
   const handleCustomerChange = (e) => {
     const { value, name } = e.target;
+    if (value == ""){
+      let x = {...customer}
+      delete x[name]
+      setCustomer(x)
+    }
+    else{
     setCustomer({ ...customer, [name]: value });
+    }
   };
 
   const handleSubmit = (e) => {

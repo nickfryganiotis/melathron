@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-//import "./Login.css";
+import React, { useEffect, useState} from "react";
 import "./MyForm.css";
 import axios from "axios";
 import {useHistory} from "react-router-dom"
 const ipc = window.require('electron').ipcRenderer
+const remote = window.require('electron').remote
 
 export default function Login() {
+
   const [account, setAccount] = useState({
     username: "",
     password: "",
   });
+
   const hist = useHistory();
   function tryLogin(acc) {
     let login_options = {
@@ -18,8 +20,24 @@ export default function Login() {
       data: account,
     };
     axios(login_options).then((response) => {
-      console.log(response)
-      hist.push("/area_choice")
+      if (response.status === 200){
+        alert("Η ΕΙΣΟΔΟΣ ΗΤΑΝ ΕΠΙΤΥΧΗΣ!")
+        hist.push("/area_choice")
+        remote.getGlobal("contexts").isAdmin = (response.data.user.admin_priv === 1)
+      }
+      else{
+        alert(response)
+      }
+
+    })
+    .catch((error) => {
+      if (error.response.status === 401){
+        alert("ΛΑΘΟΣ ΟΝΟΜΑ ΧΡΗΣΤΗ Ή ΚΩΔΙΚΟΣ")
+      }
+      else{
+        alert("ΣΦΑΛΜΑ ΣΥΣΤΗΜΑΤΟΣ")
+      }
+
     });
   }
 
@@ -38,6 +56,7 @@ export default function Login() {
     console.log(account);
 
     tryLogin(acc);
+    e.target.reset();
   };
 
   return (

@@ -24,7 +24,8 @@ export default function StaticSaleInfo({ssale, sale_id}){
 
     useEffect( () => {
         setSale({...ssale})
-        let ar = JSON.parse(localStorage.getItem("area_choice"));
+        //let ar = JSON.parse(localStorage.getItem("area_choice"));
+        let ar = window.require("electron").remote.getGlobal("contexts").areaChoice
         setArea({...ar})
     }, [ssale])
 
