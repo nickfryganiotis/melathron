@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import PelatesToPrint from "./PelatesToPrint";
+import LabelsToPrint from "./LabelsToPrint";
 import {useReactToPrint} from "react-to-print"
 //import "./pelateskartela.css"
 
@@ -40,7 +41,7 @@ export default function PelatesKartela() {
     {(customers.length !== 0) && customers.map((customer, idx) => {
       return(
 
-        <PelatesToPrint customer={customer}/>
+        <LabelsToPrint customer={customer}/>
 
       )
     } 
