@@ -10,6 +10,11 @@
   font-family: "Courier New";
 }
 
+.bigr {
+  font-size: 10pt !important;
+  white-space: pre-wrap;
+}
+
 .headr {
   page-break-before: always;
   text-decoration: underline;

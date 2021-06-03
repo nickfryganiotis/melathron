@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "./pelateskartela.css";
+import axios from 'axios'
 export default function PelatesToPrint({spcodes}) {
   const [customers, setCustomers] = useState([]);
-  const [areachoice, setAreachoice] = useState({});
+
 
   useEffect(() =>{
-    setCustomers(spcodes)
-    let x = window.require("electron").remote.getGlobal("contexts").areaChoice
-    setAreachoice(x)
+    spcodes.forEach((spcode)=>{
+      let lbl_options = {
+        method: "post",
+        url: "http://localhost:5000/labels",
+        data: {spcode : spcode}
+      }
+      axios(lbl_options).then((res)=>{
+        setCustomers([...customers, res.data[0]])
+      }).catch((error) => console.log(error))
+    })
+    console.log(customers)
   } , [])
 
   const splitArray = (array, n) => {
@@ -23,26 +32,26 @@ export default function PelatesToPrint({spcodes}) {
     console.log(resarray)
     return resarray
   }
-if (spcodes.length !== 0){
+if (customers.length !== 0){
   return (
     <div className='all'>
-      {splitArray(spcodes, 3).map((customer3) => {
+      {splitArray(customers, 3).map((customer3) => {
         return(
           <div className='row cus'>
             {customer3.map((customer) => {
               return(
                 <div className='column'>
-                  <div>
+                  <div className="bigr">
                     {customer["company_name"]}
                     </div>
-                <div>
+                <div className="bigr">
                   {customer["address_street"]}{" "}{customer["address_number"]}
                 </div>
-                <div>
-                  {customer["address_postal_code"]}&nbsp;{customer["city"]}
+                <div className="bigr">
+                  {customer["address_postal_code"]}{"   "}{customer["city"]}
                 </div>
-                <div>
-                  {areachoice["country_id"]}
+                <div className="bigr">
+                  {customer["country_name"]}
                 </div>
               </div>
               )
@@ -53,6 +62,8 @@ if (spcodes.length !== 0){
     </div>
   )
     }
-
+else{
+  return null
+}
 
 }
