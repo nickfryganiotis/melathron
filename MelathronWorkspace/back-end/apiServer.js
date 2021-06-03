@@ -1400,3 +1400,21 @@ app.post( '/location_parameters' , ( req , res ) => {
     } );
 } );
 
+app.post( '/labels' , ( req , res ) => {
+    const spcode = req.body[ 'spcode' ];
+    let query = `SELECT c.company_name, c.address_street, c.address_number, c.address_postal_code, loc.city, countr.country_name
+                 FROM (SELECT company_name, address_street, address_number, address_postal_code, location_id, country_id
+                 FROM customer
+                 WHERE customer.spcode = ?) as c
+                 LEFT OUTER JOIN
+                 (SELECT city, location_id FROM location) as loc
+                 ON loc.location_id = c.location_id
+                 LEFT OUTER JOIN
+                 (SELECT country_name, country_id FROM country) as countr
+                 ON countr.country_id = c.country_id`
+    connection.query( query , spcode   , ( error , result ) => {
+            if ( error ) throw error;
+            res.send( result );    
+    } );
+} );
+
