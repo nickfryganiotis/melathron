@@ -167,7 +167,7 @@ app.post("/send",(req,res) => {
     else {
         query += " and area is NULL)";
     }
-               
+
     connection.query(query, input,function (error, results) {
       if (error) throw error;
       auxs['spcode'] = results.insertId;
@@ -356,7 +356,7 @@ app.post("/search_customer",(req,res) => {
 
     const customer = req.body
     var input = [];
-    var prefix_query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name"; 
+    var prefix_query = "SELECT cust.spcode, cust.last_name, cust.first_name, cust.company_name, cust.website, cust.email, cust.address_street, cust.address_number, cust.address_postal_code "; 
     
     var query = " SELECT *\n FROM customer\n";
     var parameters = false;
@@ -1310,6 +1310,7 @@ app.post( '/delete_customers' , function( req , res ) {
         input.push( spcodes[ i ][ 'spcode' ] );
     }
     query += ")";
+    console.log(input)
     connection.query( query , input , function( error ) {
         if( error ) throw error;
         res.send( "Customers were deleted successfully" );

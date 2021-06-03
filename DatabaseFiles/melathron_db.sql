@@ -68,7 +68,7 @@ CREATE TABLE customer (
     address_number VARCHAR(20),
     address_postal_code VARCHAR(20),
     fax VARCHAR(20),
-    comments VARCHAR(200),
+    comments VARCHAR(500),
     category_id INT,
     profession_id INT,
     apotelesma_id INT,
@@ -388,3 +388,4 @@ INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id
 INSERT INTO location (country_id, state, city, area) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Η.Π.Α.'), 'Washington', 'Seattle', 'Northgate');
 INSERT INTO location (country_id, state, city) VALUES ( (SELECT country_id FROM country WHERE country_name LIKE 'Ελλάδα'), 'Αττικής', 'Αθήνα');
 INSERT INTO acc VALUES ("melathron", "melathron2021", 1);
+INSERT INTO acc VALUES ("giannis_papag", "777777", 0);

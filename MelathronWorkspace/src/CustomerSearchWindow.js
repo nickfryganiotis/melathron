@@ -22,7 +22,7 @@ export default function CustomerSearchWindow() {
   })
 
   const remote = window.require('electron').remote;
-  const previewPrint = () => {
+  const previewPrint = (typ) => {
     const BrowserWindow = window.require("electron").remote.BrowserWindow;
     const win2 = new BrowserWindow({
       height: 600,
@@ -36,11 +36,17 @@ export default function CustomerSearchWindow() {
     });
     win2.setMenu(null);
     win2.webContents.openDevTools();
-    win2.loadURL('http://localhost:3000/pelates_kartela');
+    if (typ === "pelates"){win2.loadURL('http://localhost:3000/pelates_kartela');
     win2.webContents.on('did-finish-load', () => {
-      win2.webContents.send('spcodes-to-print', results.map((customer) => customer["spcode"]));
-  });
+      win2.webContents.send('spcodes-to-print', results.map((customer) => customer["spcode"]));  });
+    }
+    else if (typ === "etiketes"){
+      win2.loadURL('http://localhost:3000/etiketes');
+      win2.webContents.on('did-finish-load', () => {
+      win2.webContents.send('etiketes-to-print', results.map((customer) => customer["spcode"]));  });
+    }
   }
+
   /*const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -116,6 +122,7 @@ export default function CustomerSearchWindow() {
 
   return (
     <div>
+    <div>
       <ReactTable
         data={results}
         columns={attributes}
@@ -141,16 +148,24 @@ export default function CustomerSearchWindow() {
           );
         }}
       />
-      <div>
-      {adminPriv && <SalesmanAssignment customers={results} />}
       </div>
       <div>
-      <CustomerToFile customers={results} />
+        <div>
+          {adminPriv && <SalesmanAssignment customers={results} />}
+        </div>
+        <div >
+          <CustomerToFile customers={results} />
+        </div>
+        <div>
+          <button onClick={() => previewPrint("pelates")}>ΕΚΤΥΠΩΣΗ ΚΑΡΤΕΛΩΝ</button>
+        </div>
+        <div>
+          <button onClick={() => previewPrint("etiketes")}>ΕΚΤΥΠΩΣΗ ΕΤΙΚΕΤΩΝ</button>
+        <div>
+          {adminPriv && <button onClick={massDelete}>ΜΑΖΙΚΗ ΔΙΑΓΡΑΦΗ</button>}
+        </div>
       </div>
-      <div>
-      <button onClick={previewPrint}>ΕΚΤΥΠΩΣΗ ΚΑΡΤΕΛΩΝ</button>
-      {adminPriv && <button onClick={massDelete}>ΜΑΖΙΚΗ ΔΙΑΓΡΑΦΗ</button>}
-      </div>
+    </div>
     </div>
   );
 }

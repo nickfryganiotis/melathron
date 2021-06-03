@@ -1,11 +1,31 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 import "./pelateskartela.css";
-export default function PelatesToPrint({ customer }) {
+export default function PelatesToPrint({sp}) {
   const [cust, setCust] = useState({});
+  const [sales, setSales] = useState([]);
+  const [phones, setPhones] = useState([]);
+  const [mobiles, setMobiles] = useState([]);
+  const [salesmen, setSalesmen] = useState([]);
+
   useEffect(() => {
-    setCust(customer[0]);
-    console.log(customer);
+    let url = "http://localhost:5000/customer_info";
+    let opts = {
+      method: "post",
+      url: url,
+      data: { spcode: sp },
+    };
+    axios(opts)
+      .then((response) => {
+        setCust(response.data[0][0]);
+        setSalesmen(response.data[2]);
+        setSales(response.data[3]);
+        setPhones(response.data[4]);
+        setMobiles(response.data[5]);
+      })
+      .catch((error) => console.log(error));
   }, []);
+
 
   return (
     <div className='all'>
@@ -69,7 +89,10 @@ export default function PelatesToPrint({ customer }) {
           Πωλητής: 
         </div>
         <div className='field'>
-          {cust["salesman"]}
+        {salesmen.map((salmn, i) => {
+            if (i == salesmen.length-1) return salmn["salesman_name"]
+            else if (typeof salmn["salesman_name"] !== "undefined") return salmn["salesman_name"] + " "
+            })}
         </div>
       </div>
 
@@ -78,7 +101,10 @@ export default function PelatesToPrint({ customer }) {
           Τηλέφωνα: 
         </div>
         <div className='field'>
-          {cust["PHONES"]}
+        {phones.map((salmn, i) => {
+            if (i == phones.length-1) return salmn["phone_number"]
+            else if (typeof salmn["phone_number"] !== "undefined") return salmn["phone_number"] + " "
+            })}
         </div>
       </div>
 
@@ -87,7 +113,10 @@ export default function PelatesToPrint({ customer }) {
           Κινητα: 
         </div>
         <div className='field'>
-          {cust["PHONES"]}
+        {mobiles.map((salmn, i) => {
+            if (i == mobiles.length-1) return salmn["mobile_number"]
+            else if (typeof salmn["mobile_number"] !== "undefined") return salmn["mobile_number"] + " "
+            })}
         </div>
       </div>
 
@@ -112,7 +141,7 @@ export default function PelatesToPrint({ customer }) {
           Διεύθυνση: 
         </div>
         <div className='field'>
-          {cust["address_street"]}{" " + cust["address_number"]}
+          {cust["address_street"]}{" "}{cust["address_number"]}
         </div>
       </div>
 
@@ -151,8 +180,7 @@ export default function PelatesToPrint({ customer }) {
           Παρατηρήσεις: 
         </div>
         <div className='field'>
-          {cust["comments"]}dfhhhssfffffffffffffffffffff fffffffffffffdfhhhssfffffffffffffffffdfhhhssfff fffffffffffffdfhhhssfffffffffffffffffdfhhhssfff
-          fffffffffffffdfhhhssfffffffffffffffffdfhhhssfff fffffffffffffffffffffffffffffffdfhhhssffffffffffffffffffffffffffffffffffdfhhhssff 
+          {cust["comments"]} 
         </div>
       </div>
 
@@ -171,21 +199,26 @@ export default function PelatesToPrint({ customer }) {
             ΠΟΣΟ
             </div>
         </div>
+            {sales.map((sale) => {
+              return (
+                <div className='row'>
+                <div className='f1 '>
+                  {sale["salesman_name"]}
+                </div>
+                <div className='f2 '>
+                  {sale["order_date"]}
+                  </div>
+                  <div className='f3 '>
+                  {" "}
+                  </div>
+                  <div className='f4 '>
+                  {sale["total_amount"]}
+                  </div>
+              </div>
+              )
+            })}
 
-        <div className='row'>
-          <div className='f1 '>
-            ΠΑΛΑΙΟΙ ΣΥΝΕΡΓΑΤΕΣgf
-          </div>
-          <div className='f2 '>
-            ΑΠΟfg
-            </div>
-            <div className='f3 '>
-            ΣΧΟΛΙΑfg
-            </div>
-            <div className='f4 '>
-            ΠΟΣΟfg
-            </div>
-        </div>
+
       </div>
       </div>
 
@@ -195,7 +228,7 @@ export default function PelatesToPrint({ customer }) {
           Ημ. Εκτύπωσης:
         </div>
         <div className='field2'>
-          13/05/2021
+          {new Date().toJSON().slice(0,10).replace(/-/g,'/')}
         </div>
         <div className='title'>
           Ημ. Αλλαγής:

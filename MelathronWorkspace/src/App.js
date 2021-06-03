@@ -33,7 +33,7 @@ import AddBiography from "./parametersComponents/biographiesComponents/AddBiogra
 import AddState from "./parametersComponents/locationsComponents/AddState";
 import AddCity from "./parametersComponents/locationsComponents/AddCity";
 import AddArea from "./parametersComponents/locationsComponents/AddArea";
-
+import LabelsKartela from "./printComponents/LabelsKartela"
 
 
 export default function App() {
@@ -132,6 +132,9 @@ export default function App() {
             </Route>
             <Route exact path="/pelates_kartela">
               <PelatesKartela />
+            </Route>
+            <Route exact path="/etiketes">
+              <LabelsKartela />
             </Route>
             <Route exact path="/customer_search_window">
               <CustomerSearchWindow />
