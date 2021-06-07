@@ -446,7 +446,7 @@ app.post("/search_customer",(req,res) => {
                                 
     parameters = false;
     if( customer[ 'subscription_category' ] || customer[ 'subscription_name' ]){
-        query += "INNER JOIN (\n SELECT sale.spcode as spcode\n FROM sale, subscription s\n WHERE sale.subscription_id = s.subscription_id"; 
+        query += "INNER JOIN (\n SELECT sale.spcode as spcode\n FROM sale, subscription s\n WHERE sale.subscription_id = s.subscription_id\n"; 
         if ( customer['subscription_category'] ) { query += "AND("
                                                    const subscription_categories = customer['subscription_category'];                                    
                                                    for ( i=0; i< subscription_categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "s.subscription_category = ?"; input.push(subscription_categories[i]['value']);  }
@@ -459,11 +459,11 @@ app.post("/search_customer",(req,res) => {
     }
 
     parameters = false;
-    if ( customer[ 'phone_number ']) { query += "INNER JOIN (\n SELECT *\n FROM phone\n WHERE phone_number LIKE ?\n"; 
+    if ( customer[ 'phone_number']) { query += "INNER JOIN (\n SELECT *\n FROM phone\n WHERE phone_number LIKE ?\n"; 
                                        input.push( customer['phone_number'] + '%' ); 
-                                       quey += ") AS pho ON cust.spcode = pho.spcode\n" }
+                                       query += ") AS pho ON cust.spcode = pho.spcode\n" }
     
-    if ( customer[ 'mobile_number ']) { query += "INNER JOIN (\n SELECT *\n FROM mobile\n WHERE mobile_number LIKE ?\n"; 
+    if ( customer[ 'mobile_number']) { query += "INNER JOIN (\n SELECT *\n FROM mobile\n WHERE mobile_number LIKE ?\n"; 
                                         input.push( customer['mobile_number'] + '%'); 
                                         query += ") AS mob ON cust.spcode = mob.spcode" }
     

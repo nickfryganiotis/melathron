@@ -55,6 +55,12 @@ CREATE TABLE location (
     FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
 
+CREATE TABLE salesman (
+	salesman_id INT AUTO_INCREMENT,
+    salesman_name VARCHAR(60),
+    PRIMARY KEY(salesman_id)
+    );
+
 CREATE TABLE customer (
 	spcode INT AUTO_INCREMENT,
     first_name VARCHAR(20) NOT NULL,
@@ -110,11 +116,13 @@ CREATE TABLE history_instance (
 	instance_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     spcode INT,
     apotelesma_id INT,
-    PRIMARY KEY(instance_date, spcode, apotelesma_id),
+    salesman_id INT,
+    PRIMARY KEY(instance_date, spcode, apotelesma_id, salesman_id),
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
     ON DELETE CASCADE,
     FOREIGN KEY(apotelesma_id) REFERENCES apotelesma(apotelesma_id)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id)
     );
 
 CREATE TABLE biography_history (
@@ -138,21 +146,6 @@ CREATE TABLE subscription (
     ON DELETE CASCADE
     );
 
-CREATE TABLE salesman (
-	salesman_id INT AUTO_INCREMENT,
-    salesman_name VARCHAR(60),
-    PRIMARY KEY(salesman_id)
-    );
-
-CREATE TABLE works_on (
-	spcode INT,
-    salesman_id INT,
-    PRIMARY KEY(spcode, salesman_id),
-    FOREIGN KEY(spcode) REFERENCES customer(spcode)
-    ON DELETE CASCADE,
-    FOREIGN KEY(salesman_id) REFERENCES salesman(salesman_id)
-    ON DELETE CASCADE
-    );
 
 CREATE TABLE shipping_method (
 	shipping_method_id INT AUTO_INCREMENT,
