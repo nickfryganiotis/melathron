@@ -45,6 +45,11 @@ export default function CustomerSearchWindow() {
       win2.webContents.on('did-finish-load', () => {
       win2.webContents.send('etiketes-to-print', results.map((customer) => customer["spcode"]));  });
     }
+    else if (typ === "special"){
+      win2.loadURL('http://localhost:3000/special');
+      win2.webContents.on('did-finish-load', () => {
+      win2.webContents.send('special-to-print', results.map((customer) => customer["spcode"]));  });
+    }
   }
 
   /*const componentRef = useRef();
@@ -62,8 +67,6 @@ export default function CustomerSearchWindow() {
     { Header: "Email", accessor: "email" },
     { Header: "Οδός", accessor: "address_street" },
     { Header: "Τ.Κ.", accessor: "address_postal_code" },
-    { Header: "Κατηγορία Αποτελέσματος", accessor: "apotelesma_name" },
-    { Header: "Αποτέλεσμα", accessor: "subapotelesma_name" },
   ];
 
   async function readCustomerOptions() {
@@ -80,6 +83,7 @@ export default function CustomerSearchWindow() {
     customerOptionsSet()
     console.log(customerOptions)
     let x = JSON.parse(localStorage.getItem("customer_search_options"))
+    console.log(x)
     let opts = {
       method: "post",
       url: "http://localhost:5000/search_customer",
@@ -111,9 +115,12 @@ export default function CustomerSearchWindow() {
         data: {"spcodes" : x}
       }
   
-      axios(massdeloptions).then((res) => alert(res)).catch((err) => console.log(err))
-      alert("Οι πελάτες διαγράφηκαν επιτυχώς.")
-      remote.getCurrentWindow().close()
+      axios(massdeloptions)
+      .then((res) => {
+        alert("Οι πελάτες διαγράφηκαν επιτυχώς."); 
+        remote.getCurrentWindow().close()
+      })
+      .catch((err) => console.log(err))
     } else {
       console.log("Mission aborted")
     }
@@ -161,10 +168,13 @@ export default function CustomerSearchWindow() {
         </div>
         <div>
           <button onClick={() => previewPrint("etiketes")}>ΕΚΤΥΠΩΣΗ ΕΤΙΚΕΤΩΝ</button>
+          </div>
+          <div>
+          <button onClick={() => previewPrint("special")}>ΕΙΔΙΚΗ ΕΚΤΥΠΩΣΗ</button>
+          </div>
         <div>
           {adminPriv && <button onClick={massDelete}>ΜΑΖΙΚΗ ΔΙΑΓΡΑΦΗ</button>}
         </div>
-      </div>
     </div>
     </div>
   );

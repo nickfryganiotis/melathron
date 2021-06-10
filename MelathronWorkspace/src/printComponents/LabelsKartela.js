@@ -38,6 +38,9 @@ export default function PelatesKartela() {
       ΕΚΤΥΠΩΣΗ
     </button>
     <div ref={componentRef}>
+    <style type="text/css" media="print">{"\
+          @page { size: a4; }\
+        "}</style>
     {
         splitArray(spcodes, 27).map((arr) => 
             <LabelsToPrint spcodes={spcodes} />

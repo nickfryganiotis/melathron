@@ -414,29 +414,33 @@ app.post("/search_customer",(req,res) => {
     }
     
     parameters = false;
-    if ( customer[ 'apotelesma_name' ] || customer[ 'subapotelesma_name' ] || customer[ 'salesman_name' ] ) {
-        query += "INNER JOIN (\n SELECT *\n FROM apotelesma\n"
+    if ( customer[ 'apotelesma_name' ] || customer[ 'subapotelesma_name' ]) {
+        query += "INNER JOIN (\n SELECT DISTINCT history_instance.spcode as spcode\n FROM history_instance, apotelesma a\n"
         if( customer[ 'apotelesma_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
                                               const apotelesma_names = customer['apotelesma_name'];
                                               for ( i=0; i< apotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "apotelesma_name = ?"; input.push(apotelesma_names[i]['value']);  }
-                                              query += ")\n"; 
-                                              prefix_query +=  ", ap.apotelesma_name" }
+                                              query += ")\n"; }
+                                              //prefix_query +=  ", ap.apotelesma_name" }
         if( customer[ 'subapotelesma_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
                                                  const subapotelesma_names = customer['subapotelesma_name'];
                                                  for ( i=0; i< subapotelesma_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "subapotelesma_name = ?"; input.push(subapotelesma_names[i]['value']);  }
-                                                 query += ")\n"; 
-                                                 prefix_query += ", ap.subapotelesma_name"  }
+                                                 query += ")\n"; }
+                                                 //prefix_query += ", ap.subapotelesma_name"  }
+        query += ") AS ap ON cust.spcode = ap.spcode\n"
+    }
+    parameters = false;
+    if ( customer[ 'salesman_name' ] ) {
+        query += "INNER JOIN (\n SELECT DISTINCT history_instance.spcode as spcode\n FROM history_instance, salesman s\n"
         if( customer[ 'salesman_name' ] ) { query += !parameters ? " WHERE " : " AND "; query += "("; parameters = true;
                                                  const salesman_names = customer['salesman_name'];
                                                  for ( i=0; i< salesman_names.length; i++ ) { query += i > 0 ? " OR " : ""; query += "salesman_name = ?"; input.push(salesman_names[i]['value']);  }
-                                                 query += ")\n"; 
-                                                 prefix_query += ", ap.salesman_name"  }
-        query += ") AS ap ON cust.apotelesma_id = ap.apotelesma_id\n"
-    }
-                                    
+                                                 query += ")\n"; }
+                                                //prefix_query += ", ap.salesman_name"  }
+        query += ") AS slmn ON cust.spcode = slmn.spcode\n"
+    }                          
     parameters = false;
     if( customer[ 'subscription_category' ] || customer[ 'subscription_name' ]){
-        query += "INNER JOIN (\n SELECT sale.spcode as spcode\n FROM sale, subscription s\n WHERE sale.subscription_id = s.subscription_id\n"; 
+        query += "INNER JOIN (\n SELECT DISTINCT sale.spcode as spcode\n FROM sale, subscription s\n WHERE sale.subscription_id = s.subscription_id\n"; 
         if ( customer['subscription_category'] ) { query += "AND("
                                                    const subscription_categories = customer['subscription_category'];                                    
                                                    for ( i=0; i< subscription_categories.length; i++ ) { query += i > 0 ? " OR " : ""; query += "s.subscription_category = ?"; input.push(subscription_categories[i]['value']);  }
@@ -458,7 +462,7 @@ app.post("/search_customer",(req,res) => {
                                         query += ") AS mob ON cust.spcode = mob.spcode" }
     
     const fquery = prefix_query +"\nFROM ( \n" + query;
-    console.log(fquery)
+    //console.log(fquery)
     connection.query( fquery, input, function ( error, results ) {
         if (error) throw error;
         res.send(results);   
@@ -480,7 +484,7 @@ app.post("/customer_info",(req,res) =>{
         output.push(results);       
     });
     query = "SELECT * FROM sale s, payment_info p, subscription sb, shipping_method sm WHERE s.spcode = ? AND p.sale_id = s.sale_id AND sb.subscription_id = s.subscription_id AND sm.shipping_method_id = s.shipping_method_id";
-    query = "SELECT * FROM sale s LEFT OUTER JOIN payment_info p ON p.sale_id = s.sale_id LEFT OUTER JOIN subscription sb ON sb.subscription_id = s.subscription_id LEFT OUTER JOIN shipping_method sm ON sm.shipping_method_id = s.shipping_method_id WHERE s.spcode = ?";
+    query = "SELECT * FROM sale s LEFT OUTER JOIN payment_info p ON p.sale_id = s.sale_id LEFT OUTER JOIN salesman slmn ON slmn.salesman_id = s.salesman_id LEFT OUTER JOIN subscription sb ON sb.subscription_id = s.subscription_id LEFT OUTER JOIN shipping_method sm ON sm.shipping_method_id = s.shipping_method_id WHERE s.spcode = ?";
     connection.query(query,spcode,function(error,results){
         if (error) throw error;
         output.push(results);
@@ -833,7 +837,7 @@ app.post( '/update_apotelesma', ( req, res ) => {
     
     const apotelesma = req.body;
     let input = [ apotelesma[ 'apotelesma_name' ] , apotelesma[ 'subapotelesma_name' ] , apotelesma[ 'continent_id' ] , apotelesma[ 'spcode' ], apotelesma [ 'instance_date' ] ]; 
-    const query = "UPDATE history_instance SET apotelesma_id = (SELECT apotelesma_id FROM apotelesma WHERE apotelesma_name = ? AND subapotelesma_name = ? AND continent_id = ?) WHERE spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?"
+    let query = "UPDATE history_instance SET apotelesma_id = (SELECT apotelesma_id FROM apotelesma WHERE apotelesma_name = ? AND subapotelesma_name = ? AND continent_id = ?) WHERE spcode = ? AND UNIX_TIMESTAMP(instance_date)*1000 = ?"
     if( apotelesma[ 'salesman_name' ] ) {
         query += " AND salesman_id = (SELECT salesman_id FROM salesman WHERE salesman_name = ?)"
         input.push( apotelesma[ 'salesman_name' ] );
@@ -1095,7 +1099,7 @@ app.post( "/mass_assignment" , function( req , res ) {
     let query = "";
     let input = [];
     for( let i = 0; i < spcodes.length; i++ ) {
-        query += i === 0 ? "INSERT INTO works_on VALUES (? , ?)" : ", (? , ?)";
+        query += i === 0 ? "INSERT INTO history_instance(spcode, salesman_id, apotelesma_id) VALUES (? , ?, 167)" : ", (? , ?, 167)";
         input.push( spcodes[ i ] ) , input.push( sale_id );  
     }
 
@@ -1263,7 +1267,6 @@ app.post( '/delete_customer' , function( req , res ) {
 } )
 
 app.post( '/delete_customers' , function( req , res ) {
-
     let spcodes = req.body[ 'spcodes' ];
     let input = [];
     let query = "DELETE from CUSTOMER WHERE ("
@@ -1272,7 +1275,6 @@ app.post( '/delete_customers' , function( req , res ) {
         input.push( spcodes[ i ][ 'spcode' ] );
     }
     query += ")";
-    console.log(input)
     connection.query( query , input , function( error ) {
         if( error ) throw error;
         res.send( "Customers were deleted successfully" );
@@ -1366,6 +1368,34 @@ app.post( '/labels' , ( req , res ) => {
     const spcode = req.body[ 'spcode' ];
     let query = "SELECT c.company_name, c.address_street, c.address_number, c.address_postal_code, loc.city, countr.country_name FROM (SELECT company_name, address_street, address_number, address_postal_code, location_id, country_id FROM customer WHERE customer.spcode = ? ) as c LEFT OUTER JOIN (SELECT city, location_id FROM location) as loc ON loc.location_id = c.location_id LEFT OUTER JOIN (SELECT country_name, country_id FROM country) as countr ON countr.country_id = c.country_id"
     connection.query( query , spcode , ( error , result ) => {
+            if ( error ) throw error;
+            res.send( result );    
+    } );
+} );
+
+app.post( '/print_apotelesmata' , ( req , res ) => {
+    const spcode = req.body[ 'spcode' ];
+    let query = "SELECT g.salesman_name, g.apotelesma_name, g.subapotelesma_name, MAX(g.instance_date) as imerominia FROM (SELECT a.apotelesma_name, a.subapotelesma_name, h.instance_date, s.salesman_name FROM history_instance h INNER JOIN apotelesma a ON h.apotelesma_id = a.apotelesma_id INNER JOIN salesman s ON s.salesman_id = h.salesman_id WHERE h.spcode = ?) as g GROUP BY g.apotelesma_name"
+    connection.query( query , spcode , ( error , result ) => {
+            if ( error ) throw error;
+            res.send( result );    
+    } );
+} );
+
+app.post( '/print_sale' , ( req , res ) => {
+    const sale_id = req.body[ 'sale_id' ];
+    let query = `SELECT sale.sale_id, salesman.salesman_name, customer.spcode, customer.first_name, customer.last_name, subscription.subscription_name, sale.total_amount, sale.order_date, p.total_paid, p.date_paid
+    FROM sale
+    LEFT OUTER JOIN salesman
+    ON salesman.salesman_id = sale.salesman_id
+    LEFT OUTER JOIN customer
+    ON customer.spcode = sale.spcode
+    LEFT OUTER JOIN subscription
+    ON subscription.subscription_id = sale.subscription_id
+    LEFT OUTER JOIN (SELECT sale_id, SUM(IFNULL(payment_amount,0)) as total_paid, MAX(payment_date) as date_paid FROM payment_info GROUP BY sale_id) as p
+    ON p.sale_id = sale.sale_id
+    WHERE sale.sale_id = ?`
+    connection.query( query , sale_id , ( error , result ) => {
             if ( error ) throw error;
             res.send( result );    
     } );

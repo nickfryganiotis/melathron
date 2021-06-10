@@ -128,18 +128,21 @@ export function greekToEnglish(obj) {
   return x
 }
 
-export function timeConverter(UNIX_timestamp){
+export function timeConverter(UNIX_timestamp, showfull = true){
   if (UNIX_timestamp){
   var x = Date.parse(UNIX_timestamp);
   var a = new Date(x);
   var year = a.getFullYear();
   var month = a.getMonth()+1;
   var date = a.getDate();
-  var hour = a.getHours();
-  var min = a.getMinutes();
+  //let hour= a.getHours();
+  //let min = a.getMinutes();
+  var hour = (a.getHours())/10 === 0 ? "0" + toString(a.getHours()) : a.getHours()
+  var min = (a.getMinutes())/10 === 0 ? "0" + toString(a.getMinutes()) : a.getMinutes()
   //var sec = a.getSeconds();
-  var time = date + '-' + month + '-' + year + ' ' + hour + ':' + min;
-  return time;
+  var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min;
+  let tim2 = date + '/' + month + '/' + year;
+  return (showfull?time:tim2 );
   }
   return null;
 }

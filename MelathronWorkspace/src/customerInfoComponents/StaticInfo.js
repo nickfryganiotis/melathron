@@ -19,8 +19,6 @@ export default function StaticInfo({ customer }) {
     state: "ΝΟΜΟΣ/ΠΟΛΙΤΕΙΑ",
     city: "ΠΟΛΗ",
     area: "ΠΕΡΙΟΧΗ",
-    apotelesma_name: "ΚΑΤΗΓΟΡΙΑ ΑΠΟΤΕΛΕΣΜΑΤΟΣ",
-    subapotelesma_name: "ΑΠΟΤΕΛΕΣΜΑ",
     category_name: "ΚΑΤΗΓΟΡΙΑ ΕΠΑΓΓΕΛΜΑΤΟΣ",
     profession_name: "ΕΠΑΓΓΕΛΜΑ",
   });

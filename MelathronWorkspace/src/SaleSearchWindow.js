@@ -33,6 +33,37 @@ export default function SaleSearchWindow() {
     setSaleOptions(y)
   }
 
+  const previewPrint = (typ) => {
+    const BrowserWindow = window.require("electron").remote.BrowserWindow;
+    const win2 = new BrowserWindow({
+      height: 600,
+      width: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        enableRemoteModule: true,
+        webSecurity: false,
+        contextIsolation: false
+      },
+    });
+    win2.setMenu(null);
+    win2.webContents.openDevTools();
+    if (typ === "sales"){win2.loadURL('http://localhost:3000/sales_kartela');
+    win2.webContents.on('did-finish-load', () => {
+      win2.webContents.send('saleid-to-print', results.map((sales) => sales["sale_id"]));  });
+    }
+    else if (typ === "salesmen"){
+      win2.loadURL('http://localhost:3000/salesman_print');
+      win2.webContents.on('did-finish-load', () => {
+        win2.webContents.send('saleids-to-print', results.map((sales) => {
+          return {
+            "sale_id" : sales["sale_id"],
+            "salesman_name" : sales["salesman_name"]
+          }
+        }));  });
+    }
+  }
+
+
   useEffect(() => {
     saleOptionsSet()
     console.log(saleOptions)
@@ -80,6 +111,13 @@ export default function SaleSearchWindow() {
           );
         }}
       />
+
+      <div>
+        <button onClick={() => previewPrint("sales")}>ΕΚΤΥΠΩΣΗ ΚΑΡΤΕΛΩΝ</button>
+      </div>
+      <div>
+                <button onClick={() => previewPrint("salesmen")}>ΕΚΤΥΠΩΣΗ ΣΥΝΕΡΓΑΤΩΝ</button>
+      </div>
     </div>
   );
 }

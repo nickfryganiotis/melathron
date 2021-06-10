@@ -33,11 +33,10 @@ export default function CustomerInfo({ sp }) {
       .then((response) => {
         setCustomer(response.data[0]);
         setHist(response.data[1]);
-        setSalesmen(response.data[2]);
-        setSales(response.data[3]);
-        setPhones(response.data[4]);
-        setMobiles(response.data[5]);
-        setBiohist(response.data[6])
+        setSales(response.data[2]);
+        setPhones(response.data[3]);
+        setMobiles(response.data[4]);
+        setBiohist(response.data[5])
         console.log(response.data);
       })
       .catch((error) => {
@@ -73,7 +72,7 @@ export default function CustomerInfo({ sp }) {
           {<ApHistory apHistory={hist} spcode={sp} />}
           {<BioHistory bioHistory={biohist} spcode={sp} />}
           <div className='customerMatrixRow'>
-            {<SalesmenInfo salesmenn={salesmen} spcode={sp} />}
+            {/*<SalesmenInfo salesmenn={salesmen} spcode={sp} />*/}
             {<MobilesInfo mobiless={mobiles} spcode={sp} />}
             {<PhonesInfo phoness={phones} spcode={sp} />}
           </div>

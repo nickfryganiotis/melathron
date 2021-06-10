@@ -1,0 +1,109 @@
+
+.bold {
+    font-weight: 900;
+}
+
+.g1 {
+    width: 6.17%;
+    text-align: center;
+    font-family: "Courier New";
+    font-size: 10pt;
+}
+
+.g2 {
+    text-align: center;
+    font-family: "Courier New";
+    width: 11.93%;
+    font-size: 10pt;
+}
+
+.g3 {
+    text-align: center;
+    font-family: "Courier New";
+    width: 17.39%;
+    font-size: 10pt;
+}
+
+.g4 {
+    text-align: center;
+    font-family: "Courier New";
+    width: 20.97%;
+    font-size: 10pt;
+}
+
+.g5 {
+    text-align: center;
+    font-family: "Courier New";
+    width: 14.27%;
+    font-size: 10pt;
+}
+
+.g6 {
+    text-align: center;
+    font-family: "Courier New";
+    width: 14.63%;
+    font-size: 10pt;
+}
+
+.g7 {
+    text-align: center;
+    font-family: "Courier New";
+    width: 14.63%;
+    font-size: 10pt;
+}
+
+.f1 {
+    text-align: start;
+    font-family: "Courier New";
+    width: 10.04%;
+    font-size: 10pt;
+}
+
+.f2 {
+    text-align: start;
+    font-family: "Courier New";
+    width: 10.04%;
+    font-size: 10pt;
+}
+
+.f3{
+    text-align: start;
+    font-family: "Courier New";
+    min-width: 14.89%;
+    font-size: 10pt;
+}
+
+.f4 {
+    text-align: start;
+    font-family: "Courier New";
+    width: 16.2%;
+    font-size: 10pt;
+}
+
+.f5 {
+    text-align: start;
+    font-family: "Courier New";
+    min-width: 10.77%;
+    font-size: 10pt;
+}
+
+.f6 {
+    text-align: end;
+    font-family: "Courier New";
+    width: 6.93%;
+    font-size: 10pt;
+}
+
+.f7 {
+    text-align: start;
+    font-family: "Courier New";
+    min-width: 7.3%;
+    font-size: 10pt;
+}
+
+.f8 {
+    text-align: start;
+    font-family: "Courier New";
+    width: 22.3%;
+    font-size: 10pt;
+}

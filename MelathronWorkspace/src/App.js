@@ -34,7 +34,9 @@ import AddState from "./parametersComponents/locationsComponents/AddState";
 import AddCity from "./parametersComponents/locationsComponents/AddCity";
 import AddArea from "./parametersComponents/locationsComponents/AddArea";
 import LabelsKartela from "./printComponents/LabelsKartela"
-
+import SalesKartela from "./printComponents/SalesKartela";
+import SalesmenToPrint from "./printComponents/SalesmenToPrint";
+import SpecialKartela from "./printComponents/SpecialKartela";
 
 export default function App() {
 
@@ -145,7 +147,15 @@ export default function App() {
             <Route exact path="/sale_search_window">
               <SaleSearchWindow />
             </Route>
-
+            <Route exact path="/sales_kartela">
+              <SalesKartela />
+            </Route>
+            <Route exact path="/salesman_print">
+              <SalesmenToPrint />
+            </Route>
+            <Route exact path="/special">
+              <SpecialKartela />
+            </Route>
           <Route path="*">
             <Error />
           </Route>

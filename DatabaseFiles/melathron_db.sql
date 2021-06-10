@@ -95,7 +95,7 @@ CREATE TABLE customer (
     FOREIGN KEY(location_id) REFERENCES location(location_id),
     FOREIGN KEY(biography_id) REFERENCES biography(biography_id)
     );
-
+INSERT INTO sale(spcode, total_amount) VALUES (7, 100);
 CREATE TABLE phone (
 	spcode INT,
     phone_number VARCHAR(15),
@@ -103,7 +103,7 @@ CREATE TABLE phone (
     FOREIGN KEY(spcode) REFERENCES customer(spcode)
     ON DELETE CASCADE
     );
-    
+
 CREATE TABLE mobile (
 	spcode INT,
     mobile_number VARCHAR(15),
@@ -299,43 +299,13 @@ END//
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER curr_apotelesma_in AFTER INSERT ON history_instance
-FOR EACH ROW
-BEGIN
-	UPDATE customer
-    SET apotelesma_id = NEW.apotelesma_id
-    WHERE spcode = NEW.spcode;
-END//
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER curr_apotelesma_upd AFTER UPDATE ON history_instance
-FOR EACH ROW
-BEGIN
-	UPDATE customer
-    SET apotelesma_id = NEW.apotelesma_id
-    WHERE spcode = NEW.spcode;
-END//
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER curr_apotelesma_del AFTER DELETE ON history_instance
-FOR EACH ROW
-BEGIN
-	UPDATE customer
-    SET apotelesma_id = (SELECT apotelesma_id FROM history_instance WHERE spcode=OLD.spcode ORDER BY instance_date DESC LIMIT 1) 
-    WHERE spcode = OLD.spcode;
-END//
-DELIMITER ;
-
-/*DELIMITER //
 CREATE TRIGGER upd_date BEFORE UPDATE ON customer
 FOR EACH ROW
 BEGIN
 	UPDATE customer
     SET date_changed = CURRENT_TIMESTAMP;
 END//
-DELIMITER ;*/
+DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER curr_bio_in AFTER INSERT ON biography_history
@@ -366,7 +336,7 @@ BEGIN
     WHERE spcode = OLD.spcode;
 END//
 DELIMITER ;
-
+SELECT * FROM history_instance h, apotelesma a WHERE h.apotelesma_id = a.apotelesma_id;
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Continents.txt' INTO TABLE continent FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (continent_id, continent_name);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Countries.txt' INTO TABLE country FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (country_name, continent_id);
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Apotelesmata.txt' INTO TABLE apotelesma FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' (subapotelesma_name, apotelesma_name, continent_id);
